@@ -8,6 +8,7 @@ starlette = "*"
 fastapi = "*"
 uvicorn = "*"
 txtai = "*"
+openai = "*"
 
 [scripts]
 start = "fastapi dev backend/main.py"
