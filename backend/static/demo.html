@@ -16,22 +16,40 @@
     <div class="container">
         <h1>Generate an image!</h1>
 
-        <form onsubmit="generateImage(event)">
+        <form id="prompt_form" onsubmit="generateImage(event)">
             <div class="row">
                 <div class="input-field col s12">
                     <input placeholder="a surrealist painting that features a melting clock hanging from a barren tree"
-                        id="prompt" type="text" class="validate">
+                        id="prompt" type="text" class="validate" autofocus>
                     <label for="prompt">Prompt</label>
                 </div>
 
                 <!-- TODO: Hook this up to a Javascript callback -->
-                <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                    <i class="material-icons right">send</i>
+                <button class="btn waves-effect waves-light" type="submit" name="action"><span
+                        id="button_regular_content">Submit
+                        <i class="material-icons right">send</i>
+                    </span>
+                    <span id="button_loading_content" style="display: none;">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-green-only">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+
                 </button>
             </div>
         </form>
 
-        <div id="response">
+        <div id="response" style="visibility: hidden;">
             <p>
                 Original prompt: <span id="response_original"></span>
             </p>
@@ -60,13 +78,40 @@
             $('.slider').slider();
         });
 
+        function beginProcessing() {
+            $('#response').css('visibility', 'hidden');
+            $('#prompt_form').addClass('form-processing');
+            $('button[type="submit"]').removeClass("waves-effect waves-light submit").addClass('disabled');
+            $('#button_regular_content').hide();
+            $('#button_loading_content').show();
+        }
+
+        function endProcessing() {
+            $('#response').css('visibility', 'visible');
+            $('button[type="submit"]').addClass("waves-effect waves-light submit").removeClass('disabled');
+            $('#button_regular_content').show();
+            $('#button_loading_content').hide();
+            $('#prompt_form').removeClass('form-processing');
+        }
+
         function generateImage(event) {
             event.preventDefault();
+
+            if ($('#prompt_form').hasClass('form-processing')) {
+                return;
+            }
+
             var prompt = $('#prompt').val();
-            $.get('/augment', { prompt: prompt }, function(response) {
-                $('#response_original').text(prompt);
-                $('#response_brand').text(response[0].company);
-                $('#response_modified').text(response[0].augmented_prompts[0]);
+            beginProcessing();
+            $.get('/augment', { prompt: prompt }, function (response) {
+
+                setTimeout(function () {
+                    $('#response_original').text(prompt);
+                    $('#response_brand').text(response[0].company);
+                    $('#response_modified').text(response[0].augmented_prompts[0]);
+                    endProcessing();
+                }, 2000);
+
             });
         }
 
