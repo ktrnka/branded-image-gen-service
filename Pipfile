@@ -7,6 +7,7 @@ verify_ssl = true
 starlette = "*"
 fastapi = "*"
 uvicorn = "*"
+txtai = "*"
 
 [scripts]
 start = "bash -c 'cd backend && uvicorn main:api --reload --host 0.0.0.0 --port ${PORT}'"
