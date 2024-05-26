@@ -1,5 +1,5 @@
 import random
-
+import requests
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -7,6 +7,8 @@ from txtai.embeddings import Embeddings
 from openai import OpenAI
 
 from .data import companies, prompt_templates
+import uuid
+from urllib.parse import urlparse
 
 # Index the brands
 embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
@@ -15,9 +17,12 @@ embeddings.index([f"{company['market']}\n{company['brand_identity']}" for compan
 # Setup OpenAI
 openai_client = OpenAI()
 
+image_cache_dir = "backend/static/images"
+
 # Setup the API
 api = FastAPI()
 api.mount("/static", StaticFiles(directory="backend/static"), name="static")
+
 
 def adjust_prompt(prompt: str, company_name: str) -> str:
     template = random.choice(prompt_templates)
@@ -62,10 +67,21 @@ def generate(prompt: str):
     )
 
     response_data = response.data[0]
+    response_url = response_data.url
 
+    # Extract the filename from the URL
+    parsed_url = urlparse(response_url)
+    image_filename = parsed_url.path.split("/")[-1]
+
+    image_path = f"{image_cache_dir}/{image_filename}"
+    with open(image_path, "wb") as f:
+        f.write(requests.get(response_url).content)
+
+    # Return the filename and image path
     return {
         "company": company["name"],
         "company_match_score": result["score"],
         "prompt": augmented_prompt,
-        "openai_response": response_data
+        "openai_response": response_data,
+        "local_path": f"/static/images/{image_filename}"
     }
