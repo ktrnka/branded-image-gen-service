@@ -85,7 +85,8 @@ def augment(prompt: str):
         response.append({
             "company": company["name"],
             "company_match_score": result["score"],
-            "augmented_prompts": augmented_prompts
+            "augmented_prompts": augmented_prompts,
+            "model_backend": "DEMO",
         })
 
     return response
@@ -116,7 +117,9 @@ def generate(prompt: str):
     with open(image_path, "wb") as f:
         f.write(requests.get(response_url).content)
 
-    save_image_to_database(prompt, company["name"], result["score"], augmented_prompt, "dall-e-3", image_path, str(response_data))
+    local_relative_url = f"/static/images/{image_filename}"
+
+    save_image_to_database(prompt, company["name"], result["score"], augmented_prompt, "dall-e-3", local_relative_url, str(response_data))
 
     # Return the filename and image path
     return {
@@ -124,7 +127,8 @@ def generate(prompt: str):
         "company_match_score": result["score"],
         "prompt": augmented_prompt,
         "openai_response": response_data,
-        "local_path": f"/static/images/{image_filename}"
+        "model_backend": "dall-e-3",
+        "local_path": local_relative_url
     }
 
 @api.get("/images", response_class=HTMLResponse)
@@ -150,7 +154,7 @@ def show_images():
         table += f"<td>{row[2]}</td>"
         table += f"<td>{row[3]}</td>"
         table += f"<td>{row[4]}</td>"
-        table += f"<td>{row[5]}</td>"
+        table += f"<td><a href='{row[5]}'>{row[5]}</a></td>"
         table += f"<td>{row[6]}</td>"
         table += "</tr>"
     table += "</table>"
