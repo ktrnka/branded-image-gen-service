@@ -1,8 +1,9 @@
+from pprint import pprint
 from fastapi.responses import HTMLResponse
 import re
 
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
 from txtai.embeddings import Embeddings
@@ -10,6 +11,7 @@ from txtai.embeddings import Embeddings
 from backend.generators import aws_bedrock, openai
 from backend.database import Database
 from backend.prompting import MetaPrompter, adjust_prompt
+from botocore.errorfactory import ClientError
 
 from .data import companies
 
@@ -95,10 +97,18 @@ def generate_aws(prompt: str):
     result = embeddings.search(prompt, limit=1)[0]
     company_index = int(result['id'])
     company = companies[company_index]
-    augmented_prompt = adjust_prompt(prompt, company["name"])
+
+    prompter = MetaPrompter()
+    augmented_prompt = prompter.adjust_prompt(prompt, company["name"], max_chars=400)
 
     titan = aws_bedrock.Titan(image_cache_dir)
-    image_result = titan.generate(augmented_prompt)
+
+    try:
+        image_result = titan.generate(augmented_prompt)
+    except ClientError as e:
+        pprint(e.response)
+        raise HTTPException(status_code=400, detail=f"AWS Error: {e.response['Error']['Message']}")
+
 
     local_relative_url = f"/static/images/{image_result.filename}"
 

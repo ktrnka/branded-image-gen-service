@@ -27,7 +27,7 @@ class MetaPrompter:
     def adjust_prompt(self, prompt: str, company_name: str, max_chars: Optional[int] = None) -> str:
         limit_expression = ""
         if max_chars:
-            limit_expression = f" (limit to {max_chars} characters)"
+            limit_expression = f" (use up to {max_chars // 4} tokens in the output)"
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
