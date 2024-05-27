@@ -36,7 +36,4 @@ def generate_image(prompt: str):
 
     response_body = json.loads(response.get("body").read())
 
-    print("Bedrock response:")
-    pprint(response_body)
-
     return Image.open(BytesIO(base64.b64decode(response_body["images"][0])))
