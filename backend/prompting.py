@@ -7,7 +7,7 @@ prompt_templates = [
     "{company_name} brings you {prompt}",
     "{company_name} brand marketing presents: {prompt}",
     "{prompt}. Include product placement from {company_name}",
-    "An advertisement for {company_name} featuring {prompt}",
+    "An advertisement for {company_name} featuring {prompt}. The logo for {company_name} is prominently displayed.",
 ]
 
 
