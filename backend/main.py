@@ -1,4 +1,3 @@
-import random
 from fastapi.responses import HTMLResponse
 import requests
 from urllib.parse import urlparse
@@ -12,8 +11,9 @@ from txtai.embeddings import Embeddings
 from openai import OpenAI
 
 from backend.database import Database
+from backend.prompting import adjust_prompt
 
-from .data import companies, prompt_templates
+from .data import companies
 
 # Index the brands
 embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
@@ -30,11 +30,6 @@ database.setup()
 # Setup the API
 api = FastAPI()
 api.mount("/static", StaticFiles(directory="backend/static"), name="static")
-
-
-def adjust_prompt(prompt: str, company_name: str) -> str:
-    template = random.choice(prompt_templates)
-    return template.format(prompt=prompt, company_name=company_name)
 
 
 @api.get("/")

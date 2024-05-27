@@ -241,11 +241,3 @@ companies = [
     }
 ]
 
-prompt_templates = [
-    "{prompt}, with a subtle product placement from {company_name}",
-    "{prompt}, with over the top in your face unsubtle product placement from {company_name}",
-    "{company_name} brings you {prompt}",
-    "{company_name} brand marketing presents: {prompt}",
-    "{prompt}. Include product placement from {company_name}",
-    # "{prompt}. Include brand marketing from {company_name}",
-]
