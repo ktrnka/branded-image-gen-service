@@ -128,7 +128,7 @@
 
             var prompt = $('#prompt').val();
             beginProcessing();
-            $.get('/generate/dalle', { prompt: prompt }, function (response) {
+            $.get('/generate/titan', { prompt: prompt }, function (response) {
 
                 setTimeout(function () {
                     $('#response_original').text(prompt);

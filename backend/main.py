@@ -9,7 +9,7 @@ from txtai.embeddings import Embeddings
 
 from backend.generators import aws_bedrock, openai
 from backend.database import Database
-from backend.prompting import adjust_prompt
+from backend.prompting import MetaPrompter, adjust_prompt
 
 from .data import companies
 
@@ -48,10 +48,24 @@ def augment(prompt: str):
             "company": company["name"],
             "company_match_score": result["score"],
             "augmented_prompts": augmented_prompts,
-            "model_backend": "DEMO",
         })
 
     return response
+
+@api.get("/augment_v2")
+def augment_v2(prompt: str):
+    result = embeddings.search(prompt, limit=1)[0]
+    company_index = int(result['id'])
+    company = companies[company_index]
+
+    prompter = MetaPrompter()
+    augmented_prompt = prompter.adjust_prompt(prompt, company["name"])
+
+    return {
+        "company": company["name"],
+        "company_match_score": result["score"],
+        "augmented_prompt": augmented_prompt,
+    }
 
 @api.get("/generate/dalle")
 def generate(prompt: str):
