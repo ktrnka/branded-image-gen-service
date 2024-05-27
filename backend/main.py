@@ -1,6 +1,4 @@
 from fastapi.responses import HTMLResponse
-import requests
-from urllib.parse import urlparse
 import re
 
 
@@ -8,21 +6,17 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from txtai.embeddings import Embeddings
-from openai import OpenAI
 
-from backend import aws_bedrock
+from backend.generators import aws_bedrock, openai
 from backend.database import Database
 from backend.prompting import adjust_prompt
 
 from .data import companies
-import uuid
 
 # Index the brands
 embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
 embeddings.index([f"{company['market']}\n{company['brand_identity']}" for company in companies])
 
-# Setup OpenAI
-openai_client = OpenAI()
 
 image_cache_dir = "backend/static/images"
 
@@ -57,72 +51,49 @@ def augment(prompt: str):
 
     return response
 
-@api.get("/generate")
+@api.get("/generate/dalle")
 def generate(prompt: str):
     result = embeddings.search(prompt, limit=1)[0]
     company_index = int(result['id'])
     company = companies[company_index]
     augmented_prompt = adjust_prompt(prompt, company["name"])
 
-    response = openai_client.images.generate(
-        model="dall-e-3",
-        prompt=augmented_prompt,
-        size="1024x1024",
-        quality="standard",
-        n=1,
-    )
+    dalle = openai.DallE(image_cache_dir)
+    image_result = dalle.generate(augmented_prompt)
 
-    response_data = response.data[0]
-    response_url = response_data.url
+    local_relative_url = f"/static/images/{image_result.filename}"
 
-    # Extract the filename from the URL
-    parsed_url = urlparse(response_url)
-    image_filename = parsed_url.path.split("/")[-1]
+    database.log_image(prompt, company["name"], result["score"], augmented_prompt, dalle.model_name, local_relative_url, image_result.response_metadata)
 
-    image_path = f"{image_cache_dir}/{image_filename}"
-    with open(image_path, "wb") as f:
-        f.write(requests.get(response_url).content)
-
-    local_relative_url = f"/static/images/{image_filename}"
-
-    database.log_image(prompt, company["name"], result["score"], augmented_prompt, "dall-e-3", local_relative_url, response_data.to_json())
-
-    # Return the filename and image path
     return {
         "company": company["name"],
         "company_match_score": result["score"],
         "prompt": augmented_prompt,
-        "openai_response": response_data,
-        "model_backend": "dall-e-3",
-        "local_path": local_relative_url
+        "model_backend": dalle.model_name,
+        "local_path": local_relative_url,
     }
 
 
-@api.get("/generate_aws")
+@api.get("/generate/titan")
 def generate_aws(prompt: str):
     result = embeddings.search(prompt, limit=1)[0]
     company_index = int(result['id'])
     company = companies[company_index]
     augmented_prompt = adjust_prompt(prompt, company["name"])
 
-    response_image = aws_bedrock.generate_image(augmented_prompt)
+    titan = aws_bedrock.Titan(image_cache_dir)
+    image_result = titan.generate(augmented_prompt)
 
-    image_filename = f"{str(uuid.uuid4())}.jpg"
+    local_relative_url = f"/static/images/{image_result.filename}"
 
-    image_path = f"{image_cache_dir}/{image_filename}"
-    response_image.save(image_path)
-
-    local_relative_url = f"/static/images/{image_filename}"
-
-    database.log_image(prompt, company["name"], result["score"], augmented_prompt, "Amazon Titan", local_relative_url, None)
+    database.log_image(prompt, company["name"], result["score"], augmented_prompt, titan.model_name, local_relative_url, image_result.response_metadata)
 
     # Return the filename and image path
     return {
         "company": company["name"],
         "company_match_score": result["score"],
         "prompt": augmented_prompt,
-        # "openai_response": response_data,
-        "model_backend": "Amazon Titan",
+        "model_backend": titan.model_name,
         "local_path": local_relative_url
     }
 
