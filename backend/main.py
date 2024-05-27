@@ -10,6 +10,8 @@ from fastapi.staticfiles import StaticFiles
 from txtai.embeddings import Embeddings
 from openai import OpenAI
 
+from backend.database import Database
+
 from .data import companies, prompt_templates
 
 # Index the brands
@@ -21,7 +23,8 @@ openai_client = OpenAI()
 
 image_cache_dir = "backend/static/images"
 
-
+database = Database("./data.db")
+database.setup()
 
 # Setup the API
 api = FastAPI()
@@ -31,41 +34,6 @@ api.mount("/static", StaticFiles(directory="backend/static"), name="static")
 def adjust_prompt(prompt: str, company_name: str) -> str:
     template = random.choice(prompt_templates)
     return template.format(prompt=prompt, company_name=company_name)
-
-def setup_database():
-    database_connection = sqlite3.connect("./data.db")
-    cursor = database_connection.cursor()
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS images (
-        prompt TEXT,
-        brand_name TEXT,
-        brand_score REAL,
-        augmented_prompt TEXT,
-        model_backend TEXT,
-        image_path TEXT,
-        openai_response TEXT
-    )
-    """)
-
-    database_connection.commit()
-    database_connection.close()
-
-
-# Setup a basic database
-setup_database()
-
-def save_image_to_database(prompt: str, company_name: str, company_score: float, augmented_prompt: str, model_backend: str, image_path: str, openai_response: str):
-    local_connection = sqlite3.connect("./data.db")
-    cursor = local_connection.cursor()
-
-    cursor.execute("""
-    INSERT INTO images (prompt, brand_name, brand_score, augmented_prompt, model_backend, image_path, openai_response)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (prompt, company_name, company_score, augmented_prompt, model_backend, image_path, openai_response))
-
-    local_connection.commit()
-    local_connection.close()
 
 
 @api.get("/")
@@ -119,7 +87,7 @@ def generate(prompt: str):
 
     local_relative_url = f"/static/images/{image_filename}"
 
-    save_image_to_database(prompt, company["name"], result["score"], augmented_prompt, "dall-e-3", local_relative_url, str(response_data))
+    database.log_image(prompt, company["name"], result["score"], augmented_prompt, "dall-e-3", local_relative_url, str(response_data))
 
     # Return the filename and image path
     return {
@@ -131,18 +99,13 @@ def generate(prompt: str):
         "local_path": local_relative_url
     }
 
+import re
+def munge_local_path(path: str) -> str:
+    return re.sub(r"^backend", "", path)
+
 @api.get("/images", response_class=HTMLResponse)
 def show_images():
-    # Connect to the database
-    connection = sqlite3.connect("./data.db")
-    cursor = connection.cursor()
-
-    # Retrieve all rows from the images table
-    cursor.execute("SELECT * FROM images")
-    rows = cursor.fetchall()
-
-    # Close the database connection
-    connection.close()
+    rows = database.get_all_images()
 
     # Generate the HTML table
     table = "<table>"
@@ -154,7 +117,7 @@ def show_images():
         table += f"<td>{row[2]}</td>"
         table += f"<td>{row[3]}</td>"
         table += f"<td>{row[4]}</td>"
-        table += f"<td><a href='{row[5]}'>{row[5]}</a></td>"
+        table += f"<td><a href='{munge_local_path(row[5])}'>{row[5]}</a></td>"
         table += f"<td>{row[6]}</td>"
         table += "</tr>"
     table += "</table>"
