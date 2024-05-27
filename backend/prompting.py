@@ -20,7 +20,7 @@ def adjust_prompt(prompt: str, company_name: str) -> str:
     return template.format(prompt=prompt, company_name=company_name)
 
 class MetaPrompter:
-    def __init__(self, model="gpt-3.5-turbo"):
+    def __init__(self, model="gpt-3.5-turbo-0125"):
         self.client = OpenAI()
         self.model = model
 
