@@ -14,51 +14,55 @@
 
 <body>
     <div class="container">
-        <h1>Generate an image!</h1>
+        <h3 class="grey-text text-darken-1">Paying for GPUs with product placement</h3>
 
-        <form id="prompt_form" onsubmit="generateImage(event)">
-            <div class="row">
-                <div class="input-field col s12">
+        <div class="row">
+            <form id="prompt_form" onsubmit="generateImage(event)">
+                <div class="input-field col s12 valign-wrapper">
                     <input placeholder="a surrealist painting that features a melting clock hanging from a barren tree"
                         id="prompt" type="text" class="validate" required autofocus>
                     <label for="prompt">Prompt</label>
-                </div>
 
-                <!-- TODO: Hook this up to a Javascript callback -->
-                <button class="btn waves-effect waves-light" type="submit" name="action"><span
-                        id="button_regular_content">Submit
-                        <i class="material-icons right">send</i>
-                    </span>
-                    <span id="button_loading_content" style="display: none;">
-                        <div class="preloader-wrapper small active">
-                            <div class="spinner-layer spinner-green-only">
-                                <div class="circle-clipper left">
-                                    <div class="circle"></div>
-                                </div>
-                                <div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div>
-                                <div class="circle-clipper right">
-                                    <div class="circle"></div>
+                    <button class="btn waves-effect waves-light submit-button" type="submit" name="action"><span
+                            id="button_regular_content">Submit <i class="material-icons right">send</i>
+                        </span>
+                        <span id="button_loading_content" style="display: none;">
+                            <div class="preloader-wrapper small active">
+                                <div class="spinner-layer spinner-green-only">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </span>
+                        </span>
 
-                </button>
-            </div>
-        </form>
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
 
         <div id="response" style="visibility: hidden;">
+            <img id="response_img" class="materialboxed" width="1024" height="1024">
+
+            <p>
+                Prompt: <span id="response_modified"></span>
+            </p>
+
             <p>
                 Original prompt: <span id="response_original"></span>
             </p>
             <p>
                 Brand match: <span id="response_brand"></span>
             </p>
-            <p>
-                Modified prompt: <span id="response_modified"></span>
-            </p>
+
         </div>
     </div>
 
@@ -109,6 +113,8 @@
                     $('#response_original').text(prompt);
                     $('#response_brand').text(response[0].company);
                     $('#response_modified').text(response[0].augmented_prompts[0]);
+
+                    $('#response_img').attr('src', "/static/images/img-sH7jM4Y6E3wMINmnjGfo0Dp2.png");
                     endProcessing();
                 }, 2000);
 
