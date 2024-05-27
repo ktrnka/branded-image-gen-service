@@ -107,7 +107,7 @@
 
             var prompt = $('#prompt').val();
             beginProcessing();
-            $.get('/generate', { prompt: prompt }, function (response) {
+            $.get('/generate_aws', { prompt: prompt }, function (response) {
 
                 setTimeout(function () {
                     $('#response_original').text(prompt);

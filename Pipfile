@@ -9,6 +9,10 @@ fastapi = "*"
 uvicorn = "*"
 txtai = "*"
 openai = "*"
+boto3 = "*"
+awscli = "*"
+botocore = "*"
+pillow = "*"
 
 [scripts]
 start = "fastapi dev backend/main.py"

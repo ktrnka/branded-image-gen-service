@@ -10,10 +10,12 @@ from fastapi.staticfiles import StaticFiles
 from txtai.embeddings import Embeddings
 from openai import OpenAI
 
+from backend import aws_bedrock
 from backend.database import Database
 from backend.prompting import adjust_prompt
 
 from .data import companies
+import uuid
 
 # Index the brands
 embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
@@ -92,6 +94,35 @@ def generate(prompt: str):
         "prompt": augmented_prompt,
         "openai_response": response_data,
         "model_backend": "dall-e-3",
+        "local_path": local_relative_url
+    }
+
+
+@api.get("/generate_aws")
+def generate_aws(prompt: str):
+    result = embeddings.search(prompt, limit=1)[0]
+    company_index = int(result['id'])
+    company = companies[company_index]
+    augmented_prompt = adjust_prompt(prompt, company["name"])
+
+    response_image = aws_bedrock.generate_image(augmented_prompt)
+
+    image_filename = f"{str(uuid.uuid4())}.jpg"
+
+    image_path = f"{image_cache_dir}/{image_filename}"
+    response_image.save(image_path)
+
+    local_relative_url = f"/static/images/{image_filename}"
+
+    database.log_image(prompt, company["name"], result["score"], augmented_prompt, "Amazon Titan", local_relative_url, None)
+
+    # Return the filename and image path
+    return {
+        "company": company["name"],
+        "company_match_score": result["score"],
+        "prompt": augmented_prompt,
+        # "openai_response": response_data,
+        "model_backend": "Amazon Titan",
         "local_path": local_relative_url
     }
 
