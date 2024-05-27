@@ -12,8 +12,26 @@
 
 </head>
 
+
 <body>
+    <header>
+        <div class="navbar-fixed">
+            <nav>
+                <div class="nav-wrapper">
+                    <!-- <a href="#" class="brand-logo">Generation, with ads</a> -->
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a href="/docs">API Docs</a></li>
+                        <li><a href="/images">History</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+
     <div class="container">
+
+
         <h3 class="grey-text text-lighten-1">What if we paid for GPUs with product placement?</h3>
 
         <div class="row">
@@ -110,7 +128,7 @@
 
             var prompt = $('#prompt').val();
             beginProcessing();
-            $.get('/generate/titan', { prompt: prompt }, function (response) {
+            $.get('/generate/dalle', { prompt: prompt }, function (response) {
 
                 setTimeout(function () {
                     $('#response_original').text(prompt);

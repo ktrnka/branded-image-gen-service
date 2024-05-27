@@ -30,7 +30,9 @@ api.mount("/static", StaticFiles(directory="backend/static"), name="static")
 
 @api.get("/")
 def route():
-    return {"status": "ok"}
+    with open("backend/static/demo.html", "r") as file:
+        content = file.read()
+    return HTMLResponse(content)
 
 @api.get("/augment")
 def augment(prompt: str):
