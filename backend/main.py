@@ -2,7 +2,8 @@ import random
 from fastapi.responses import HTMLResponse
 import requests
 from urllib.parse import urlparse
-import sqlite3
+import re
+
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -87,7 +88,7 @@ def generate(prompt: str):
 
     local_relative_url = f"/static/images/{image_filename}"
 
-    database.log_image(prompt, company["name"], result["score"], augmented_prompt, "dall-e-3", local_relative_url, str(response_data))
+    database.log_image(prompt, company["name"], result["score"], augmented_prompt, "dall-e-3", local_relative_url, response_data.to_json())
 
     # Return the filename and image path
     return {
@@ -99,7 +100,6 @@ def generate(prompt: str):
         "local_path": local_relative_url
     }
 
-import re
 def munge_local_path(path: str) -> str:
     return re.sub(r"^backend", "", path)
 
