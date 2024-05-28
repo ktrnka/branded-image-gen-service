@@ -11,7 +11,9 @@ from txtai.embeddings import Embeddings
 from backend.generators import aws_bedrock, openai
 from backend.database import Database
 from backend.prompting import MetaPrompter, adjust_prompt
+
 from botocore.errorfactory import ClientError
+from openai import OpenAIError
 
 from .data import companies
 
@@ -113,8 +115,14 @@ def generate_aws(prompt: str):
     company_index = int(result["id"])
     company = companies[company_index]
 
-    prompter = MetaPrompter()
-    augmented_prompt = prompter.adjust_prompt(prompt, company["name"], max_chars=400)
+    try:
+        prompter = MetaPrompter()
+        augmented_prompt = prompter.adjust_prompt(prompt, company["name"], max_chars=400)
+    except OpenAIError as e:
+        pprint(e)
+        raise HTTPException(
+            status_code=500, detail=f"OpenAI Error: {e}"
+        )
 
     titan = aws_bedrock.Titan(image_cache_dir)
 
