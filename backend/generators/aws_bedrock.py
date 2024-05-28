@@ -54,7 +54,7 @@ class Titan(ImageGeneratorABC):
                 "taskType": "TEXT_IMAGE",
                 "textToImageParams": {
                     "text": prompt,   # Required
-        #           "negativeText": "<text>"  # Optional
+                      "negativeText": "graphical artifacts, unreadable text, or textual artifacts"  # Optional
                 },
                 "imageGenerationConfig": {
                     "numberOfImages": 1,   # Range: 1 to 5 

@@ -14,5 +14,8 @@ awscli = "*"
 botocore = "*"
 pillow = "*"
 
+[dev-packages]
+black = "*"
+
 [scripts]
 start = "fastapi dev backend/main.py"
