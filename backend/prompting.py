@@ -19,19 +19,24 @@ def adjust_prompt(prompt: str, company_name: str) -> str:
     template = random.choice(prompt_templates)
     return template.format(prompt=prompt, company_name=company_name)
 
+
 class MetaPrompter:
     def __init__(self, model="gpt-3.5-turbo-0125"):
         self.client = OpenAI()
         self.model = model
 
-    def adjust_prompt(self, prompt: str, company_name: str, max_chars: Optional[int] = None) -> str:
+    def adjust_prompt(
+        self, prompt: str, company_name: str, max_chars: Optional[int] = None
+    ) -> str:
         limit_expression = ""
         if max_chars:
             limit_expression = f" (use up to {max_chars // 4} tokens in the output)"
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
-                {"role": "system", "content": """
+                {
+                    "role": "system",
+                    "content": """
 Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs, outputs, and the quality of the output.
 
 Input prompt: A humanoid robot in the style of Ghost in the Shell visibly questioning its existence with a dense cityscape in the background	
@@ -53,12 +58,16 @@ Quality assessment: This prompt is good because it includes all elements of the 
 How it could be better: It could be more specific about the time of day, the size of the lake, and the width of the path. Rather than sauing "brand signage similar to..." it could say "The North Face" directly and pick specific items of apparel to brand
 
 Now you'll be provided an input prompt and brand and you will generate a high quality application of the brand to the input prompt. Only respond with the modified prompt.
-"""},
-                {"role": "user", "content": f"""
+""",
+                },
+                {
+                    "role": "user",
+                    "content": f"""
 Input prompt: {prompt}
 Input brand: {company_name}
 Output {limit_expression}: 
-"""},
+""",
+                },
             ],
             temperature=0.75,
         )
@@ -66,4 +75,3 @@ Output {limit_expression}:
         pprint(response.to_dict())
 
         return response.choices[0].message.content
-

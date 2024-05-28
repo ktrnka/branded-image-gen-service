@@ -3,6 +3,7 @@ from openai import OpenAI
 import requests
 from .base import ImageGeneratorABC, ImageResult
 
+
 class DallE(ImageGeneratorABC):
     model_name = "OpenAI DALL-E 3"
 
@@ -29,5 +30,5 @@ class DallE(ImageGeneratorABC):
         image_path = f"{self.local_cache_dir}/{image_filename}"
         with open(image_path, "wb") as f:
             f.write(requests.get(response_url).content)
-        
+
         return ImageResult(path=image_path, response_metadata=response_data.to_json())

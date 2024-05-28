@@ -17,7 +17,9 @@ from .data import companies
 
 # Index the brands
 embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
-embeddings.index([f"{company['market']}\n{company['brand_identity']}" for company in companies])
+embeddings.index(
+    [f"{company['market']}\n{company['brand_identity']}" for company in companies]
+)
 
 
 image_cache_dir = "backend/static/images"
@@ -36,28 +38,32 @@ def route():
         content = file.read()
     return HTMLResponse(content)
 
+
 @api.get("/augment")
 def augment(prompt: str):
     response = []
 
     for result in embeddings.search(prompt, limit=3):
-        company_index = int(result['id'])
+        company_index = int(result["id"])
         company = companies[company_index]
 
         augmented_prompts = [adjust_prompt(prompt, company["name"]) for _ in range(3)]
 
-        response.append({
-            "company": company["name"],
-            "company_match_score": result["score"],
-            "augmented_prompts": augmented_prompts,
-        })
+        response.append(
+            {
+                "company": company["name"],
+                "company_match_score": result["score"],
+                "augmented_prompts": augmented_prompts,
+            }
+        )
 
     return response
+
 
 @api.get("/augment_v2")
 def augment_v2(prompt: str):
     result = embeddings.search(prompt, limit=1)[0]
-    company_index = int(result['id'])
+    company_index = int(result["id"])
     company = companies[company_index]
 
     prompter = MetaPrompter()
@@ -69,10 +75,11 @@ def augment_v2(prompt: str):
         "augmented_prompt": augmented_prompt,
     }
 
+
 @api.get("/generate/dalle")
 def generate(prompt: str):
     result = embeddings.search(prompt, limit=1)[0]
-    company_index = int(result['id'])
+    company_index = int(result["id"])
     company = companies[company_index]
     augmented_prompt = adjust_prompt(prompt, company["name"])
 
@@ -81,7 +88,15 @@ def generate(prompt: str):
 
     local_relative_url = f"/static/images/{image_result.filename}"
 
-    database.log_image(prompt, company["name"], result["score"], augmented_prompt, dalle.model_name, local_relative_url, image_result.response_metadata)
+    database.log_image(
+        prompt,
+        company["name"],
+        result["score"],
+        augmented_prompt,
+        dalle.model_name,
+        local_relative_url,
+        image_result.response_metadata,
+    )
 
     return {
         "company": company["name"],
@@ -95,7 +110,7 @@ def generate(prompt: str):
 @api.get("/generate/titan")
 def generate_aws(prompt: str):
     result = embeddings.search(prompt, limit=1)[0]
-    company_index = int(result['id'])
+    company_index = int(result["id"])
     company = companies[company_index]
 
     prompter = MetaPrompter()
@@ -107,12 +122,21 @@ def generate_aws(prompt: str):
         image_result = titan.generate(augmented_prompt)
     except ClientError as e:
         pprint(e.response)
-        raise HTTPException(status_code=400, detail=f"AWS Error: {e.response['Error']['Message']}")
-
+        raise HTTPException(
+            status_code=400, detail=f"AWS Error: {e.response['Error']['Message']}"
+        )
 
     local_relative_url = f"/static/images/{image_result.filename}"
 
-    database.log_image(prompt, company["name"], result["score"], augmented_prompt, titan.model_name, local_relative_url, image_result.response_metadata)
+    database.log_image(
+        prompt,
+        company["name"],
+        result["score"],
+        augmented_prompt,
+        titan.model_name,
+        local_relative_url,
+        image_result.response_metadata,
+    )
 
     # Return the filename and image path
     return {
@@ -120,11 +144,13 @@ def generate_aws(prompt: str):
         "company_match_score": result["score"],
         "prompt": augmented_prompt,
         "model_backend": titan.model_name,
-        "local_path": local_relative_url
+        "local_path": local_relative_url,
     }
+
 
 def munge_local_path(path: str) -> str:
     return re.sub(r"^backend", "", path)
+
 
 @api.get("/images", response_class=HTMLResponse)
 def show_images():
