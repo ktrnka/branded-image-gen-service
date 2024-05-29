@@ -231,6 +231,287 @@ companies = [
         "market": "Beats by Dre is a brand of high-performance audio products, including headphones, earphones, and speakers, known for their sleek design and strong bass performance.",
         "brand_identity": "Beats' brand identity is trendy and bold, targeting young, fashion-conscious consumers and music lovers. Their marketing themes often include celebrity endorsements and a focus on lifestyle, with the iconic 'b' logo symbolizing premium audio and style.",
     },
+    {
+        "name": "Squarespace",
+        "market": "Squarespace is a website building and hosting service that provides easy-to-use tools for creating and maintaining websites, known for its sleek and customizable templates.",
+        "brand_identity": "Squarespace's brand identity is creative and professional, targeting small business owners, entrepreneurs, and creatives. Their marketing themes emphasize ease of use, design flexibility, and professional results.",
+        "marketing_examples": [
+            "A full-page ad with a minimalist design showcasing a beautifully crafted website on a laptop screen. The background is a clean, modern workspace with subtle touches of creativity like sketches and color palettes.",
+            "A banner ad featuring a split-screen of a basic website and a professionally designed Squarespace website. The transition between the two sites highlights the customization options available.",
+            "A full-page ad displaying testimonials from satisfied customers with images of their websites. The layout includes a mix of artistic and professional websites, emphasizing versatility."
+        ]
+    },
+    {
+        "name": "Snickers",
+        "market": "Snickers is a popular chocolate bar produced by Mars, Incorporated, known for its combination of nougat, caramel, peanuts, and milk chocolate.",
+        "brand_identity": "Snickers' brand identity is humorous and satisfying, targeting a broad audience including young adults and snack enthusiasts. Their marketing themes often revolve around the idea that Snickers satisfies hunger and improves mood.",
+        "marketing_examples": [
+            "A full-page ad with a dramatic transformation scene showing a grumpy, disheveled person on the left side and a happy, confident version of the same person on the right side, holding a Snickers bar. The background is split into two distinct colors, dark and gloomy on the left and bright and cheerful on the right.",
+            "A banner ad showing a close-up of a hand reaching out to grab a Snickers bar from a vending machine. The background shows a slightly blurred office environment with coworkers looking stressed and tired, highlighting the Snickers bar as the focal point.",
+            "A full-page ad with a high-energy sports scene where an athlete is struggling, then transformed into a star performer after taking a bite of a Snickers bar. The background includes cheering fans and vibrant stadium lights, emphasizing the change in performance."
+        ]
+    },
+    {
+        "name": "Butterfinger",
+        "market": "Butterfinger is a candy bar created by Nestlé, featuring a crispy peanut butter core covered in chocolate.",
+        "brand_identity": "Butterfinger's brand identity is playful and bold, targeting younger audiences and candy lovers. Their marketing themes often include humor and memorable catchphrases.",
+        "marketing_examples": [
+            "A full-page ad with the headline 'Nobody Better Lay a Finger on My Butterfinger' featuring an image of the candy bar and a playful background design with cartoon characters trying to steal the bar.",
+            "A banner ad showing a close-up of a Butterfinger bar being broken in half, with a burst of peanut butter and chocolate filling the scene, highlighting its texture and flavor.",
+            "A full-page ad with a humorous comic strip style that depicts someone going to great lengths to protect their Butterfinger bar, with bright colors and exaggerated expressions."
+        ]
+    },
+    {
+        "name": "Exxon Mobil",
+        "market": "Exxon Mobil is one of the world's largest publicly traded international oil and gas companies, involved in exploration, production, refining, and marketing of petroleum products.",
+        "brand_identity": "Exxon Mobil's brand identity is reliable and forward-thinking, targeting energy consumers and investors. Their marketing themes often emphasize innovation, safety, and sustainability in energy production.",
+        "marketing_examples": [
+            "A full-page ad with the headline 'Powering Progress' featuring an image of an advanced oil rig or renewable energy facility, with a clean and modern design highlighting technological advancements.",
+            "A banner ad showcasing Exxon Mobil's commitment to sustainability with a vibrant image of wind turbines and solar panels against a clear blue sky, emphasizing green energy.",
+            "A full-page ad with a scenic image of clean energy initiatives, such as solar panels in a desert landscape, with the headline 'Innovating for a Cleaner Tomorrow', focusing on their environmental efforts."
+        ]
+    },
+    {
+        "name": "BP",
+        "market": "BP (British Petroleum) is a multinational oil and gas company, involved in all aspects of the oil and gas industry, including exploration, production, refining, distribution, and marketing.",
+        "brand_identity": "BP's brand identity is innovative and responsible, targeting environmentally conscious consumers and investors. Their marketing themes often focus on sustainability, green energy, and corporate responsibility.",
+        "marketing_examples": [
+            "A full-page ad with the headline 'Beyond Petroleum' featuring images of BP’s renewable energy projects, such as wind farms and solar arrays, with a focus on sustainability.",
+            "A banner ad with a vibrant image of a green energy landscape, including electric vehicle charging stations and wind turbines, emphasizing BP’s future-forward energy solutions.",
+            "A full-page ad showcasing BP's community projects, with the headline 'Powering Communities Responsibly', featuring images of local environmental initiatives and clean energy education programs."
+        ]
+    },
+    {
+        "name": "Lego",
+        "market": "Lego is a Danish toy company best known for its plastic construction toys that allow children and adults to build various models using interlocking bricks.",
+        "brand_identity": "Lego's brand identity is creative and educational, targeting children and adults who enjoy building and imagination. Their marketing themes often emphasize creativity, learning through play, and family bonding.",
+        "marketing_examples": [
+            "A full-page ad with the headline 'Build Your Imagination' featuring an image of a complex Lego creation like a castle or spaceship, set against a bright, colorful background with children playing.",
+            "A banner ad showcasing a new Lego set with detailed images of the pieces and the completed model, highlighting the intricacy and fun of building with Lego.",
+            "A full-page ad with a family building a Lego set together, captured in a cozy living room setting with a warm and inviting atmosphere, emphasizing family bonding."
+        ]
+    },
+    {
+        "name": "Johnson & Johnson",
+        "market": "Johnson & Johnson is a multinational corporation that develops medical devices, pharmaceutical, and consumer packaged goods, known for brands like Band-Aid, Tylenol, and baby care products.",
+        "brand_identity": "Johnson & Johnson's brand identity is caring and trustworthy, targeting families and healthcare professionals. Their marketing themes often focus on health, wellness, and family care.",
+        "marketing_examples": [
+            "A full-page ad featuring a mother and baby with the headline 'Care for What Matters Most', showcasing Johnson & Johnson baby products in a soft, nurturing setting.",
+            "A banner ad with an image of a Band-Aid being applied to a child's knee, set against a backdrop of a playful outdoor scene, highlighting the product's reliability and comfort.",
+            "A full-page ad highlighting Tylenol products with a calm, reassuring image of a person resting peacefully, with subtle medical graphics emphasizing the product's efficacy and safety."
+        ]
+    },
+    {
+        "name": "Comcast",
+        "market": "Comcast is an American telecommunications conglomerate that provides cable television, internet, telephone, and wireless services to residential and commercial customers.",
+        "brand_identity": "Comcast's brand identity is innovative and connected, targeting households and businesses. Their marketing themes often emphasize high-speed internet, reliable service, and advanced technology.",
+        "marketing_examples": [
+            "A full-page ad with the headline 'Experience the Fastest Internet', featuring a sleek, modern home interior with multiple devices connected seamlessly, highlighting the speed and reliability of Comcast’s Xfinity service.",
+            "A banner ad showcasing Comcast’s Xfinity home automation features with a futuristic home setup, smart devices in action, and a family enjoying the convenience and security.",
+            "A full-page ad highlighting a special offer for bundled services, with vibrant images of internet, TV, and phone services, set against a backdrop of a happy, connected family."
+        ]
+    },
+    {
+        "name": "Kool-Aid",
+        "market": "Kool-Aid is a brand of flavored drink mix owned by Kraft Heinz, known for its variety of flavors and the iconic Kool-Aid Man mascot.",
+        "brand_identity": "Kool-Aid's brand identity is fun and vibrant, targeting children and families. Their marketing themes often include excitement, refreshment, and playful fun, with the Kool-Aid Man bursting through walls in ads.",
+        "marketing_examples": [
+            "A full-page ad with the Kool-Aid Man bursting through a wall at a summer party, with kids and families enjoying vibrant Kool-Aid drinks, set against a colorful, festive backdrop.",
+            "A banner ad showcasing a lineup of Kool-Aid flavors in bright, cheerful packaging, with a playful summer scene in the background, emphasizing refreshment.",
+            "A full-page ad with a fun, animated scene of kids playing outside on a hot day, with the Kool-Aid Man delivering ice-cold drinks, creating a lively and refreshing atmosphere."
+        ]
+    },
+    {
+        "name": "Netflix",
+        "market": "Netflix is a leading streaming service offering a wide variety of TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.",
+        "brand_identity": "Netflix's brand identity is innovative and entertaining, targeting a global audience of diverse viewers. Their marketing themes often emphasize original content, convenience, and the ability to watch anywhere, anytime.",
+        "marketing_examples": [
+            "A full-page ad featuring a cozy living room setting with a family or group of friends gathered around a large TV screen, displaying a montage of popular Netflix Original series, with the room filled with popcorn, blankets, and a warm, inviting atmosphere.",
+            "A banner ad showcasing a series of movie posters and show thumbnails cascading down the screen, emphasizing the diversity of content available on Netflix. The background mimics the sleek, dark interface of the Netflix browsing experience.",
+            "A full-page ad with an outdoor setting where people are watching Netflix on various devices—tablets, phones, and laptops. The scene includes a picnic in a park, a beach day, and a commute on public transport, highlighting the portability and convenience of streaming Netflix anywhere."
+        ]
+    },
+    {
+        "name": "Salesforce",
+        "market": "Salesforce is a cloud-based software company that provides customer relationship management (CRM) services and enterprise applications focused on customer service, marketing automation, analytics, and application development.",
+        "brand_identity": "Salesforce's brand identity is innovative and customer-centric, targeting businesses of all sizes looking to improve their customer relationships. Their marketing themes often emphasize the power of cloud computing, integration, and user-friendly design.",
+        "marketing_examples": [
+            "A full-page ad featuring a sleek office environment with employees interacting seamlessly using Salesforce on various devices, highlighting real-time data and customer insights.",
+            "A banner ad showcasing a dashboard interface with vibrant graphs and analytics, set against a backdrop of business professionals collaborating efficiently, emphasizing productivity.",
+            "A full-page ad with a futuristic theme, featuring an interconnected network of business applications powered by Salesforce, highlighting the integration and flexibility of their platform."
+        ]
+    },
+    {
+        "name": "FedEx",
+        "market": "FedEx is a multinational courier delivery services company known for its overnight shipping service, and pioneering a system that could track packages and provide real-time updates on package location.",
+        "brand_identity": "FedEx's brand identity is reliable and efficient, targeting businesses and individual customers who need fast and secure delivery services. Their marketing themes often emphasize speed, reliability, and global reach.",
+        "marketing_examples": [
+            "A full-page ad with the headline 'When It Absolutely, Positively Has to Be There Overnight' featuring an image of a FedEx plane taking off at sunset, symbolizing speed and reliability.",
+            "A banner ad showcasing a FedEx courier delivering a package to a smiling customer in a bustling city environment, highlighting the convenience and personal touch of their service.",
+            "A full-page ad with a global map highlighting FedEx's extensive delivery network, with visuals of packages moving seamlessly across countries and continents, emphasizing their global reach."
+        ]
+    },
+    {
+        "name": "Blockbuster",
+        "market": "Blockbuster was an American-based provider of home movie and video game rental services through video rental shops, DVD-by-mail, streaming, video on demand, and cinema theater.",
+        "brand_identity": "Blockbuster's brand identity was nostalgic and entertainment-focused, targeting families and movie enthusiasts. Their marketing themes often emphasized the joy of movie nights and the wide selection of titles available.",
+        "marketing_examples": [
+            "A full-page ad featuring a cozy living room setup with a family gathered around a TV with a Blockbuster rental. The scene is filled with popcorn, soda, and a stack of DVDs, highlighting the nostalgic joy of movie nights.",
+            "A banner ad showcasing iconic movie covers available at Blockbuster, set against a backdrop of a vibrant, bustling rental store interior, emphasizing the wide selection.",
+            "A full-page ad with a retro theme, featuring the classic Blockbuster logo and a visual of a VHS tape being inserted into a VCR, invoking a sense of nostalgia and the golden age of home video."
+        ]
+    },
+    {
+        "name": "Rainier Beer",
+        "market": "Rainier Beer is a beer brand founded in Seattle, Washington, known for its lagers and iconic red 'R' logo. It has a long history and a strong regional presence in the Pacific Northwest.",
+        "brand_identity": "Rainier Beer's brand identity is rugged and authentic, targeting outdoor enthusiasts and those who appreciate traditional brewing. Their marketing themes often include natural landscapes, regional pride, and a laid-back lifestyle.",
+        "marketing_examples": [
+            "A full-page ad featuring a picturesque mountain landscape with a group of friends enjoying Rainier Beer around a campfire, highlighting the connection with nature and outdoor adventures.",
+            "A banner ad showcasing the iconic red 'R' logo set against a backdrop of the Seattle skyline, with images of the beer in hand, emphasizing regional pride and tradition.",
+            "A full-page ad with a vintage-style design, featuring historical images and the classic Rainier Beer bottle, celebrating the brand’s heritage and long-standing presence in the community."
+        ]
+    },
+    {
+        "name": "Aflac",
+        "market": "Aflac is an American insurance company that provides supplemental insurance for individuals and groups to help cover expenses not paid by major medical insurance.",
+        "brand_identity": "Aflac's brand identity is approachable and reliable, targeting individuals and families seeking financial security. Their marketing themes often feature the Aflac Duck, emphasizing the ease and benefits of their supplemental insurance plans.",
+        "marketing_examples": [
+            "A full-page ad with the Aflac Duck prominently featured, interacting with a family in a warm, homey setting, highlighting the peace of mind provided by Aflac insurance.",
+            "A banner ad showcasing the Aflac Duck assisting a smiling individual with medical bills, set against a backdrop of a healthcare facility, emphasizing financial support.",
+            "A full-page ad with a cheerful, animated scene of the Aflac Duck guiding a family through various life stages, highlighting the comprehensive coverage options available."
+        ]
+    },
+    {
+        "name": "Allstate",
+        "market": "Allstate is a large American insurance company offering a variety of insurance products, including auto, home, life, and business insurance, known for its slogan 'You're in Good Hands'.",
+        "brand_identity": "Allstate's brand identity is protective and trustworthy, targeting individuals and families seeking comprehensive and reliable insurance coverage. Their marketing themes often emphasize security, trust, and the iconic 'good hands' logo.",
+        "marketing_examples": [
+            "A full-page ad with the headline 'You're in Good Hands' featuring an image of a family in a secure home, with the Allstate logo subtly integrated into the scene.",
+            "A banner ad showcasing a caring Allstate agent helping a customer, set against a backdrop of a cozy, well-protected home, highlighting personal service and protection.",
+            "A full-page ad with a dramatic scene of a car accident being promptly attended to by Allstate services, emphasizing quick response and reliable coverage."
+        ]
+    },
+    {
+        "name": "Boeing",
+        "market": "Boeing is an American multinational corporation that designs, manufactures, and sells airplanes, rotorcraft, rockets, satellites, and telecommunications equipment, and provides leasing and product support services.",
+        "brand_identity": "Boeing's brand identity is innovative and pioneering, targeting airlines, governments, and space agencies. Their marketing themes often emphasize technological advancement, reliability, and aerospace leadership.",
+        "marketing_examples": [
+            "A full-page ad with a sleek, futuristic airplane flying above the clouds, highlighting Boeing’s cutting-edge technology and engineering prowess.",
+            "A banner ad showcasing the interior of a modern Boeing jet, with spacious seating and advanced in-flight entertainment systems, emphasizing passenger comfort and innovation.",
+            "A full-page ad with a dramatic launch scene of a Boeing rocket, set against a starry night sky, highlighting their contributions to space exploration and aerospace excellence."
+        ]
+    },
+    {
+        "name": "CVS",
+        "market": "CVS is an American retail corporation that operates a chain of pharmacy stores, providing prescription medications, health and wellness products, and basic household items.",
+        "brand_identity": "CVS's brand identity is caring and convenient, targeting individuals and families looking for accessible healthcare and everyday essentials. Their marketing themes often emphasize convenience, health services, and community care.",
+        "marketing_examples": [
+            "A full-page ad featuring a friendly CVS pharmacist assisting a customer, with shelves of health and wellness products in the background, emphasizing personal care and convenience.",
+            "A banner ad showcasing the convenience of CVS's in-store clinics with an image of a patient receiving quick care in a clean, professional setting, highlighting accessibility.",
+            "A full-page ad with a vibrant, welcoming storefront image, featuring customers picking up prescriptions and shopping for essentials, emphasizing the community aspect and comprehensive services."
+        ]
+    },
+    {
+        "name": "Delta Air Lines",
+        "market": "Delta Air Lines is a major American airline, providing air travel services to both domestic and international destinations. They are known for their extensive network and customer service.",
+        "brand_identity": "Delta's brand identity is reliable and customer-focused, targeting business and leisure travelers. Their marketing themes often emphasize comfort, connectivity, and excellent service.",
+        "marketing_examples": [
+            "A full-page ad featuring a luxurious first-class cabin with passengers enjoying spacious seating and gourmet meals, set against a backdrop of a serene sky, highlighting comfort and premium service.",
+            "A banner ad showcasing Delta’s extensive global network with a vibrant world map, highlighting key destinations and flight paths, emphasizing connectivity and reach.",
+            "A full-page ad with a heartwarming scene of a family being warmly welcomed by Delta staff at the airport, emphasizing exceptional customer service and a friendly travel experience."
+        ]
+    },
+
+    {
+        "name": "John Deere",
+        "market": "John Deere is a brand of Deere & Company, known for manufacturing agricultural, construction, and forestry machinery, diesel engines, and lawn care equipment.",
+        "brand_identity": "John Deere's brand identity is durable and reliable, targeting farmers, construction workers, and landscaping professionals. Their marketing themes often emphasize ruggedness, efficiency, and innovation.",
+        "marketing_examples": [
+            "A full-page ad featuring a John Deere tractor in the middle of a lush, green field, with a farmer smiling proudly, highlighting the machine's reliability and performance.",
+            "A banner ad showcasing the versatility of John Deere machinery with a montage of different equipment in use—tractors, harvesters, and lawn mowers—set against a backdrop of various agricultural and construction sites.",
+            "A full-page ad with a close-up of a John Deere logo on a piece of equipment, with a detailed background showing a busy, productive farm, emphasizing the brand's integral role in farming success."
+        ]
+    },
+    {
+        "name": "Electronic Arts",
+        "market": "Electronic Arts (EA) is a global leader in digital interactive entertainment, known for developing and publishing video games such as FIFA, Madden NFL, and The Sims.",
+        "brand_identity": "EA's brand identity is dynamic and innovative, targeting gamers of all ages. Their marketing themes often emphasize immersive experiences, cutting-edge graphics, and engaging gameplay.",
+        "marketing_examples": [
+            "A full-page ad featuring vivid, action-packed scenes from popular EA games, with players fully immersed in gameplay, emphasizing the excitement and high-quality graphics.",
+            "A banner ad showcasing the latest EA sports game with a detailed image of a stadium filled with cheering fans, athletes in motion, and the game's realistic visuals.",
+            "A full-page ad with a futuristic theme, featuring characters from various EA games interacting in a digital world, highlighting the innovation and creativity of EA's game design."
+        ]
+    },
+    {
+        "name": "Garmin",
+        "market": "Garmin is a multinational technology company known for its GPS technology development in the aviation, marine, automotive, outdoor, and fitness markets.",
+        "brand_identity": "Garmin's brand identity is precise and adventurous, targeting outdoor enthusiasts, athletes, and travelers. Their marketing themes often emphasize accuracy, reliability, and the spirit of exploration.",
+        "marketing_examples": [
+            "A full-page ad featuring an adventurer using a Garmin GPS device while hiking through rugged terrain, with a breathtaking mountain landscape in the background, emphasizing reliability and precision.",
+            "A banner ad showcasing Garmin's fitness wearables with a close-up of an athlete tracking their performance during an intense workout, highlighting advanced features and accuracy.",
+            "A full-page ad with a sailor using a Garmin marine GPS system on a boat navigating through challenging waters, set against a backdrop of a vibrant sunset over the ocean, emphasizing the brand's trustworthiness in critical situations."
+        ]
+    },
+    {
+        "name": "General Mills",
+        "market": "General Mills is a leading global food company that produces and markets well-known brands like Cheerios, Betty Crocker, Haagen-Dazs, and Pillsbury.",
+        "brand_identity": "General Mills' brand identity is wholesome and family-oriented, targeting families and individuals who prioritize nutrition and convenience. Their marketing themes often emphasize quality, tradition, and the joy of eating together.",
+        "marketing_examples": [
+            "A full-page ad featuring a happy family enjoying a breakfast of Cheerios around a sunny kitchen table, highlighting the wholesome, family-friendly nature of the brand.",
+            "A banner ad showcasing a beautifully decorated Betty Crocker cake with vibrant colors and intricate designs, set against a background of a festive kitchen scene, emphasizing quality and celebration.",
+            "A full-page ad with a comforting scene of a family enjoying a warm, delicious meal made with Pillsbury products, with a cozy, inviting atmosphere, highlighting tradition and home-cooked goodness."
+        ]
+    },
+    {
+        "name": "Hilton",
+        "market": "Hilton is a global hospitality company, operating a portfolio of 18 world-class brands including Hilton Hotels & Resorts, Waldorf Astoria, and DoubleTree by Hilton.",
+        "brand_identity": "Hilton's brand identity is luxurious and welcoming, targeting travelers seeking comfort and high-quality service. Their marketing themes often emphasize relaxation, sophistication, and exceptional guest experiences.",
+        "marketing_examples": [
+            "A full-page ad featuring a luxurious Hilton hotel suite with elegant decor, a stunning city view from the window, and a guest relaxing in a plush robe, highlighting comfort and luxury.",
+            "A banner ad showcasing a beautifully set table at a Hilton restaurant with gourmet dishes, sparkling glasses, and a view of a scenic landscape, emphasizing fine dining and exceptional service.",
+            "A full-page ad with a family enjoying the poolside amenities at a Hilton resort, with palm trees, blue skies, and clear waters, highlighting the brand's family-friendly and relaxing atmosphere."
+        ]
+    },
+    {
+        "name": "Kraft",
+        "market": "Kraft is a well-known food brand owned by Kraft Heinz, offering a wide range of products including cheese, condiments, and snacks.",
+        "brand_identity": "Kraft's brand identity is comforting and reliable, targeting families and individuals who enjoy classic, easy-to-prepare foods. Their marketing themes often emphasize tradition, convenience, and great taste.",
+        "marketing_examples": [
+            "A full-page ad featuring a delicious grilled cheese sandwich made with Kraft Singles, with a golden, crispy exterior and gooey cheese inside, set against a warm, inviting kitchen background.",
+            "A banner ad showcasing a variety of Kraft products on a picnic table, with a happy family enjoying a sunny day outdoors, highlighting convenience and versatility.",
+            "A full-page ad with a cozy dinner scene where a family is enjoying a meal made with Kraft Mac & Cheese, with smiles and laughter around the table, emphasizing comfort and tradition."
+        ]
+    },
+    {
+        "name": "Heinz",
+        "market": "Heinz is a leading global food brand known for its ketchup, sauces, and other condiments, part of the Kraft Heinz Company.",
+        "brand_identity": "Heinz's brand identity is classic and dependable, targeting families and individuals who appreciate high-quality, flavorful condiments. Their marketing themes often emphasize taste, quality, and the iconic Heinz branding.",
+        "marketing_examples": [
+            "A full-page ad featuring a bottle of Heinz Ketchup being poured onto a juicy burger, with vibrant, fresh ingredients and a summery backyard barbecue setting, highlighting taste and tradition.",
+            "A banner ad showcasing a row of Heinz condiments with a tagline emphasizing quality and flavor, set against a clean, modern kitchen background, highlighting versatility.",
+            "A full-page ad with a nostalgic scene of a diner table with Heinz Ketchup prominently placed, and a plate of crispy fries ready to be dipped, emphasizing the brand's timeless appeal."
+        ]
+    },
+    {
+        "name": "Lululemon",
+        "market": "Lululemon is an athletic apparel retailer known for its high-quality yoga pants, activewear, and accessories, targeting fitness enthusiasts.",
+        "brand_identity": "Lululemon's brand identity is active and mindful, targeting individuals who value fitness, wellness, and style. Their marketing themes often emphasize performance, comfort, and a holistic approach to health.",
+        "marketing_examples": [
+            "A full-page ad featuring a group of individuals practicing yoga in a serene outdoor setting, all wearing stylish Lululemon activewear, with a calm, natural background highlighting mindfulness and wellness.",
+            "A banner ad showcasing a close-up of Lululemon's latest yoga pants with intricate detailing, set against a dynamic background of an urban fitness studio, emphasizing quality and performance.",
+            "A full-page ad with a runner stretching on a scenic trail, wearing Lululemon gear, with the sunrise in the background, highlighting the connection between fitness and nature."
+        ]
+    },
+    {
+        "name": "Royal Caribbean",
+        "market": "Royal Caribbean is a global cruise vacation company that operates a fleet of modern ships offering a wide variety of activities, dining options, and destinations.",
+        "brand_identity": "Royal Caribbean's brand identity is adventurous and luxurious, targeting vacationers seeking unique and memorable travel experiences. Their marketing themes often emphasize adventure, relaxation, and exceptional service.",
+        "marketing_examples": [
+            "A full-page ad featuring a stunning view of a Royal Caribbean ship sailing through crystal-clear waters with passengers enjoying onboard amenities, highlighting adventure and luxury.",
+            "A banner ad showcasing an array of activities available on Royal Caribbean cruises, such as rock climbing, fine dining, and exotic excursions, set against a vibrant backdrop of popular destinations.",
+            "A full-page ad with a romantic scene of a couple enjoying a sunset dinner on the deck of a Royal Caribbean ship, with the ocean in the background, emphasizing relaxation and exceptional service."
+        ]
+    }
 ]
 
 
