@@ -15,17 +15,24 @@ from .prompting import MetaPrompter, adjust_prompt
 from botocore.errorfactory import ClientError
 from openai import OpenAIError
 
-from .data import companies
+from .branding import companies
 from dotenv import load_dotenv
 
 # Set up any access keys, etc
 load_dotenv()
 
+
 # Index the brands
-embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
-embeddings.index(
-    [f"{company['market']}\n{company['brand_identity']}" for company in companies]
-)
+def index_brands():
+    embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
+    embeddings.index(
+        [f"{company['market']}\n{company['brand_identity']}" for company in companies]
+    )
+
+    return embeddings
+
+
+embeddings = index_brands()
 
 
 image_cache_dir = "web_backend/static/images"
@@ -68,25 +75,28 @@ def augment(prompt: str):
 
 @api.get("/augment_v2")
 def augment_v2(prompt: str):
-    result = embeddings.search(prompt, limit=1)[0]
-    company_index = int(result["id"])
-    company = companies[company_index]
+    company, match_score = match_brand(prompt)
 
     prompter = MetaPrompter()
     augmented_prompt = prompter.adjust_prompt(prompt, company["name"])
 
     return {
         "company": company["name"],
-        "company_match_score": result["score"],
+        "company_match_score": match_score,
         "augmented_prompt": augmented_prompt,
     }
 
 
-@api.get("/generate/dalle")
-def generate(prompt: str):
+def match_brand(prompt):
     result = embeddings.search(prompt, limit=1)[0]
     company_index = int(result["id"])
     company = companies[company_index]
+    return company, result["score"]
+
+
+@api.get("/generate/dalle")
+def generate(prompt: str):
+    company, match_score = match_brand(prompt)
     augmented_prompt = adjust_prompt(prompt, company["name"])
 
     dalle = openai.DallE(image_cache_dir)
@@ -97,7 +107,7 @@ def generate(prompt: str):
     database.log_image(
         prompt,
         company["name"],
-        result["score"],
+        match_score,
         augmented_prompt,
         dalle.model_name,
         local_relative_url,
@@ -106,7 +116,7 @@ def generate(prompt: str):
 
     return {
         "company": company["name"],
-        "company_match_score": result["score"],
+        "company_match_score": match_score,
         "prompt": augmented_prompt,
         "model_backend": dalle.model_name,
         "local_path": local_relative_url,
@@ -115,18 +125,16 @@ def generate(prompt: str):
 
 @api.get("/generate/titan")
 def generate_aws(prompt: str):
-    result = embeddings.search(prompt, limit=1)[0]
-    company_index = int(result["id"])
-    company = companies[company_index]
+    company, match_score = match_brand(prompt)
 
     try:
         prompter = MetaPrompter()
-        augmented_prompt = prompter.adjust_prompt(prompt, company["name"], max_chars=400)
+        augmented_prompt = prompter.adjust_prompt(
+            prompt, company["name"], max_chars=400
+        )
     except OpenAIError as e:
         pprint(e)
-        raise HTTPException(
-            status_code=500, detail=f"OpenAI Error: {e}"
-        )
+        raise HTTPException(status_code=500, detail=f"OpenAI Error: {e}")
 
     titan = aws_bedrock.Titan(image_cache_dir)
 
@@ -143,7 +151,7 @@ def generate_aws(prompt: str):
     database.log_image(
         prompt,
         company["name"],
-        result["score"],
+        match_score,
         augmented_prompt,
         titan.model_name,
         local_relative_url,
@@ -153,7 +161,7 @@ def generate_aws(prompt: str):
     # Return the filename and image path
     return {
         "company": company["name"],
-        "company_match_score": result["score"],
+        "company_match_score": match_score,
         "prompt": augmented_prompt,
         "model_backend": titan.model_name,
         "local_path": local_relative_url,
