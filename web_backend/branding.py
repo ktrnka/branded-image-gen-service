@@ -1,6 +1,5 @@
 from txtai.embeddings import Embeddings
 
-
 companies = [
     {
         "name": "Coca-Cola",
@@ -63,11 +62,6 @@ companies = [
         "brand_identity": "Ford's brand identity is rugged and patriotic, targeting truck enthusiasts, families, and performance car lovers. Their marketing themes often highlight durability, innovation, and American heritage, featuring the tagline 'Built Ford Tough.'",
     },
     {
-        "name": "AT&T",
-        "market": "AT&T is a major telecommunications company providing mobile, broadband, and TV services across the US.",
-        "brand_identity": "AT&T's brand identity is connected and reliable, targeting tech-savvy consumers and businesses. Their marketing themes emphasize innovation, connectivity, and comprehensive service, often using a blue and white color scheme.",
-    },
-    {
         "name": "Verizon",
         "market": "Verizon is a leading telecommunications provider offering wireless services, broadband, and digital TV.",
         "brand_identity": "Verizon's brand identity is dependable and forward-thinking, targeting a broad consumer base including families and businesses. Their marketing often highlights network quality and reliability, with themes of connection and technological advancement.",
@@ -116,11 +110,6 @@ companies = [
         "name": "Domino's",
         "market": "Domino's is an American multinational pizza restaurant chain known for its wide variety of pizzas, sides, and fast delivery service.",
         "brand_identity": "Domino's brand identity is convenient and family-friendly, targeting busy families and young adults. Their marketing themes emphasize speed, quality, and innovation in delivery, often using the tagline 'You Got 30 Minutes.'",
-    },
-    {
-        "name": "The Onion",
-        "market": "The Onion is a satirical digital media company and newspaper organization known for its humorous take on current events and social issues through parody articles.",
-        "brand_identity": "The Onion's brand identity is edgy and irreverent, targeting readers who appreciate satire and humor. Their marketing themes often include biting social commentary and absurdity, with a distinct and recognizable satirical style.",
     },
     {
         "name": "Boss Coffee",
@@ -250,9 +239,10 @@ def default_company2key(company: dict) -> str:
 
 
 class BrandIndex:
-    def __init__(
-        self, embedding_path="BAAI/bge-small-en-v1.5", key_fn=default_company2key
-    ):
+    def __init__(self, embedding_path="BAAI/bge-small-en-v1.5", key_fn=default_company2key):
+        # dump the names to help regeneration later
+        print("Brands: ", ", ".join(sorted(company["name"] for company in companies)))
+
         self.embeddings = Embeddings(content=True, path=embedding_path)
         self.embeddings.index([key_fn(company) for company in companies])
 
