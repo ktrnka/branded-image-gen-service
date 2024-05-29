@@ -1,5 +1,5 @@
 from pprint import pprint
-from typing import NamedTuple
+from typing import Dict, NamedTuple
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import os
@@ -28,6 +28,7 @@ class GenerationResponse(NamedTuple):
     image_url: str
     engine: str
     prompt: str
+    about: Dict[str, str]
 
 def format_response(response: GenerationResponse):
     return [
@@ -41,6 +42,15 @@ def format_response(response: GenerationResponse):
             "text": {"type": "mrkdwn", "text": f"_Engine:_ {response.engine}"},
         },
         {"type": "section", "text": {"type": "mrkdwn", "text": f"_Prompt:_ {response.prompt}"}},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "mrkdwn",
+					"text": "\n".join([f"{key}: {value}" for key, value in sorted(response.about.items())])
+				}
+			]
+		}
     ]
 
 
@@ -81,10 +91,14 @@ def generate_image(prompt: str):
         image_url=public_image_url,
         engine=titan.model_name,
         prompt=augmented_prompt,
+        about={
+            "Brand selection": f"{company['name']} ({match_score:.2f})",
+            "Original prompt": prompt,
+        }
     )
 
 @app.command("/futurejunk")
-def respond_to_slack_within_3_seconds(ack, payload, respond, say):
+def respond_to_slack_within_3_seconds(ack, payload, say):
     ack("Processing...")
 
     prompt = payload["text"]
@@ -97,7 +111,7 @@ def respond_to_slack_within_3_seconds(ack, payload, respond, say):
         )
     except Exception as e:
         pprint(e)
-        respond(f"An error occurred while generating the image: {e}")
+        say(f"An error occurred while generating the image: {e}")
         return
 
 
