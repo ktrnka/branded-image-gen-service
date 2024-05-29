@@ -87,22 +87,20 @@ def generate_image(prompt: str):
 
 @app.command("/futurejunk")
 def respond_to_slack_within_3_seconds(ack, payload, respond, say):
-    ack()
+    ack("Processing...")
 
     prompt = payload["text"]
 
-    company, match_score = brand_index.find_match(prompt)
-    adjusted_prompt = adjust_prompt(prompt, company["name"])
-
-    response = GenerationResponse(
-        image_url="https://future-junk-images.s3.us-west-2.amazonaws.com/public/00a1bed9-74fc-44a8-8c12-0bd069c86950.jpg",
-        engine="AWS Titan",
-        prompt=adjusted_prompt,
-    )
-    say(
-        blocks=format_response(response),
-        text="Generated image",
-    )
+    try:
+        response = generate_image(prompt)
+        say(
+            blocks=format_response(response),
+            text="Generated image",
+        )
+    except Exception as e:
+        pprint(e)
+        respond(f"An error occurred while generating the image: {e}")
+        return
 
 
 if __name__ == "__main__":
