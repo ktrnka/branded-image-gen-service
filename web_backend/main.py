@@ -6,7 +6,6 @@ import re
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
-from txtai.embeddings import Embeddings
 
 from .generators import aws_bedrock, openai
 from .database import Database
@@ -15,7 +14,7 @@ from .prompting import MetaPrompter, adjust_prompt
 from botocore.errorfactory import ClientError
 from openai import OpenAIError
 
-from .branding import BrandIndex, companies
+from .branding import BrandIndex
 from dotenv import load_dotenv
 
 # Set up any access keys, etc
