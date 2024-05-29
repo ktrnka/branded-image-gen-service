@@ -23,5 +23,5 @@ black = "*"
 click = "*"
 
 [scripts]
-start = "fastapi dev web_backend/main.py"
-local_slackbot = "python slack_socket_backend/app.py"
+start = "fastapi dev web_backend/web_app.py"
+local_slackbot = "python web_backend/slack_app.py"
