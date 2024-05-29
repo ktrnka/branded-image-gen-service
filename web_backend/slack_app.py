@@ -16,7 +16,7 @@ load_dotenv()
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 
-brand_index = BrandIndex()
+brand_index = BrandIndex(embedding_path="BAAI/bge-large-en-v1.5")
 image_cache_dir = "web_backend/static/images"
 
 database = Database("./data.db")
