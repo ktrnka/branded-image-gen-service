@@ -13,9 +13,13 @@ boto3 = "*"
 awscli = "*"
 botocore = "*"
 pillow = "*"
+chalice = "*"
+slack_bolt = "*"
+slack_sdk = "*"
 
 [dev-packages]
 black = "*"
+click = "*"
 
 [scripts]
 start = "fastapi dev web_backend/main.py"
