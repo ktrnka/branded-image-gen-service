@@ -6,6 +6,8 @@ import re
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
+from web_backend.publish_to_s3 import publish_to_s3
+
 
 from .generators import aws_bedrock, openai
 from .database import Database
@@ -16,8 +18,6 @@ from openai import OpenAIError
 
 from .branding import BrandIndex
 from dotenv import load_dotenv
-import boto3
-import os.path
 
 # Set up any access keys, etc
 load_dotenv()
@@ -34,16 +34,6 @@ database.setup()
 # Setup the API
 api = FastAPI()
 api.mount("/static", StaticFiles(directory="web_backend/static"), name="static")
-
-
-def publish_to_s3(local_image_path: str) -> str:
-    """Upload an image to S3 and return the public URL."""
-    s3_client = boto3.client("s3")
-    object_path = f"public/{os.path.basename(local_image_path)}"
-    bucket_name = "future-junk-images"
-    s3_client.upload_file(local_image_path, bucket_name, object_path)
-
-    return f"https://{bucket_name}.s3.us-west-2.amazonaws.com/{object_path}"
 
 
 @api.get("/")

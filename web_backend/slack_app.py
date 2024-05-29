@@ -1,11 +1,17 @@
+from pprint import pprint
 import time
+from typing import NamedTuple
+from openai import OpenAIError
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import os
 from dotenv import load_dotenv
 
 from branding import BrandIndex
-from prompting import adjust_prompt
+from prompting import MetaPrompter, adjust_prompt
+from database import Database
+from generators import aws_bedrock
+from publish_to_s3 import publish_to_s3
 
 load_dotenv()
 
@@ -13,24 +19,71 @@ SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 
 brand_index = BrandIndex()
+image_cache_dir = "web_backend/static/images"
+
+database = Database("./data.db")
+database.setup()
 
 app = App(token=SLACK_BOT_TOKEN)
 
+class GenerationResponse(NamedTuple):
+    image_url: str
+    engine: str
+    prompt: str
 
-def format_response(image_url: str, engine: str, prompt: str):
+def format_response(response: GenerationResponse):
     return [
         {
             "type": "image",
-            "image_url": image_url,
-            "alt_text": prompt,
+            "image_url": response.image_url,
+            "alt_text": response.prompt,
         },
         {
             "type": "section",
-            "text": {"type": "mrkdwn", "text": f"_Engine:_ {engine}"},
+            "text": {"type": "mrkdwn", "text": f"_Engine:_ {response.engine}"},
         },
-        {"type": "section", "text": {"type": "mrkdwn", "text": f"_Prompt:_ {prompt}"}},
+        {"type": "section", "text": {"type": "mrkdwn", "text": f"_Prompt:_ {response.prompt}"}},
     ]
 
+
+def generate_image(prompt: str):
+    """
+    Generate an image based on the prompt and log it to the database.
+
+    Errors:
+    OpenAIError: If there is an error with the OpenAI API.
+    ClientError: If there is an error with the AWS API.
+    """
+    company, match_score = brand_index.find_match(prompt)
+
+    prompter = MetaPrompter()
+    augmented_prompt = prompter.adjust_prompt(
+        prompt, company["name"], max_chars=400
+    )
+
+    titan = aws_bedrock.Titan(image_cache_dir)
+
+    image_result = titan.generate(augmented_prompt)
+
+    local_relative_url = f"/static/images/{image_result.filename}"
+
+    database.log_image(
+        prompt,
+        company["name"],
+        match_score,
+        augmented_prompt,
+        titan.model_name,
+        local_relative_url,
+        image_result.response_metadata,
+    )
+
+    public_image_url = publish_to_s3(image_result.path)
+
+    return GenerationResponse(
+        image_url=public_image_url,
+        engine=titan.model_name,
+        prompt=augmented_prompt,
+    )
 
 @app.command("/futurejunk")
 def respond_to_slack_within_3_seconds(ack, payload, respond, say):
@@ -41,12 +94,13 @@ def respond_to_slack_within_3_seconds(ack, payload, respond, say):
     company, match_score = brand_index.find_match(prompt)
     adjusted_prompt = adjust_prompt(prompt, company["name"])
 
+    response = GenerationResponse(
+        image_url="https://future-junk-images.s3.us-west-2.amazonaws.com/public/00a1bed9-74fc-44a8-8c12-0bd069c86950.jpg",
+        engine="AWS Titan",
+        prompt=adjusted_prompt,
+    )
     say(
-        blocks=format_response(
-            "https://future-junk-images.s3.us-west-2.amazonaws.com/public/00a1bed9-74fc-44a8-8c12-0bd069c86950.jpg",
-            "AWS Titan",
-            adjusted_prompt,
-        ),
+        blocks=format_response(response),
         text="Generated image",
     )
 
