@@ -15,24 +15,14 @@ from .prompting import MetaPrompter, adjust_prompt
 from botocore.errorfactory import ClientError
 from openai import OpenAIError
 
-from .branding import companies
+from .branding import BrandIndex, companies
 from dotenv import load_dotenv
 
 # Set up any access keys, etc
 load_dotenv()
 
 
-# Index the brands
-def index_brands():
-    embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
-    embeddings.index(
-        [f"{company['market']}\n{company['brand_identity']}" for company in companies]
-    )
-
-    return embeddings
-
-
-embeddings = index_brands()
+brand_index = BrandIndex()
 
 
 image_cache_dir = "web_backend/static/images"
@@ -52,30 +42,9 @@ def route():
     return HTMLResponse(content)
 
 
-@api.get("/augment")
-def augment(prompt: str):
-    response = []
-
-    for result in embeddings.search(prompt, limit=3):
-        company_index = int(result["id"])
-        company = companies[company_index]
-
-        augmented_prompts = [adjust_prompt(prompt, company["name"]) for _ in range(3)]
-
-        response.append(
-            {
-                "company": company["name"],
-                "company_match_score": result["score"],
-                "augmented_prompts": augmented_prompts,
-            }
-        )
-
-    return response
-
-
 @api.get("/augment_v2")
 def augment_v2(prompt: str):
-    company, match_score = match_brand(prompt)
+    company, match_score = brand_index.find_match(prompt)
 
     prompter = MetaPrompter()
     augmented_prompt = prompter.adjust_prompt(prompt, company["name"])
@@ -87,16 +56,9 @@ def augment_v2(prompt: str):
     }
 
 
-def match_brand(prompt):
-    result = embeddings.search(prompt, limit=1)[0]
-    company_index = int(result["id"])
-    company = companies[company_index]
-    return company, result["score"]
-
-
 @api.get("/generate/dalle")
 def generate(prompt: str):
-    company, match_score = match_brand(prompt)
+    company, match_score = brand_index.find_match(prompt)
     augmented_prompt = adjust_prompt(prompt, company["name"])
 
     dalle = openai.DallE(image_cache_dir)
@@ -125,7 +87,7 @@ def generate(prompt: str):
 
 @api.get("/generate/titan")
 def generate_aws(prompt: str):
-    company, match_score = match_brand(prompt)
+    company, match_score = brand_index.find_match(prompt)
 
     try:
         prompter = MetaPrompter()
