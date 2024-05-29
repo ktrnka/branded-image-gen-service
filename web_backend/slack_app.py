@@ -1,14 +1,12 @@
 from pprint import pprint
-import time
 from typing import NamedTuple
-from openai import OpenAIError
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import os
 from dotenv import load_dotenv
 
 from branding import BrandIndex
-from prompting import MetaPrompter, adjust_prompt
+from prompting import MetaPrompter
 from database import Database
 from generators import aws_bedrock
 from publish_to_s3 import publish_to_s3
