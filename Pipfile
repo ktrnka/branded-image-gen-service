@@ -18,4 +18,4 @@ pillow = "*"
 black = "*"
 
 [scripts]
-start = "fastapi dev backend/main.py"
+start = "fastapi dev web_backend/main.py"
