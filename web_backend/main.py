@@ -16,6 +16,10 @@ from botocore.errorfactory import ClientError
 from openai import OpenAIError
 
 from .data import companies
+from dotenv import load_dotenv
+
+# Set up any access keys, etc
+load_dotenv()
 
 # Index the brands
 embeddings = Embeddings(content=True, path="BAAI/bge-small-en-v1.5")
