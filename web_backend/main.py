@@ -16,6 +16,8 @@ from openai import OpenAIError
 
 from .branding import BrandIndex
 from dotenv import load_dotenv
+import boto3
+import os.path
 
 # Set up any access keys, etc
 load_dotenv()
@@ -32,6 +34,16 @@ database.setup()
 # Setup the API
 api = FastAPI()
 api.mount("/static", StaticFiles(directory="web_backend/static"), name="static")
+
+
+def publish_to_s3(local_image_path: str) -> str:
+    """Upload an image to S3 and return the public URL."""
+    s3_client = boto3.client("s3")
+    object_path = f"public/{os.path.basename(local_image_path)}"
+    bucket_name = "future-junk-images"
+    s3_client.upload_file(local_image_path, bucket_name, object_path)
+
+    return f"https://{bucket_name}.s3.us-west-2.amazonaws.com/{object_path}"
 
 
 @api.get("/")
@@ -101,6 +113,7 @@ def generate_aws(prompt: str):
 
     try:
         image_result = titan.generate(augmented_prompt)
+        public_image_url = publish_to_s3(image_result.path)
     except ClientError as e:
         pprint(e.response)
         raise HTTPException(
@@ -125,7 +138,7 @@ def generate_aws(prompt: str):
         "company_match_score": match_score,
         "prompt": augmented_prompt,
         "model_backend": titan.model_name,
-        "local_path": local_relative_url,
+        "local_path": public_image_url,
     }
 
 
