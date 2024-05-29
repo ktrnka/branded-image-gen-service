@@ -1,4 +1,5 @@
 import logging
+import time
 
 from chalice import Chalice, Response
 
@@ -16,8 +17,11 @@ def handle_app_mentions(body, say, logger):
 
 
 @bolt_app.command("/futurejunk")
-def respond_to_slack_within_3_seconds(ack):
-    ack("Not implemented: Generation of future crap. Sooon!")
+def respond_to_slack_within_3_seconds(ack, payload, respond, say):
+    ack()
+
+    time.sleep(2)
+    say(f"What's up? I'm a Chalice app :wave:. You said: {payload['text']}")
 
 
 ChaliceSlackRequestHandler.clear_all_log_handlers()
