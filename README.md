@@ -45,3 +45,15 @@ openai.OpenAIError: The api_key client option must be set either by passing api_
 
 
 https://future-junk-images.s3.us-west-2.amazonaws.com/public/00a1bed9-74fc-44a8-8c12-0bd069c86950.jpg
+
+
+## Brand placement ideas I really want to see
+
+- UW logo on buildings/ferries
+- Eating a Snickers
+- McDonald's tatoo
+- The reflection in a woman's eyes is the Starbucks logo
+
+### Subtle
+
+- Everyone has Dominos colored clothing
