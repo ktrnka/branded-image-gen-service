@@ -6,6 +6,8 @@ import re
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
+from .generators.base import ImageGeneratorABC
+
 from .publish_to_s3 import publish_to_s3
 
 
@@ -57,57 +59,40 @@ def augment_v2(prompt: str):
     }
 
 
-@api.get("/generate/dalle")
-def generate(prompt: str):
-    company, match_score = brand_index.find_match(prompt)
-    augmented_prompt = adjust_prompt(prompt, company["name"])
-
-    dalle = openai.DallE(image_cache_dir)
-    image_result = dalle.generate(augmented_prompt)
-
-    local_relative_url = f"/static/images/{image_result.filename}"
-
-    database.log_image(
-        prompt,
-        company["name"],
-        match_score,
-        augmented_prompt,
-        dalle.model_name,
-        local_relative_url,
-        image_result.response_metadata,
-    )
-
-    return {
-        "company": company["name"],
-        "company_match_score": match_score,
-        "prompt": augmented_prompt,
-        "model_backend": dalle.model_name,
-        "local_path": local_relative_url,
-    }
+titan = aws_bedrock.Titan(image_cache_dir)
+dalle = openai.DallE(image_cache_dir)
 
 
-@api.get("/generate/titan")
-def generate_aws(prompt: str):
+def generate_image(prompt: str, engine: ImageGeneratorABC):
+    """Shared generation"""
     company, match_score = brand_index.find_match(prompt)
 
     try:
+        # configure the prompter a little
+        match engine.model_name:
+            case titan.model_name:
+                max_chars = 400
+                is_titan = True
+            case dalle.model_name:
+                max_chars = None
+                is_titan = False
+            case _:
+                raise ValueError(f"Unknown model: {engine.model_name}")
         prompter = MetaPrompter()
         augmented_prompt = prompter.adjust_prompt(
-            prompt, company["name"], max_chars=400
+            prompt, company["name"], max_chars=max_chars, titan_prompt=is_titan
         )
     except OpenAIError as e:
         raise HTTPException(status_code=500, detail=f"OpenAI Error: {e}")
     except BaseException as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
 
-    titan = aws_bedrock.Titan(image_cache_dir)
-
     try:
-        image_result = titan.generate(augmented_prompt)
+        image_result = engine.generate(augmented_prompt)
         public_image_url = publish_to_s3(image_result.path)
     except Exception as e:
         raise HTTPException(
-            status_code=400, detail=f"AWS Error: {e}"
+            status_code=500, detail=f"Error: {e}"
         )
 
     local_relative_url = f"/static/images/{image_result.filename}"
@@ -117,19 +102,27 @@ def generate_aws(prompt: str):
         company["name"],
         match_score,
         augmented_prompt,
-        titan.model_name,
+        engine.model_name,
         local_relative_url,
         image_result.response_metadata,
     )
 
-    # Return the filename and image path
     return {
         "company": company["name"],
         "company_match_score": match_score,
         "prompt": augmented_prompt,
-        "model_backend": titan.model_name,
+        "model_backend": engine.model_name,
         "local_path": public_image_url,
     }
+
+@api.get("/generate/dalle")
+def generate_dalle(prompt: str):
+    return generate_image(prompt, dalle)
+
+
+@api.get("/generate/titan")
+def generate_aws(prompt: str):
+    return generate_image(prompt, titan)
 
 
 def munge_local_path(path: str) -> str:
