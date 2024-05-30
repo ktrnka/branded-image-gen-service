@@ -49,6 +49,8 @@ class InappropriatePromptError(Exception):
     def __str__(self):
         return f"AWS blocked the prompt: {self.prompt}"
 
+from ..core import Cost
+
 class Titan(ImageGeneratorABC):
     model_name = "Amazon Titan"
 
@@ -58,22 +60,31 @@ class Titan(ImageGeneratorABC):
             service_name="bedrock-runtime", region_name="us-west-2"
         )
 
-    def generate(self, prompt: str) -> ImageResult:
+    def generate(self, prompt: str, cost: Cost) -> ImageResult:
+        match cost:
+            case Cost.LOW:
+                quality = "standard"
+                res = 512
+            case Cost.HIGH:
+                quality = "premium"
+                res = 1024
+            case _:
+                raise ValueError(f"Unknown cost: {cost}")
+
         body = json.dumps(
             {
                 "taskType": "TEXT_IMAGE",
                 "textToImageParams": {
                     "text": prompt,  # Required
-                    "negativeText": "graphical artifacts, unreadable text, or textual artifacts",  # Optional
+                    "negativeText": "graphical artifacts, unreadable text",  # Optional
                 },
                 "imageGenerationConfig": {
                     "numberOfImages": 1,  # Range: 1 to 5
-                    "quality": "premium",  # Options: standard or premium
-                    "height": 1024,  # Supported height list in the docs
-                    "width": 1024,  # Supported width list in the docs
+                    "quality": quality,  # Options: standard or premium
+                    "height": res,  # Supported height list in the docs
+                    "width": res,  # Supported width list in the docs
                     # Specifies how strongly the generated image should adhere to the prompt. Use a lower value to introduce more randomness in the generation
-                    "cfgScale": 9.5,  # Range: 1.0 (exclusive) to 10.0
-                    # "seed": 42             # Range: 0 to 214783647
+                    "cfgScale": 9.0,  # Range: 1.0 (exclusive) to 10.0
                 },
             }
         )

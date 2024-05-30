@@ -98,10 +98,25 @@ def check_metaprompt(metaprompt: str) -> str:
 
     return metaprompt
 
+from .core import Cost
+from typing import Optional
+
 class MetaPrompter:
-    def __init__(self, model="gpt-3.5-turbo-0125"):
+    def __init__(self, model="gpt-4o", cost: Optional[Cost] = None):
+        """
+        Example models:
+            gpt-4o $5 per mil input, $15 per mil output
+            gpt-3.5-turbo-0125 $0.5 per mil input, $1.5 per mil output
+        """
         self.client = OpenAI()
-        self.model = model
+
+        match cost:
+            case Cost.LOW:
+                self.model = "gpt-3.5-turbo-0125"
+            case Cost.HIGH:
+                self.model = "gpt-4o"
+            case _:
+                self.model = model
 
     def adjust_prompt(
         self, prompt: str, company_name: str, max_chars: Optional[int] = None, titan_prompt: bool = False

@@ -2,6 +2,7 @@ from urllib.parse import urlparse
 from openai import OpenAI
 import requests
 from .base import ImageGeneratorABC, ImageResult
+from ..core import Cost
 
 
 class DallE(ImageGeneratorABC):
@@ -11,13 +12,13 @@ class DallE(ImageGeneratorABC):
         self.local_cache_dir = local_cache_dir
         self.client = OpenAI()
 
-    def generate(self, prompt: str) -> ImageResult:
+    def generate(self, prompt: str, cost: Cost) -> ImageResult:
         response = self.client.images.generate(
             model="dall-e-3",
             prompt=prompt,
-            size="1024x1024",
-            quality="standard",
             n=1,
+            size="1024x1024",
+            quality="hd" if cost == Cost.HIGH else "standard",
         )
 
         response_data = response.data[0]

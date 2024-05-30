@@ -1,10 +1,11 @@
-from pprint import pprint
 from fastapi.responses import HTMLResponse
 import re
 
 
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
+
+from .core import Cost
 
 from .generators.base import ImageGeneratorABC
 
@@ -13,9 +14,8 @@ from .publish_to_s3 import publish_to_s3
 
 from .generators import aws_bedrock, openai
 from .database import Database
-from .prompting import MetaPrompter, adjust_prompt
+from .prompting import MetaPrompter
 
-from botocore.errorfactory import ClientError
 from openai import OpenAIError
 
 from .branding import BrandIndex
@@ -24,6 +24,7 @@ from dotenv import load_dotenv
 # Set up any access keys, etc
 load_dotenv()
 
+COST = Cost.LOW
 
 brand_index = BrandIndex()
 
@@ -45,18 +46,18 @@ def route():
     return HTMLResponse(content)
 
 
-@api.get("/augment_v2")
-def augment_v2(prompt: str):
-    company, match_score = brand_index.find_match(prompt)
+# @api.get("/augment_v2")
+# def augment_v2(prompt: str):
+#     company, match_score = brand_index.find_match(prompt)
 
-    prompter = MetaPrompter()
-    augmented_prompt = prompter.adjust_prompt(prompt, company["name"])
+#     prompter = MetaPrompter()
+#     augmented_prompt = prompter.adjust_prompt(prompt, company["name"])
 
-    return {
-        "company": company["name"],
-        "company_match_score": match_score,
-        "augmented_prompt": augmented_prompt,
-    }
+#     return {
+#         "company": company["name"],
+#         "company_match_score": match_score,
+#         "augmented_prompt": augmented_prompt,
+#     }
 
 
 titan = aws_bedrock.Titan(image_cache_dir)
@@ -78,7 +79,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
                 is_titan = False
             case _:
                 raise ValueError(f"Unknown model: {engine.model_name}")
-        prompter = MetaPrompter()
+        prompter = MetaPrompter(cost=COST)
         augmented_prompt = prompter.adjust_prompt(
             prompt, company["name"], max_chars=max_chars, titan_prompt=is_titan
         )
@@ -88,7 +89,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         raise HTTPException(status_code=500, detail=f"Error: {e}")
 
     try:
-        image_result = engine.generate(augmented_prompt)
+        image_result = engine.generate(augmented_prompt, cost=COST)
         public_image_url = publish_to_s3(image_result.path)
     except Exception as e:
         raise HTTPException(
