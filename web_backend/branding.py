@@ -1,3 +1,4 @@
+import random
 from txtai.embeddings import Embeddings
 
 companies = [
@@ -531,14 +532,22 @@ def default_company2key(company: dict) -> str:
 
 class BrandIndex:
     def __init__(self, embedding_path="BAAI/bge-small-en-v1.5", key_fn=default_company2key):
-        # dump the names to help regeneration later
-        print("Brands: ", ", ".join(sorted(company["name"] for company in companies)))
-
         self.embeddings = Embeddings(content=True, path=embedding_path)
         self.embeddings.index([key_fn(company) for company in companies])
 
-    def find_match(self, prompt: str):
-        result = self.embeddings.search(prompt, limit=1)[0]
+    def find_match(self, prompt: str, randomization_pool_size=1):
+        if randomization_pool_size > 1:
+            results = self.embeddings.search(prompt, limit=randomization_pool_size)
+            result = random.choices(results, weights=[result["score"] for result in results], k=1)[0]
+
+            # While in early development, dump the brand randomization so I can double check it
+            print(f"""
+Brand randomization
+Selected: {companies[int(result["id"])]["name"]}
+Options: {", ".join(f"{companies[int(result['id'])]['name']} | {result['score']:.2f}" for result in results)}
+""")
+        else:
+            result = self.embeddings.search(prompt, limit=1)[0]
         company_index = int(result["id"])
         company = companies[company_index]
         return company, result["score"]

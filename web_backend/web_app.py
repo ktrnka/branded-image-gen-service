@@ -65,7 +65,7 @@ dalle = openai.DallE(image_cache_dir)
 
 def generate_image(prompt: str, engine: ImageGeneratorABC):
     """Shared generation"""
-    company, match_score = brand_index.find_match(prompt)
+    company, match_score = brand_index.find_match(prompt, randomization_pool_size=3)
 
     try:
         # configure the prompter a little
