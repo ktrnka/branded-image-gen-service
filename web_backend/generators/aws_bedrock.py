@@ -5,11 +5,11 @@ from PIL import Image
 from io import BytesIO
 import json
 import boto3
+from botocore.errorfactory import ClientError
 
 from .base import ImageGeneratorABC, ImageResult
 
 bedrock_client = boto3.client(service_name="bedrock-runtime", region_name="us-west-2")
-
 
 def generate_image(prompt: str):
     body = json.dumps(
@@ -42,6 +42,12 @@ def generate_image(prompt: str):
 
     return Image.open(BytesIO(base64.b64decode(response_body["images"][0])))
 
+class InappropriatePromptError(Exception):
+    def __init__(self, prompt: str):
+        self.prompt = prompt
+
+    def __str__(self):
+        return f"AWS blocked the prompt: {self.prompt}"
 
 class Titan(ImageGeneratorABC):
     model_name = "Amazon Titan"
@@ -72,12 +78,18 @@ class Titan(ImageGeneratorABC):
             }
         )
 
-        response = bedrock_client.invoke_model(
-            body=body,
-            modelId="amazon.titan-image-generator-v1",
-            accept="application/json",
-            contentType="application/json",
-        )
+        try:
+            response = bedrock_client.invoke_model(
+                body=body,
+                modelId="amazon.titan-image-generator-v1",
+                accept="application/json",
+                contentType="application/json",
+            )
+        except ClientError as e:
+            if "blocked by our content filters" in e.response['Error']['Message']:
+                raise InappropriatePromptError(prompt) from e
+            else:
+                raise ValueError(e.response['Error']['Message']) from e
 
         response_body = json.loads(response.get("body").read())
         image = Image.open(BytesIO(base64.b64decode(response_body["images"][0])))

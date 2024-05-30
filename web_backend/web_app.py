@@ -96,18 +96,18 @@ def generate_aws(prompt: str):
             prompt, company["name"], max_chars=400
         )
     except OpenAIError as e:
-        pprint(e)
         raise HTTPException(status_code=500, detail=f"OpenAI Error: {e}")
+    except BaseException as e:
+        raise HTTPException(status_code=500, detail=f"Error: {e}")
 
     titan = aws_bedrock.Titan(image_cache_dir)
 
     try:
         image_result = titan.generate(augmented_prompt)
         public_image_url = publish_to_s3(image_result.path)
-    except ClientError as e:
-        pprint(e.response)
+    except Exception as e:
         raise HTTPException(
-            status_code=400, detail=f"AWS Error: {e.response['Error']['Message']}"
+            status_code=400, detail=f"AWS Error: {e}"
         )
 
     local_relative_url = f"/static/images/{image_result.filename}"

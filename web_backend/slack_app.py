@@ -127,7 +127,7 @@ def respond_to_slack_within_3_seconds(ack, payload, say, respond):
         )
     except OpenAIError as e:
         respond(f"OpenAI error: {e}")
-    except ClientError as e:
+    except Exception as e:
         if "blocked by our content filters" in e.response['Error']['Message']:
             respond("The augmented prompt was blocked by AWS content filters. See https://aws.amazon.com/machine-learning/responsible-ai/policy/ for more information. This can happen if the prompt includes copyrighted material.")
         else:
