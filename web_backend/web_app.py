@@ -112,7 +112,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         "company_match_score": match_score,
         "prompt": augmented_prompt,
         "model_backend": engine.model_name,
-        "local_path": public_image_url,
+        "image_url": public_image_url,
     }
 
 @api.get("/generate/dalle")
