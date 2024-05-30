@@ -1,10 +1,12 @@
 from pprint import pprint
 import random
 from typing import Dict, NamedTuple
+from openai import OpenAIError
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import os
 from dotenv import load_dotenv
+from botocore.errorfactory import ClientError
 
 from branding import BrandIndex
 from prompting import MetaPrompter
@@ -110,12 +112,12 @@ def generate_image(prompt: str):
     )
 
 @app.command("/futurecrap")
-def respond_to_slack_within_3_seconds(ack, payload, say):
-    ack("Imagining a future filled with ads (usually takes a few seconds)...")
-
+def respond_to_slack_within_3_seconds(ack, payload, say, respond):
     pprint(payload)
 
     prompt = payload["text"]
+
+    ack(f"Imagining {prompt} (usually takes a few seconds)...")
 
     try:
         response = generate_image(prompt)
@@ -123,10 +125,13 @@ def respond_to_slack_within_3_seconds(ack, payload, say):
             blocks=format_response(payload, response),
             text="Generated image",
         )
-    except Exception as e:
-        pprint(e)
-        say(f"An error occurred while generating the image: {e}")
-        return
+    except OpenAIError as e:
+        respond(f"OpenAI error: {e}")
+    except ClientError as e:
+        if "blocked by our content filters" in e.response['Error']['Message']:
+            respond("The augmented prompt was blocked by AWS content filters. See https://aws.amazon.com/machine-learning/responsible-ai/policy/ for more information. This can happen if the prompt includes copyrighted material.")
+        else:
+            respond(f"AWS error: {e}")
 
 
 if __name__ == "__main__":
