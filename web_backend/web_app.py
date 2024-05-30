@@ -6,7 +6,7 @@ import re
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
-from web_backend.publish_to_s3 import publish_to_s3
+from .publish_to_s3 import publish_to_s3
 
 
 from .generators import aws_bedrock, openai

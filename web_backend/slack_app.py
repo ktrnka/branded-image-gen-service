@@ -1,4 +1,5 @@
 from pprint import pprint
+import random
 from typing import Dict, NamedTuple
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -8,7 +9,7 @@ from dotenv import load_dotenv
 from branding import BrandIndex
 from prompting import MetaPrompter
 from database import Database
-from generators import aws_bedrock
+from generators import aws_bedrock, openai
 from publish_to_s3 import publish_to_s3
 
 load_dotenv()
@@ -24,13 +25,19 @@ database.setup()
 
 app = App(token=SLACK_BOT_TOKEN)
 
+generation_backends = [
+    aws_bedrock.Titan(image_cache_dir),
+    openai.DallE(image_cache_dir),
+]
+
 class GenerationResponse(NamedTuple):
     image_url: str
     engine: str
     prompt: str
     about: Dict[str, str]
 
-def format_response(response: GenerationResponse):
+def format_response(payload, response: GenerationResponse):
+    user_id = payload["user_id"]
     return [
         {
             "type": "image",
@@ -39,9 +46,13 @@ def format_response(response: GenerationResponse):
         },
         {
             "type": "section",
+            "text": {"type": "mrkdwn", "text": f"This creation was brought to you by <@{user_id}>"},
+        },
+        {
+            "type": "section",
             "text": {"type": "mrkdwn", "text": f"_Engine:_ {response.engine}"},
         },
-        {"type": "section", "text": {"type": "mrkdwn", "text": f"_Prompt:_ {response.prompt}"}},
+        {"type": "section", "text": {"type": "mrkdwn", "text": f"_Prompt after brand-injection:_ {response.prompt}"}},
 		{
 			"type": "context",
 			"elements": [
@@ -69,9 +80,10 @@ def generate_image(prompt: str):
         prompt, company["name"], max_chars=400
     )
 
-    titan = aws_bedrock.Titan(image_cache_dir)
+    # titan = aws_bedrock.Titan(image_cache_dir)
+    engine = random.choice(generation_backends)
 
-    image_result = titan.generate(augmented_prompt)
+    image_result = engine.generate(augmented_prompt)
 
     local_relative_url = f"/static/images/{image_result.filename}"
 
@@ -80,7 +92,7 @@ def generate_image(prompt: str):
         company["name"],
         match_score,
         augmented_prompt,
-        titan.model_name,
+        engine.model_name,
         local_relative_url,
         image_result.response_metadata,
     )
@@ -89,7 +101,7 @@ def generate_image(prompt: str):
 
     return GenerationResponse(
         image_url=public_image_url,
-        engine=titan.model_name,
+        engine=engine.model_name,
         prompt=augmented_prompt,
         about={
             "Brand selection": f"{company['name']} ({match_score:.2f})",
@@ -97,16 +109,18 @@ def generate_image(prompt: str):
         }
     )
 
-@app.command("/futurejunk")
+@app.command("/futurecrap")
 def respond_to_slack_within_3_seconds(ack, payload, say):
     ack("Processing...")
+
+    pprint(payload)
 
     prompt = payload["text"]
 
     try:
         response = generate_image(prompt)
         say(
-            blocks=format_response(response),
+            blocks=format_response(payload, response),
             text="Generated image",
         )
     except Exception as e:
