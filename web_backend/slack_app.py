@@ -111,7 +111,7 @@ def generate_image(prompt: str):
 
 @app.command("/futurecrap")
 def respond_to_slack_within_3_seconds(ack, payload, say):
-    ack("Processing...")
+    ack("Imagining a future filled with ads (usually takes a few seconds)...")
 
     pprint(payload)
 
