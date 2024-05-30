@@ -511,6 +511,16 @@ companies = [
             "A banner ad showcasing an array of activities available on Royal Caribbean cruises, such as rock climbing, fine dining, and exotic excursions, set against a vibrant backdrop of popular destinations.",
             "A full-page ad with a romantic scene of a couple enjoying a sunset dinner on the deck of a Royal Caribbean ship, with the ocean in the background, emphasizing relaxation and exceptional service."
         ]
+    },
+    {
+        "name": "KFC",
+        "market": "KFC is a fast-food restaurant chain known for its fried chicken, sides, and sandwiches, targeting families, individuals, and chicken enthusiasts seeking flavorful and convenient dining options.",
+        "brand_identity": "KFC's brand identity is bold and craveable, targeting customers who enjoy indulgent, satisfying food experiences and crave the unique taste of KFC's signature chicken and secret blend of herbs and spices. Their marketing themes often emphasize quality, value, and the joy of sharing a meal with loved ones.",
+        "marketing_examples": [
+            "A full-page ad featuring a mouthwatering spread of KFC's famous fried chicken, biscuits, and sides, set against a backdrop of happy families and friends enjoying a picnic or gathering, emphasizing the brand's role as a go-to destination for delicious and memorable dining experiences.",
+            "A banner ad showcasing KFC's latest menu innovations and promotions with bold, eye-catching graphics and a tagline inviting customers to 'Taste the Crunch', set against a dynamic background of sizzling fryers and savory aromas, emphasizing the brand's commitment to delivering craveable flavors and satisfying meals.",
+            "A full-page ad with a focus on KFC's community involvement and social responsibility initiatives, featuring images of KFC employees volunteering, donating, and supporting local causes, set against a backdrop of grateful recipients and smiling faces, highlighting the brand's dedication to making a positive impact in the communities it serves."
+        ]
     }
 ]
 
@@ -532,3 +542,6 @@ class BrandIndex:
         company_index = int(result["id"])
         company = companies[company_index]
         return company, result["score"]
+
+    def get_all_brands(self):
+        return companies
