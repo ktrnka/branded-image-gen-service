@@ -24,4 +24,4 @@ click = "*"
 
 [scripts]
 start_web = "fastapi dev web_backend/web_app.py"
-start_slack = "python web_backend/slack_app.py"
+start_slack = "python -m web_backend.slack_app"

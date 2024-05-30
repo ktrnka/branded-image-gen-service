@@ -1,5 +1,5 @@
 from typing import NamedTuple, Optional
-
+from ..core import Cost
 
 class ImageResult(NamedTuple):
     path: str
@@ -15,7 +15,7 @@ class ImageGeneratorABC:
     prompt_max_chars: Optional[int] = None
     metaprompt_id = "default"
 
-    def generate(self, prompt: str) -> ImageResult:
+    def generate(self, prompt: str, cost: Cost) -> ImageResult:
         raise NotImplementedError(
             "generate method must be implemented in subclass. It should return a path to the generated image."
         )

@@ -8,11 +8,12 @@ import os
 from dotenv import load_dotenv
 from botocore.errorfactory import ClientError
 
-from branding import BrandIndex
-from prompting import MetaPrompter
-from database import Database
-from generators import aws_bedrock, openai
-from publish_to_s3 import publish_to_s3
+from .branding import BrandIndex
+from .prompting import MetaPrompter
+from .database import Database
+from .generators import aws_bedrock, openai
+from .publish_to_s3 import publish_to_s3
+from .core import Cost
 
 load_dotenv()
 
@@ -32,11 +33,14 @@ generation_backends = [
     openai.DallE(image_cache_dir),
 ]
 
+COST = Cost.HIGH
+
 class GenerationResponse(NamedTuple):
     image_url: str
     engine: str
     prompt: str
     about: Dict[str, str]
+
 
 def format_response(payload, response: GenerationResponse):
     user_id = payload["user_id"]
@@ -48,22 +52,36 @@ def format_response(payload, response: GenerationResponse):
         },
         {
             "type": "section",
-            "text": {"type": "mrkdwn", "text": f"This creation was brought to you by <@{user_id}>"},
+            "text": {
+                "type": "mrkdwn",
+                "text": f"This creation was brought to you by <@{user_id}>",
+            },
         },
         {
             "type": "section",
             "text": {"type": "mrkdwn", "text": f"_Engine:_ {response.engine}"},
         },
-        {"type": "section", "text": {"type": "mrkdwn", "text": f"_Prompt after brand-injection:_ {response.prompt}"}},
-		{
-			"type": "context",
-			"elements": [
-				{
-					"type": "mrkdwn",
-					"text": "\n".join([f"{key}: {value}" for key, value in sorted(response.about.items())])
-				}
-			]
-		}
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"_Prompt after brand-injection:_ {response.prompt}",
+            },
+        },
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": "\n".join(
+                        [
+                            f"{key}: {value}"
+                            for key, value in sorted(response.about.items())
+                        ]
+                    ),
+                }
+            ],
+        },
     ]
 
 
@@ -75,17 +93,20 @@ def generate_image(prompt: str):
     OpenAIError: If there is an error with the OpenAI API.
     ClientError: If there is an error with the AWS API.
     """
-    company, match_score = brand_index.find_match(prompt)
+    company, match_score = brand_index.find_match(prompt, randomization_pool_size=3)
 
-    prompter = MetaPrompter()
-    augmented_prompt = prompter.adjust_prompt(
-        prompt, company["name"], max_chars=400
-    )
-
-    # titan = aws_bedrock.Titan(image_cache_dir)
     engine = random.choice(generation_backends)
 
-    image_result = engine.generate(augmented_prompt)
+    prompter = MetaPrompter(cost=COST)
+    augmented_prompt = prompter.adjust_prompt(
+        prompt,
+        company["name"],
+        # TODO: Refactor into a prompt hints
+        max_chars=engine.prompt_max_chars,
+        metaprompt_id=engine.metaprompt_id,
+    )
+
+    image_result = engine.generate(augmented_prompt, cost=COST)
 
     local_relative_url = f"/static/images/{image_result.filename}"
 
@@ -108,16 +129,17 @@ def generate_image(prompt: str):
         about={
             "Brand selection": f"{company['name']} ({match_score:.2f})",
             "Original prompt": prompt,
-        }
+        },
     )
 
+
 @app.command("/futurecrap")
-def respond_to_slack_within_3_seconds(ack, payload, say, respond):
+def process_prompt(ack, payload, say, respond):
     pprint(payload)
 
     prompt = payload["text"]
 
-    ack(f"Imagining {prompt} (usually takes a few seconds)...")
+    ack(f"Imagining crappy ads with _{prompt}_ (takes a few seconds)...")
 
     try:
         response = generate_image(prompt)
@@ -128,10 +150,8 @@ def respond_to_slack_within_3_seconds(ack, payload, say, respond):
     except OpenAIError as e:
         respond(f"OpenAI error: {e}")
     except Exception as e:
-        if "blocked by our content filters" in e.response['Error']['Message']:
-            respond("The augmented prompt was blocked by AWS content filters. See https://aws.amazon.com/machine-learning/responsible-ai/policy/ for more information. This can happen if the prompt includes copyrighted material.")
-        else:
-            respond(f"AWS error: {e}")
+        # TODO: For Inapprop error, retry using OpenAI instead of AWS
+        respond(f"Error: {e}")
 
 
 if __name__ == "__main__":
