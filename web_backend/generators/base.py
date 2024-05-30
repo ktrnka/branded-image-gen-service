@@ -12,6 +12,8 @@ class ImageResult(NamedTuple):
 
 class ImageGeneratorABC:
     model_name: str
+    prompt_max_chars: Optional[int] = None
+    metaprompt_id = "default"
 
     def generate(self, prompt: str) -> ImageResult:
         raise NotImplementedError(

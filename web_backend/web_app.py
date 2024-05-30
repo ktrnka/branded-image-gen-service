@@ -24,12 +24,14 @@ from dotenv import load_dotenv
 # Set up any access keys, etc
 load_dotenv()
 
+# cost setting
 COST = Cost.LOW
 
 brand_index = BrandIndex()
 
-
 image_cache_dir = "web_backend/static/images"
+titan = aws_bedrock.Titan(image_cache_dir)
+dalle = openai.DallE(image_cache_dir)
 
 database = Database("./data.db")
 database.setup()
@@ -39,6 +41,9 @@ api = FastAPI()
 api.mount("/static", StaticFiles(directory="web_backend/static"), name="static")
 
 
+#### ROUTES #####
+
+
 @api.get("/")
 def route():
     with open("web_backend/static/demo.html", "r") as file:
@@ -46,55 +51,28 @@ def route():
     return HTMLResponse(content)
 
 
-# @api.get("/augment_v2")
-# def augment_v2(prompt: str):
-#     company, match_score = brand_index.find_match(prompt)
-
-#     prompter = MetaPrompter()
-#     augmented_prompt = prompter.adjust_prompt(prompt, company["name"])
-
-#     return {
-#         "company": company["name"],
-#         "company_match_score": match_score,
-#         "augmented_prompt": augmented_prompt,
-#     }
-
-
-titan = aws_bedrock.Titan(image_cache_dir)
-dalle = openai.DallE(image_cache_dir)
-
-
 def generate_image(prompt: str, engine: ImageGeneratorABC):
-    """Shared generation"""
+    """
+    Generate an image based on the prompt using the given engine.
+    """
     company, match_score = brand_index.find_match(prompt, randomization_pool_size=3)
 
     try:
-        # configure the prompter a little
-        match engine.model_name:
-            case titan.model_name:
-                max_chars = 480
-                is_titan = True
-            case dalle.model_name:
-                max_chars = None
-                is_titan = False
-            case _:
-                raise ValueError(f"Unknown model: {engine.model_name}")
         prompter = MetaPrompter(cost=COST)
         augmented_prompt = prompter.adjust_prompt(
-            prompt, company["name"], max_chars=max_chars, titan_prompt=is_titan
+            prompt,
+            company["name"],
+            max_chars=engine.prompt_max_chars,
+            metaprompt_id=engine.metaprompt_id,
         )
-    except OpenAIError as e:
-        raise HTTPException(status_code=500, detail=f"OpenAI Error: {e}")
     except BaseException as e:
-        raise HTTPException(status_code=500, detail=f"Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Prompt error: {e}")
 
     try:
         image_result = engine.generate(augmented_prompt, cost=COST)
         public_image_url = publish_to_s3(image_result.path)
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Error: {e}"
-        )
+        raise HTTPException(status_code=500, detail=f"Generation error: {e}")
 
     local_relative_url = f"/static/images/{image_result.filename}"
 
@@ -115,6 +93,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         "model_backend": engine.model_name,
         "image_url": public_image_url,
     }
+
 
 @api.get("/generate/dalle")
 def generate_dalle(prompt: str):
@@ -151,6 +130,7 @@ def show_images():
 
     # Return the HTML table
     return table
+
 
 @api.get("/brands", response_class=HTMLResponse)
 def show_brands():

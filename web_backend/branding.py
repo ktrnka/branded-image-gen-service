@@ -543,11 +543,12 @@ class BrandIndex:
             # While in early development, dump the brand randomization so I can double check it
             print(f"""
 Brand randomization
-Selected: {companies[int(result["id"])]["name"]}
-Options: {", ".join(f"{companies[int(result['id'])]['name']} | {result['score']:.2f}" for result in results)}
+    Selected: {companies[int(result["id"])]["name"]}
+    Options: {", ".join(f"{companies[int(result['id'])]['name']} | {result['score']:.2f}" for result in results)}
 """)
         else:
             result = self.embeddings.search(prompt, limit=1)[0]
+
         company_index = int(result["id"])
         company = companies[company_index]
         return company, result["score"]

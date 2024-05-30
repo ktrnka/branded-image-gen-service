@@ -1,6 +1,7 @@
 from pprint import pprint
 import random
 from typing import Optional
+import re
 
 from openai import OpenAI
 
@@ -19,7 +20,7 @@ def adjust_prompt(prompt: str, company_name: str) -> str:
     template = random.choice(prompt_templates)
     return template.format(prompt=prompt, company_name=company_name)
 
-dall_e_3_prompt = """
+default_metaprompt = """
 Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs, outputs, and the quality of the output.
 
 Input prompt: A humanoid robot in the style of Ghost in the Shell visibly questioning its existence with a dense cityscape in the background	
@@ -51,7 +52,7 @@ Better output:
 
 """
 
-aws_titan_prompt = """
+aws_titan_metaprompt = """
 Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs and varying quality outputs.
 
 For this image generator the output prompt should be relatively short and to the point about the key details.
@@ -83,7 +84,6 @@ Better output: Immerse in the tranquil beauty of a serene sunset at a lake. Refl
 Now you'll be provided an input prompt and brand and you will generate a high quality prompt modification to prominently feature the brand. Only respond with the modified prompt.
 """
 
-import re
 
 def check_metaprompt(metaprompt: str) -> str:
     """
@@ -119,13 +119,20 @@ class MetaPrompter:
                 self.model = model
 
     def adjust_prompt(
-        self, prompt: str, company_name: str, max_chars: Optional[int] = None, titan_prompt: bool = False
+        self, prompt: str, company_name: str, max_chars: Optional[int] = None, metaprompt_id: Optional[str] = None
     ) -> str:
         limit_expression = ""
         if max_chars:
             limit_expression = f" (use up to {max_chars // 4} tokens in the output)"
 
-        system_metaprompt = check_metaprompt(aws_titan_prompt if titan_prompt else dall_e_3_prompt)
+        match metaprompt_id:
+            case "titan":
+                system_metaprompt = check_metaprompt(aws_titan_metaprompt)
+            case "default":
+                system_metaprompt = check_metaprompt(default_metaprompt)
+            case _:
+                raise ValueError(f"Unknown metaprompt_id: {metaprompt_id}")
+
         user_metaprompt = f"""
 Input prompt: {prompt}
 Input brand: {company_name}
@@ -148,16 +155,16 @@ Excellent output {limit_expression}:
         )
 
         print(f"""
-Metaprompt:
+Metaprompt
+----------
 System: {system_metaprompt}
 User: {user_metaprompt}
 
-Response:
-{response.choices[0].message.content}
-
+Response: {response.choices[0].message.content}
 Tokens: {response.usage}
+
 """)
 
-        pprint(response.to_dict())
+        # pprint(response.to_dict())
 
         return response.choices[0].message.content
