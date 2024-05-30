@@ -71,7 +71,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         # configure the prompter a little
         match engine.model_name:
             case titan.model_name:
-                max_chars = 400
+                max_chars = 480
                 is_titan = True
             case dalle.model_name:
                 max_chars = None
