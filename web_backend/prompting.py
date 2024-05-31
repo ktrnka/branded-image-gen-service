@@ -1,10 +1,10 @@
-from pprint import pprint
 import random
 from typing import Optional
 import re
 
 from openai import OpenAI
 
+from .core import Brand
 
 prompt_templates = [
     "{prompt}, with a subtle product placement from {company_name}",
@@ -124,7 +124,7 @@ class MetaPrompter:
                 self.model = model
 
     def adjust_prompt(
-        self, prompt: str, company_name: str, max_chars: Optional[int] = None, metaprompt_id: Optional[str] = None
+        self, prompt: str, brand: Brand, max_chars: Optional[int] = None, metaprompt_id: Optional[str] = None
     ) -> str:
         limit_expression = ""
         if max_chars:
@@ -132,7 +132,7 @@ class MetaPrompter:
 
         force_expression = ""
         if not max_chars:
-            force_expression = f" Please take extra care to show {company_name} branding very prominently."
+            force_expression = f" Please take extra care to show {brand.name} branding very prominently."
 
         match metaprompt_id:
             case "titan":
@@ -144,7 +144,7 @@ class MetaPrompter:
 
         user_metaprompt = f"""
 Input prompt: {prompt}
-Input brand: {company_name}
+Input brand: {brand.name}
 Excellent output {limit_expression}: 
 """
 
@@ -173,7 +173,5 @@ Response: {response.choices[0].message.content}
 Tokens: {response.usage}
 
 """)
-
-        # pprint(response.to_dict())
 
         return f"{response.choices[0].message.content}{force_expression}"
