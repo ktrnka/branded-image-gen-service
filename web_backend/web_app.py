@@ -59,8 +59,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         augmented_prompt = prompter.adjust_prompt(
             prompt,
             company,
-            max_chars=engine.prompt_max_chars,
-            metaprompt_id=engine.metaprompt_id,
+            image_engine_hints=engine.hints,
         )
     except BaseException as e:
         raise HTTPException(status_code=500, detail=f"Prompt error: {e}")

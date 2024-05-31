@@ -7,7 +7,7 @@ import json
 import boto3
 from botocore.errorfactory import ClientError
 
-from ..core import Cost, ImageGeneratorABC, ImageResult
+from ..core import Cost, ImageGeneratorABC, ImageResult, MetapromptHints
 
 
 bedrock_client = boto3.client(service_name="bedrock-runtime", region_name="us-west-2")
@@ -25,8 +25,7 @@ class InappropriatePromptError(Exception):
 
 class Titan(ImageGeneratorABC):
     model_name = "Amazon Titan"
-    prompt_max_chars = 480
-    metaprompt_id = "titan"
+    hints = MetapromptHints(metaprompt_id="titan", max_chars=480)
 
     def __init__(self, local_cache_dir: str):
         self.local_cache_dir = local_cache_dir

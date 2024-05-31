@@ -4,7 +4,7 @@ import re
 
 from openai import OpenAI
 
-from .core import Brand
+from .core import Brand, MetapromptHints
 
 prompt_templates = [
     "{prompt}, with a subtle product placement from {company_name}",
@@ -124,23 +124,23 @@ class MetaPrompter:
                 self.model = model
 
     def adjust_prompt(
-        self, prompt: str, brand: Brand, max_chars: Optional[int] = None, metaprompt_id: Optional[str] = None
+        self, prompt: str, brand: Brand, image_engine_hints: MetapromptHints
     ) -> str:
         limit_expression = ""
-        if max_chars:
-            limit_expression = f" (use up to {max_chars // 4} tokens in the output)"
+        if image_engine_hints.max_chars:
+            limit_expression = f" (use up to {image_engine_hints.max_chars // 4} tokens in the output)"
 
         force_expression = ""
-        if not max_chars:
+        if not image_engine_hints.max_chars:
             force_expression = f" Please take extra care to show {brand.name} branding very prominently."
 
-        match metaprompt_id:
+        match image_engine_hints.metaprompt_id:
             case "titan":
                 system_metaprompt = check_metaprompt(aws_titan_metaprompt)
             case "default":
                 system_metaprompt = check_metaprompt(default_metaprompt)
             case _:
-                raise ValueError(f"Unknown metaprompt_id: {metaprompt_id}")
+                raise ValueError(f"Unknown metaprompt_id: {image_engine_hints.metaprompt_id}")
 
         user_metaprompt = f"""
 Input prompt: {prompt}

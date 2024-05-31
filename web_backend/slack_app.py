@@ -100,9 +100,7 @@ def generate_image(prompt: str):
     augmented_prompt = prompter.adjust_prompt(
         prompt,
         company,
-        # TODO: Refactor into a prompt hints
-        max_chars=engine.prompt_max_chars,
-        metaprompt_id=engine.metaprompt_id,
+        image_engine_hints=engine.hints,
     )
 
     image_result = engine.generate(augmented_prompt, cost=COST)

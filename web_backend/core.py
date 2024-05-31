@@ -29,11 +29,16 @@ class ImageResult(NamedTuple):
     def filename(self) -> str:
         return self.path.split("/")[-1]
 
+class MetapromptHints(NamedTuple):
+    """
+    Image generation engine hints for the metaprompt engine
+    """
+    metaprompt_id: str
+    max_chars: Optional[int] = None
 
 class ImageGeneratorABC:
     model_name: str
-    prompt_max_chars: Optional[int] = None
-    metaprompt_id = "default"
+    hints: MetapromptHints = MetapromptHints(metaprompt_id="default")
 
     def generate(self, prompt: str, cost: Cost) -> ImageResult:
         raise NotImplementedError(
