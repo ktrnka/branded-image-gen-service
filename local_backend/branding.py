@@ -135,6 +135,7 @@ _brand_data = [
         "name": "Safeway",
         "market": "Safeway is an American supermarket chain offering a wide range of grocery products, including fresh produce, meats, bakery items, and household goods.",
         "brand_identity": "Safeway's brand identity is reliable and community-oriented, targeting families and everyday shoppers. Their marketing themes often emphasize freshness, value, and convenience, with a focus on local community involvement.",
+        "brand_style": "Red and white Safeway logo, featuring a stylized white S shaped figure inside a red rounded square, with the word SAFEWAY in bold black letters below."
     },
     {
         "name": "Taco Bell",
@@ -196,6 +197,7 @@ _brand_data = [
         "name": "Target",
         "market": "Target is an American retail corporation that offers a wide variety of products including household essentials, clothing, electronics, and groceries.",
         "brand_identity": "Target's brand identity is trendy and family-friendly, targeting a broad consumer base with an emphasis on style and value. Their marketing themes often highlight affordability, quality, and a pleasant shopping experience, with the iconic bullseye logo.",
+        "brand_style": "Large red sign with the Target logo, including a white bullseye symbol above the word TARGET in white capital letters, mounted on the exterior of a building against a clear blue sky."
     },
     {
         "name": "Chase Bank",
@@ -302,6 +304,7 @@ _brand_data = [
         "name": "Blockbuster",
         "market": "Blockbuster was an American-based provider of home movie and video game rental services through video rental shops, DVD-by-mail, streaming, video on demand, and cinema theater.",
         "brand_identity": "Blockbuster's brand identity was nostalgic and entertainment-focused, targeting families and movie enthusiasts. Their marketing themes often emphasized the joy of movie nights and the wide selection of titles available.",
+        "brand_style": "A blue ticket stub with yellow accents and the word BLOCKBUSTER in bold, yellow capital letters centered within the ticket outline."
     },
     {
         "name": "Rainier Beer",

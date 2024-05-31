@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # cost setting
-COST = Cost.HIGH
+COST = Cost.LOW
 
 brand_index = BrandIndex()
 
@@ -55,7 +55,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
     company, match_score = brand_index.find_match(prompt, randomization_pool_size=1)
 
     try:
-        prompter = MetaPrompter(cost=COST)
+        prompter = MetaPrompter(cost=Cost.LOW)
         augmented_prompt = prompter.adjust_prompt(
             prompt,
             company,
@@ -65,7 +65,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         raise HTTPException(status_code=500, detail=f"Prompt error: {e}")
 
     try:
-        image_result = engine.generate(augmented_prompt, cost=COST)
+        image_result = engine.generate(augmented_prompt, cost=Cost.HIGH)
         public_image_url = publish_to_s3(image_result.path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Generation error: {e}")
