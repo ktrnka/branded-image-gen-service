@@ -7,8 +7,8 @@ import json
 import boto3
 from botocore.errorfactory import ClientError
 
-from .base import ImageGeneratorABC, ImageResult
-from ..core import Cost
+from ..core import Cost, ImageGeneratorABC, ImageResult
+
 
 bedrock_client = boto3.client(service_name="bedrock-runtime", region_name="us-west-2")
 

@@ -1,8 +1,7 @@
 from urllib.parse import urlparse
 from openai import OpenAI
 import requests
-from .base import ImageGeneratorABC, ImageResult
-from ..core import Cost
+from ..core import Cost, ImageGeneratorABC, ImageResult
 
 
 class DallE(ImageGeneratorABC):

@@ -6,7 +6,6 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import os
 from dotenv import load_dotenv
-from botocore.errorfactory import ClientError
 
 from .branding import BrandIndex
 from .prompting import MetaPrompter

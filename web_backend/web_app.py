@@ -5,9 +5,7 @@ import re
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
-from .core import Cost
-
-from .generators.base import ImageGeneratorABC
+from .core import Cost, ImageGeneratorABC
 
 from .publish_to_s3 import publish_to_s3
 
@@ -16,7 +14,6 @@ from .generators import aws_bedrock, openai
 from .database import Database
 from .prompting import MetaPrompter
 
-from openai import OpenAIError
 
 from .branding import BrandIndex
 from dotenv import load_dotenv
