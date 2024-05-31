@@ -1,8 +1,34 @@
-# branded-image-gen-service
+# About
 
-## Fun example prompts
+This is a demo in the style of "shitty robots" but for generative AI. It generates what you ask for, but injects advertisements into the image.
+
+It takes your image generation prompt, modifies it, then sends the modified prompt to an image generation API, and returns the result.
+
+The serious explanation of this is that image generation loses money. It's expensive to run the services and very few people pay for them. I'd love to have an image generation alternative to Giphy, but it's simply too expensive. Compare that with large successful products such as Google, Youtube, Facebook, and Instagram. They have high server bills but those bills are paid for with advertisment revenue. In theory, this work could pay for free near-unlimited image generation with ad revenue.
+
+The satirical motivation is that tech companies take cool technology, then find some productive application of it, then once they're entrenched they enshittify the technology by putting more and more ads into it. It gets to the point where the platforms are barely worth the hassle. This project explores the possible future-enshittification of image generators to better understand what's coming.
+
+Specific inspirations and motivations:
+- Giphy could be so much better for Slack memes
+- Midjourney/etc as a Slack plugin is fun but it's pricey
+- Simone Gertz shitty robots
+- That crazy AI branding page
+- Google/Facebook
+
+# On image generators
+
+- DALL-E 3: More creative. Deviates from branding often
+- Titan: Cheaper, more photo/art oriented, often drops branding
+
+# On prompt engineering
+
+- I started with template generation of prompts but I had slightly better results with using GPT to generate the prompt from a metaprompt
+- I found that the prompt needed to be customized differently for each engine
+
+# Example prompts
 
 - College girl studying at a desk listening to lofi hiphop beats with rain outside in a hybrid style of cartoon and watercolor
+- A painting of a serious-looking dog sitting behind an office desk reading reports	
 
 ## From image to prompt on my photos
 
@@ -12,29 +38,6 @@
 - A white plate containing gnocchi covered in a red tomato sauce, topped with shavings of cheese, situated on a wooden table.
 - A scenic view of snow-capped mountains in the background with smaller, tree-covered hills emerging through a thick layer of clouds in the foreground. The sky is clear and blue, providing a stark contrast to the white clouds and snow.
 
-## Meta-prompting notes
-
-This is an effort to replace the code function augment(prompt, brand) with a ChatGPT "function" that does the same but much better. 
-
-Goals:
-
-- Integrate the brand into the prompt better
-- Generate more details about the image for DALL-E 3 so that it doesn't override
-
-Notes
-
-- I've integrated the meta-prompting into the repo and it works great
-
-## Interesting errors
-
-botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the InvokeModel operation: This request has been blocked by our content filters. Our filters automatically flagged this prompt because it may conflict our AUP or AWS Responsible AI Policy. Please adjust your text prompt to submit a new request.
-
-botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the InvokeModel operation: Malformed input request: #/textToImageParams/text: expected maxLength: 512, actual: 536, please reformat your input and try again.
-
-openai.OpenAIError: The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable
-
-# Examples
-
 ## From https://medium.com/@ceo_44783/amazons-titan-image-generator-compared-to-chatgpt-s-dall-e-3-0f9185aecfc9
 
 - The Last Rose
@@ -43,9 +46,7 @@ openai.OpenAIError: The api_key client option must be set either by passing api_
 - Playing a Piano Filled With Flames
 - Gopro Selfie of the French Revolution
 
-
-https://future-junk-images.s3.us-west-2.amazonaws.com/public/00a1bed9-74fc-44a8-8c12-0bd069c86950.jpg
-
+# Ideas
 
 ## Brand placement ideas I really want to see
 
