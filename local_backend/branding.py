@@ -125,6 +125,7 @@ _brand_data = [
         "name": "Tim Horton's",
         "market": "Tim Horton's is a Canadian multinational fast food restaurant known for its coffee, doughnuts, and other quick-service breakfast and lunch items.",
         "brand_identity": "Tim Horton's brand identity is warm and community-focused, targeting a broad audience including families and commuters. Their marketing themes often emphasize tradition and comfort, with a focus on Canadian heritage and hospitality.",
+        "brand_style": "Tim Hortons logo featuring the company name in marker-styled cursive letters in red and white, often accompanied by the iconic coffee cup and maple leaf design.",
     },
     {
         "name": "Starbucks",
@@ -141,21 +142,25 @@ _brand_data = [
         "name": "Taco Bell",
         "market": "Taco Bell is an American fast food chain known for its Mexican-inspired menu, featuring items like tacos, burritos, quesadillas, and nachos.",
         "brand_identity": "Taco Bell's brand identity is fun and youthful, targeting young adults and teens. Their marketing themes often include bold flavors, late-night cravings, and value, with a playful and sometimes irreverent tone.",
+        "brand_style": "Taco Bell logo featuring the company name in bold, uppercase letters in purple and pink, often accompanied by the iconic bell shape and the tagline 'Live Mas.'. The color palette includes purple, pink, and white with yellow accents.",
     },
     {
         "name": "7-11",
         "market": "7-11 is an international chain of convenience stores that provides a variety of products including snacks, beverages, and everyday essentials, often operating 24/7.",
         "brand_identity": "7-11's brand identity is convenient and accessible, targeting a wide range of consumers looking for quick and easy solutions. Their marketing themes often highlight convenience, variety, and availability, with the iconic red and green logo.",
+        "brand_style": "7-Eleven logo featuring the word 7-ELEVEN in bold, uppercase letters in red and green, often accompanied by the tagline 'Always Open.'",
     },
     {
         "name": "Mazda",
         "market": "Mazda is a Japanese automotive manufacturer known for its stylish and innovative vehicles, including sedans, SUVs, and sports cars with a focus on driving dynamics.",
         "brand_identity": "Mazda's brand identity is sporty and sophisticated, targeting drivers who appreciate performance and design. Their marketing themes often highlight driving pleasure and innovation, with the tagline 'Zoom-Zoom' emphasizing a fun and spirited driving experience.",
+        "brand_style": "The Mazda logo is an iconic winged M emblem often in silver or black."
     },
     {
         "name": "Tesla",
         "market": "Tesla is an American electric vehicle and clean energy company known for its cutting-edge electric cars, battery energy storage, and solar products.",
         "brand_identity": "Tesla's brand identity is innovative and futuristic, targeting tech-savvy consumers and environmentally conscious individuals. Their marketing themes emphasize sustainability, advanced technology, and luxury, often featuring sleek, modern visuals.",
+        "brand_style": "Tesla logo featuring a stylized T in silver against a dark background. The color palette includes silver, black, and red.",
     },
     {
         "name": "REI",
@@ -167,31 +172,37 @@ _brand_data = [
         "name": "Patagonia",
         "market": "Patagonia is an American clothing company that markets and sells outdoor clothing and gear with a strong emphasis on environmental sustainability.",
         "brand_identity": "Patagonia's brand identity is eco-conscious and rugged, targeting environmentally aware consumers and outdoor adventurers. Their marketing often emphasizes sustainability, ethical production, and activism, with a focus on protecting the planet.",
+        "brand_style": "Patagonia logo featuring the company name in bold, uppercase letters in black, often accompanied by the iconic mountain silhouette design. It's often accompanied by a stylized sunset behind the mountains.",
     },
     {
         "name": "The North Face",
         "market": "The North Face is an American outdoor product company specializing in outerwear, fleece, coats, shirts, footwear, and equipment such as backpacks and tents.",
         "brand_identity": "The North Face's brand identity is adventurous and durable, targeting outdoor enthusiasts and athletes. Their marketing themes often highlight exploration, innovation, and resilience, with the iconic half-dome logo symbolizing rugged terrain.",
+        "brand_style": "The North Face logo featuring a stylized half-dome mountain shape in black, often accompanied by the company name in bold, uppercase letters in the same color. The color palette includes black, white, and gray.",
     },
     {
         "name": "Planet Fitness",
         "market": "Planet Fitness is an American franchisor and operator of fitness centers, known for its 'Judgment Free Zone' and affordable gym memberships.",
         "brand_identity": "Planet Fitness' brand identity is inclusive and approachable, targeting casual gym-goers and fitness newcomers. Their marketing themes often emphasize affordability, comfort, and a non-intimidating environment, with the 'Judgment Free Zone' concept central to their messaging.",
+        "brand_style": "Planet Fitness logo featuring the company name in bold, uppercase letters in yellow and purple, often accompanied by the tagline 'The Judgment Free Zone.'",
     },
     {
         "name": "Krispy Kreme",
         "market": "Krispy Kreme is an American doughnut company and coffeehouse chain, famous for its glazed doughnuts and other sweet treats.",
         "brand_identity": "Krispy Kreme's brand identity is nostalgic and indulgent, targeting families and sweet-toothed individuals. Their marketing themes often highlight freshness, joy, and tradition, with the iconic hot light signaling freshly made doughnuts.",
+        "brand_style": "Krispy Kreme logo featuring the company name in stylized cursive letters in red and green, often accompanied by the iconic green and white color scheme.'",
     },
     {
         "name": "Home Depot",
         "market": "Home Depot is an American home improvement retail chain that sells tools, construction products, appliances, and services, including installation and repair.",
         "brand_identity": "Home Depot's brand identity is practical and empowering, targeting DIY enthusiasts and professional contractors. Their marketing themes often highlight expertise, variety, and value, with the tagline 'More saving. More doing.' emphasizing customer empowerment.",
+        "brand_style": "Home Depot logo featuring the company name in bold, uppercase letters in orange against a white background, often accompanied by the iconic orange and black color scheme.'",
     },
     {
         "name": "Ikea",
         "market": "Ikea is a multinational group that designs and sells ready-to-assemble furniture, kitchen appliances, and home accessories, known for its modernist designs and affordability.",
         "brand_identity": "Ikea's brand identity is innovative and accessible, targeting budget-conscious consumers and design enthusiasts. Their marketing themes often emphasize functionality, simplicity, and Swedish heritage, with the iconic blue and yellow logo.",
+        "brand_style": "Ikea logo featuring the company name in bold, uppercase letters in blue and yellow. The color palette is bright with a modern, minimalist design.",
     },
     {
         "name": "Target",
@@ -203,26 +214,29 @@ _brand_data = [
         "name": "Chase Bank",
         "market": "Chase Bank, officially known as JPMorgan Chase Bank, is a national bank that offers a wide range of financial services including personal banking, loans, credit cards, and investment services.",
         "brand_identity": "Chase Bank's brand identity is secure and reliable, targeting a diverse audience including individuals and businesses. Their marketing themes often highlight trust, innovation, and comprehensive financial solutions, with a focus on customer service and security.",
+        "brand_style": "Chase logo featuring the word CHASE in bold, uppercase letters in blue, often accompanied by the iconic blue octagon symbolizing security and stability.",
     },
     {
         "name": "Hyatt Regency",
         "market": "Hyatt Regency is a brand of upscale, full-service hotels, resorts, and residences known for their comprehensive facilities and excellent customer service.",
         "brand_identity": "Hyatt Regency's brand identity is luxurious and welcoming, targeting business travelers and vacationers. Their marketing themes often emphasize comfort, convenience, and premium service, with a focus on creating memorable experiences for guests.",
     },
-    {
-        "name": "Canon",
-        "market": "Canon is a leading Japanese company specializing in imaging and optical products, including cameras, camcorders, and printers. They are renowned for their high-quality DSLR and mirrorless cameras.",
-        "brand_identity": "Canon's brand identity is innovative and professional, targeting photographers and videographers of all levels. Their marketing themes often highlight precision, quality, and creativity, with a focus on capturing and preserving memories.",
-    },
+    # {
+    #     "name": "Canon",
+    #     "market": "Canon is a leading Japanese company specializing in imaging and optical products, including cameras, camcorders, and printers. They are renowned for their high-quality DSLR and mirrorless cameras.",
+    #     "brand_identity": "Canon's brand identity is innovative and professional, targeting photographers and videographers of all levels. Their marketing themes often highlight precision, quality, and creativity, with a focus on capturing and preserving memories.",
+    # },
     {
         "name": "Nikon",
         "market": "Nikon is a Japanese multinational corporation known for its imaging products and optics, including cameras, camera lenses, binoculars, and microscopes. Nikon cameras are popular among professional photographers for their reliability and performance.",
         "brand_identity": "Nikon's brand identity is reliable and cutting-edge, targeting professional photographers and hobbyists. Their marketing themes often emphasize technological innovation, durability, and artistic expression, with a focus on high-quality imaging.",
+        "brand_style": "Nikon logo featuring the company name in bold, uppercase letters in yellow against a black background, often accompanied by the iconic yellow and black color scheme.'",
     },
     {
         "name": "University of Washington",
         "market": "The University of Washington (UW) is a public research university in Seattle, known for its strong academic programs, particularly in medicine, engineering, and computer science.",
         "brand_identity": "The University of Washington's brand identity is prestigious and inclusive, targeting prospective students, faculty, and researchers. Their marketing themes often highlight academic excellence, innovation, and community engagement, with the iconic 'W' logo representing the university's legacy.",
+        "brand_style": "The University of Washington logo featuring a stylized purple 'W' with a gold outline, often accompanied by the full university name in a modern font. The color palette includes purple and gold, representing the school's official colors.",
     },
     {
         "name": "WeWork",
@@ -234,11 +248,13 @@ _brand_data = [
         "name": "Sennheiser",
         "market": "Sennheiser is a German audio company specializing in the design and production of high-fidelity audio equipment, including headphones, microphones, and sound systems.",
         "brand_identity": "Sennheiser's brand identity is premium and professional, targeting audiophiles, musicians, and sound engineers. Their marketing themes often highlight superior sound quality, innovation, and craftsmanship, with a focus on enhancing the listening experience.",
+        "brand_style": "The Sennheiser logo features a stylized 'S' within a rectangle, often accompanied by the company name in a modern font. The color palette includes black, white, and silver.",
     },
     {
         "name": "Beats",
         "market": "Beats by Dre is a brand of high-performance audio products, including headphones, earphones, and speakers, known for their sleek design and strong bass performance.",
         "brand_identity": "Beats' brand identity is trendy and bold, targeting young, fashion-conscious consumers and music lovers. Their marketing themes often include celebrity endorsements and a focus on lifestyle, with the iconic 'b' logo symbolizing premium audio and style.",
+        "brand_style": "Beats logo featuring a lowercase b in white inside a red circle, often accompanied by the word BEATS in bold, uppercase letters below. The color palette includes red, white, and black.",
     },
     {
         "name": "Squarespace",
@@ -249,6 +265,7 @@ _brand_data = [
         "name": "Snickers",
         "market": "Snickers is a popular chocolate bar produced by Mars, Incorporated, known for its combination of nougat, caramel, peanuts, and milk chocolate.",
         "brand_identity": "Snickers' brand identity is humorous and satisfying, targeting a broad audience including young adults and snack enthusiasts. Their marketing themes often revolve around the idea that Snickers satisfies hunger and improves mood.",
+        "brand_style": "Snickers logo featuring the word SNICKERS in bold, uppercase letters in blue against a white background with a red and black outline, often accompanied by the iconic blue and white color scheme.'",
     },
     {
         "name": "Butterfinger",
@@ -269,36 +286,41 @@ _brand_data = [
         "name": "Lego",
         "market": "Lego is a Danish toy company best known for its plastic construction toys that allow children and adults to build various models using interlocking bricks.",
         "brand_identity": "Lego's brand identity is creative and educational, targeting children and adults who enjoy building and imagination. Their marketing themes often emphasize creativity, learning through play, and family bonding.",
+        "brand_style": "Lego logo featuring the word LEGO in bold, uppercase letters in white with a black and yellow outline against a red background, often accompanied by the iconic red, yellow, blue, and green color scheme.'",
     },
     {
         "name": "Johnson & Johnson",
         "market": "Johnson & Johnson is a multinational corporation that develops medical devices, pharmaceutical, and consumer packaged goods, known for brands like Band-Aid, Tylenol, and baby care products.",
         "brand_identity": "Johnson & Johnson's brand identity is caring and trustworthy, targeting families and healthcare professionals. Their marketing themes often focus on health, wellness, and family care.",
+        "brand_style": "Johnson & Johnson logo featuring the company name in cursive red letters.",
     },
     {
         "name": "Comcast",
         "market": "Comcast is an American telecommunications conglomerate that provides cable television, internet, telephone, and wireless services to residential and commercial customers.",
         "brand_identity": "Comcast's brand identity is innovative and connected, targeting households and businesses. Their marketing themes often emphasize high-speed internet, reliable service, and advanced technology.",
+        "brand_style": "Comcast logo featuring the word COMCAST in bold, uppercase letters, often accompanied by a red crescent moon emphasizing the C. The color palette includes red, white, and black.",
     },
     {
         "name": "Kool-Aid",
         "market": "Kool-Aid is a brand of flavored drink mix owned by Kraft Heinz, known for its variety of flavors and the iconic Kool-Aid Man mascot.",
         "brand_identity": "Kool-Aid's brand identity is fun and vibrant, targeting children and families. Their marketing themes often include excitement, refreshment, and playful fun, with the Kool-Aid Man bursting through walls in ads.",
+        "brand_style": "Kool-Aid logo featuring the word KOOL-AID in bold, colorful letters, often accompanied by the Kool-Aid man mascot, a smiling pitcher filled with the drink, bursting through a wall."
     },
     {
         "name": "Netflix",
         "market": "Netflix is a leading streaming service offering a wide variety of TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.",
         "brand_identity": "Netflix's brand identity is innovative and entertaining, targeting a global audience of diverse viewers. Their marketing themes often emphasize original content, convenience, and the ability to watch anywhere, anytime.",
     },
-    {
-        "name": "Salesforce",
-        "market": "Salesforce is a cloud-based software company that provides customer relationship management (CRM) services and enterprise applications focused on customer service, marketing automation, analytics, and application development.",
-        "brand_identity": "Salesforce's brand identity is innovative and customer-centric, targeting businesses of all sizes looking to improve their customer relationships. Their marketing themes often emphasize the power of cloud computing, integration, and user-friendly design.",
-    },
+    # {
+    #     "name": "Salesforce",
+    #     "market": "Salesforce is a cloud-based software company that provides customer relationship management (CRM) services and enterprise applications focused on customer service, marketing automation, analytics, and application development.",
+    #     "brand_identity": "Salesforce's brand identity is innovative and customer-centric, targeting businesses of all sizes looking to improve their customer relationships. Their marketing themes often emphasize the power of cloud computing, integration, and user-friendly design.",
+    # },
     {
         "name": "FedEx",
         "market": "FedEx is a multinational courier delivery services company known for its overnight shipping service, and pioneering a system that could track packages and provide real-time updates on package location.",
         "brand_identity": "FedEx's brand identity is reliable and efficient, targeting businesses and individual customers who need fast and secure delivery services. Their marketing themes often emphasize speed, reliability, and global reach.",
+        "brand_style": "FedEx logo featuring the letters FEDEX in purple and orange, with an arrow hidden between the E and the X symbolizing speed and precision. The tagline 'The World on Time' is often included.",
     },
     {
         "name": "Blockbuster",
@@ -313,14 +335,10 @@ _brand_data = [
         "brand_style": "Rainier Beer. Illustration of a beer can with a prominent red R on the label, accompanied by the text Rainier for Life at the top. The can features gold accents and a white background, with additional text at the bottom stating Mountain Fresh and Naturally Brewed.",
     },
     {
-        "name": "Aflac",
-        "market": "Aflac is an American insurance company that provides supplemental insurance for individuals and groups to help cover expenses not paid by major medical insurance.",
-        "brand_identity": "Aflac's brand identity is approachable and reliable, targeting individuals and families seeking financial security. Their marketing themes often feature the Aflac Duck, emphasizing the ease and benefits of their supplemental insurance plans.",
-    },
-    {
         "name": "Allstate",
         "market": "Allstate is a large American insurance company offering a variety of insurance products, including auto, home, life, and business insurance, known for its slogan 'You're in Good Hands'.",
         "brand_identity": "Allstate's brand identity is protective and trustworthy, targeting individuals and families seeking comprehensive and reliable insurance coverage. Their marketing themes often emphasize security, trust, and the iconic 'good hands' logo.",
+        "brand_style": "Allstate logo featuring two hands cupped together in a protective gesture, with the word ALLSTATE in bold, uppercase letters below. The tagline 'You're in Good Hands' is often included. The color palette includes blue, white, and black.",
     },
     {
         "name": "Boeing",
@@ -331,16 +349,19 @@ _brand_data = [
         "name": "CVS",
         "market": "CVS is an American retail corporation that operates a chain of pharmacy stores, providing prescription medications, health and wellness products, and basic household items.",
         "brand_identity": "CVS's brand identity is caring and convenient, targeting individuals and families looking for accessible healthcare and everyday essentials. Their marketing themes often emphasize convenience, health services, and community care.",
+        "brand_style": "CVS logo featuring the letters CVS in red and white, with a stylized heart shape in the middle of the V. The tagline 'Health is Everything' is often included below the logo.",
     },
     {
         "name": "Delta Air Lines",
         "market": "Delta Air Lines is a major American airline, providing air travel services to both domestic and international destinations. They are known for their extensive network and customer service.",
         "brand_identity": "Delta's brand identity is reliable and customer-focused, targeting business and leisure travelers. Their marketing themes often emphasize comfort, connectivity, and excellent service.",
+        "brand_style": "Delta Air Lines logo featuring a red and blue triangle with a white center, symbolizing a winged aircraft. The text DELTA is written in bold, uppercase letters below the triangle, with the tagline 'Keep Climbing' underneath.",
     },
     {
         "name": "John Deere",
         "market": "John Deere is a brand of Deere & Company, known for manufacturing agricultural, construction, and forestry machinery, diesel engines, and lawn care equipment.",
         "brand_identity": "John Deere's brand identity is durable and reliable, targeting farmers, construction workers, and landscaping professionals. Their marketing themes often emphasize ruggedness, efficiency, and innovation.",
+        "brand_style": "John Deere logo featuring a leaping deer in black, set against a yellow background, with the words JOHN DEERE in bold, green letters below."
     },
     {
         "name": "Electronic Arts",
@@ -364,24 +385,22 @@ _brand_data = [
         "brand_identity": "Hilton's brand identity is luxurious and welcoming, targeting travelers seeking comfort and high-quality service. Their marketing themes often emphasize relaxation, sophistication, and exceptional guest experiences.",
     },
     {
-        "name": "Kraft",
-        "market": "Kraft is a well-known food brand owned by Kraft Heinz, offering a wide range of products including cheese, condiments, and snacks.",
-        "brand_identity": "Kraft's brand identity is comforting and reliable, targeting families and individuals who enjoy classic, easy-to-prepare foods. Their marketing themes often emphasize tradition, convenience, and great taste.",
-    },
-    {
         "name": "Heinz",
         "market": "Heinz is a leading global food brand known for its ketchup, sauces, and other condiments, part of the Kraft Heinz Company.",
         "brand_identity": "Heinz's brand identity is classic and dependable, targeting families and individuals who appreciate high-quality, flavorful condiments. Their marketing themes often emphasize taste, quality, and the iconic Heinz branding.",
+        "brand_style": "Heinz logo featuring the word HEINZ in bold, black letters with red accents, set against a white background. The logo often includes a tomato vine illustration and the tagline '57 Varieties.'",
     },
     {
         "name": "Lululemon",
         "market": "Lululemon is an athletic apparel retailer known for its high-quality yoga pants, activewear, and accessories, targeting fitness enthusiasts.",
         "brand_identity": "Lululemon's brand identity is active and mindful, targeting individuals who value fitness, wellness, and style. Their marketing themes often emphasize performance, comfort, and a holistic approach to health.",
+        "brand_style": "Lululemon logo featuring the word LULULEMON in bold, uppercase letters with a stylized 'A' in the shape of a yoga pose. The color palette includes black, white, and red.",
     },
     {
         "name": "Royal Caribbean",
         "market": "Royal Caribbean is a global cruise vacation company that operates a fleet of modern ships offering a wide variety of activities, dining options, and destinations.",
         "brand_identity": "Royal Caribbean's brand identity is adventurous and luxurious, targeting vacationers seeking unique and memorable travel experiences. Their marketing themes often emphasize adventure, relaxation, and exceptional service.",
+        "brand_style": "Royal Caribbean logo featuring a stylized blue anchor with a crown on top, surrounded by a circular border with the text ROYAL CARIBBEAN INTERNATIONAL in bold, uppercase letters. The color palette includes blue, white, and gold.",
     },
     {
         "name": "KFC",
