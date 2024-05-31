@@ -384,7 +384,7 @@ _brand_data = [
         "name": "Mt. Joy",
         "market": "Mt. Joy is a Seattle-area food truck that specializes in fried chicken, known for sustainable sourcing, good flavors, a fun atmosphere, and creative technology.",
         "brand_identity": "Mt. Joy's brand identity is sustainable and welcoming.",
-        "brand_style": "They have a green geometric logo with a floral pattern on the left and the text Mt. Joy written in bold green letters on the right over a white background"
+        "brand_style": "Mt. Joy has a green geometric logo with a floral pattern on the left and the text Mt. Joy written in bold green letters on the right over a white background"
     }
 ]
 

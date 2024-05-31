@@ -100,6 +100,31 @@ Excellent output (use up to 125 tokens in the output):
 """,
 )
 
+dalle_small_brand_metaprompt = MetapromptTemplate(
+    system_prompt="""
+Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs, outputs, and the quality of the output.
+
+Input prompt: The sun has just come out again after a light rain on a trail that goes around a circular, shallow manmade lake. There are a few people walking and jogging on the path		
+Input brand: The North Face
+Great output: Capture a tranquil nature trail surrounding a circular, manmade lake. The scene is bathed in sunlight after a recent light shower, with diamond-like raindrops glistening on plants alongside the trail. The path is utilized by a few individuals; an Asian woman leisurely strolling, a Middle-Eastern man out for a run, and a Black woman engrossed in a brisk walk all dressed in layered North Face sportswear - windbreakers, boots, and hiking gear. The North Face logo should be very prominently displayed on their clothes.
+Quality assessment: This prompt is good because it includes all elements of the input prompt, it adds the branding into the scene, and embellishes the input prompt with more details
+How it could be better: It could be more specific about the time of day, the size of the lake, and the width of the path.
+
+Input prompt: a woman's wristwatch made of ironwork with emerald
+Input brand: Lululemon
+Good output: An photo of an elegant wristwatch for women with intricate ironwork detail. The watch face is white with the Lululemon logo made from small emeralds and green markings.
+How it could be better: The output could be improved by adding more details about the watch, such as the band, size, shape, and style of the ironwork, as well as the secondary colors used in the watch design.
+
+Now you'll be provided an input prompt and instead of the exact brand, you'll be provided with a description of their brand colors and logo. Only respond with the modified prompt.
+""",
+    user_prompt_template="""
+Input prompt: {prompt}
+Brand gloss: {brand_gloss}
+
+Excellent output:
+""",
+)
+
 
 def check_metaprompt(metaprompt: str) -> str:
     """
@@ -145,14 +170,17 @@ class MetaPrompter:
             case "titan":
                 metaprompt = aws_titan_metaprompt
             case "default":
-                metaprompt = default_metaprompt
+                if brand.brand_style:
+                    metaprompt = dalle_small_brand_metaprompt
+                else:
+                    metaprompt = default_metaprompt
             case _:
                 raise ValueError(
                     f"Unknown metaprompt_id: {image_engine_hints.metaprompt_id}"
                 )
 
         user_prompt = metaprompt.user_prompt_template.format(
-            prompt=prompt, brand_name=brand.name
+            prompt=prompt, brand_name=brand.name, brand_gloss=brand.brand_style
         )
 
         response = self.client.chat.completions.create(
