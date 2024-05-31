@@ -96,7 +96,8 @@ def generate_image(prompt: str):
 
     engine = random.choice(generation_backends)
 
-    prompter = MetaPrompter(cost=COST)
+    # For some reason the high cost prompter is just worse
+    prompter = MetaPrompter(cost=Cost.LOW)
     augmented_prompt = prompter.adjust_prompt(
         prompt,
         company,
