@@ -1,7 +1,10 @@
 import random
+from typing import List, Tuple
 from txtai.embeddings import Embeddings
 
-companies = [
+from .core import Brand
+
+_brand_data = [
     {
         "name": "Coca-Cola",
         "market": "Coca-Cola is a global leader in the beverage industry, known for its flagship soda as well as a wide range of other soft drinks, juices, and bottled water.",
@@ -385,39 +388,32 @@ companies = [
     }
 ]
 
+brands = [Brand(**company) for company in _brand_data]
 
-def default_company2key(company: dict) -> str:
-    return f"{company['market']}\n{company['brand_identity']}"
+# Replace this with a custom function to affect preprocessing before indexing
+def brand2key(brand: Brand) -> str:
+    return f"{brand.market}\n{brand.brand_identity}"
 
 
 class BrandIndex:
     def __init__(
-        self, embedding_path="BAAI/bge-small-en-v1.5", key_fn=default_company2key
+        self, embedding_path="BAAI/bge-small-en-v1.5", key_fn=brand2key
     ):
         self.embeddings = Embeddings(content=True, path=embedding_path)
-        self.embeddings.index([key_fn(company) for company in companies])
+        self.embeddings.index([key_fn(brand) for brand in brands])
 
-    def find_match(self, prompt: str, randomization_pool_size=1):
+    def find_match(self, prompt: str, randomization_pool_size=1) -> Tuple[Brand, float]:
         if randomization_pool_size > 1:
             results = self.embeddings.search(prompt, limit=randomization_pool_size)
             result = random.choices(
                 results, weights=[result["score"] for result in results], k=1
             )[0]
-
-            # While in early development, dump the brand randomization so I can double check it
-            print(
-                f"""
-Brand randomization
-    Selected: {companies[int(result["id"])]["name"]}
-    Options: {", ".join(f"{companies[int(result['id'])]['name']} | {result['score']:.2f}" for result in results)}
-"""
-            )
         else:
             result = self.embeddings.search(prompt, limit=1)[0]
 
-        company_index = int(result["id"])
-        company = companies[company_index]
-        return company, result["score"]
+        brand_index = int(result["id"])
+        brand = brands[brand_index]
+        return brand, result["score"]
 
-    def get_all_brands(self):
-        return companies
+    def get_all_brands(self) -> List[Brand]:
+        return brands

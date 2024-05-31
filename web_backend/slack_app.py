@@ -100,7 +100,7 @@ def generate_image(prompt: str):
     prompter = MetaPrompter(cost=COST)
     augmented_prompt = prompter.adjust_prompt(
         prompt,
-        company["name"],
+        company.name,
         # TODO: Refactor into a prompt hints
         max_chars=engine.prompt_max_chars,
         metaprompt_id=engine.metaprompt_id,
@@ -112,7 +112,7 @@ def generate_image(prompt: str):
 
     database.log_image(
         prompt,
-        company["name"],
+        company.name,
         match_score,
         augmented_prompt,
         engine.model_name,
@@ -127,7 +127,7 @@ def generate_image(prompt: str):
         engine=engine.model_name,
         prompt=augmented_prompt,
         about={
-            "Brand selection": f"{company['name']} ({match_score:.2f})",
+            "Brand selection": f"{company.name} ({match_score:.2f})",
             "Original prompt": prompt,
         },
     )

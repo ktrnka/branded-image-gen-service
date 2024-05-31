@@ -61,7 +61,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         prompter = MetaPrompter(cost=COST)
         augmented_prompt = prompter.adjust_prompt(
             prompt,
-            company["name"],
+            company.name,
             max_chars=engine.prompt_max_chars,
             metaprompt_id=engine.metaprompt_id,
         )
@@ -78,7 +78,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
 
     database.log_image(
         prompt,
-        company["name"],
+        company.name,
         match_score,
         augmented_prompt,
         engine.model_name,
@@ -87,7 +87,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
     )
 
     return {
-        "company": company["name"],
+        "company": company.name,
         "company_match_score": match_score,
         "prompt": augmented_prompt,
         "model_backend": engine.model_name,

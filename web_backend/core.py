@@ -1,4 +1,6 @@
+from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 class Cost(Enum):
     """
@@ -6,3 +8,14 @@ class Cost(Enum):
     """
     HIGH = 'HIGH'
     LOW = 'LOW'
+
+
+@dataclass
+class Brand:
+    """
+    Convenience wrapper around brand data
+    """
+    name: str
+    market: str
+    brand_identity: str
+    brand_style: Optional[str] = None
