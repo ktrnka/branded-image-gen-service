@@ -304,6 +304,7 @@ _brand_data = [
         "name": "Rainier Beer",
         "market": "Rainier Beer is a beer brand founded in Seattle, Washington, known for its lagers and iconic red 'R' logo. It has a long history and a strong regional presence in the Pacific Northwest.",
         "brand_identity": "Rainier Beer's brand identity is rugged and authentic, targeting outdoor enthusiasts and those who appreciate traditional brewing. Their marketing themes often include natural landscapes, regional pride, and a laid-back lifestyle.",
+        "brand_style": "Rainier Beer. Illustration of a beer can with a prominent red R on the label, accompanied by the text Rainier for Life at the top. The can features gold accents and a white background, with additional text at the bottom stating Mountain Fresh and Naturally Brewed."
     },
     {
         "name": "Aflac",
