@@ -4,7 +4,7 @@ import re
 
 from openai import OpenAI
 
-from .core import Brand, MetapromptHints
+from .core import Brand, MetapromptHints, Cost
 
 prompt_templates = [
     "{prompt}, with a subtle product placement from {company_name}",
@@ -102,9 +102,6 @@ def check_metaprompt(metaprompt: str) -> str:
     assert len(matches) >= 2, f"Metaprompt only has {len(matches)} examples. Expected at least 2."
 
     return metaprompt
-
-from .core import Cost
-from typing import Optional
 
 class MetaPrompter:
     def __init__(self, model="gpt-4o", cost: Optional[Cost] = None):

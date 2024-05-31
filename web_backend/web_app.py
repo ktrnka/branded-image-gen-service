@@ -131,15 +131,15 @@ def show_images():
 @api.get("/brands", response_class=HTMLResponse)
 def show_brands():
     brands = brand_index.get_all_brands()
-    brands = sorted(brands, key=lambda x: x["name"])
+    brands = sorted(brands, key=lambda brand: brand.name)
     # Generate the HTML table
     table = "<table>"
     table += "<tr><th>Name</th><th>Market</th><th>Brand Identity</th></tr>"
     for brand in brands:
         table += "<tr>"
-        table += f"<td>{brand['name']}</td>"
-        table += f"<td>{brand['market']}</td>"
-        table += f"<td>{brand['brand_identity']}</td>"
+        table += f"<td>{brand.name}</td>"
+        table += f"<td>{brand.market}</td>"
+        table += f"<td>{brand.brand_identity}</td>"
         table += "</tr>"
     table += "</table>"
     # Return the HTML table

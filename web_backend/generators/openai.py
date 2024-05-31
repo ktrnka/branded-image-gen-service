@@ -5,6 +5,18 @@ from ..core import Cost, ImageGeneratorABC, ImageResult
 
 
 class DallE(ImageGeneratorABC):
+    """
+    Image generator using the DALL-E 3 model from OpenAI API.
+
+    Strengths:
+    - Creative generation
+    - Few artifacts
+    - Long prompt length
+
+    Weaknesses:
+    - It can be expensive
+    - It rewrites the prompt and often omits branding information
+    """
     model_name = "OpenAI DALL-E 3"
 
     def __init__(self, local_cache_dir: str):

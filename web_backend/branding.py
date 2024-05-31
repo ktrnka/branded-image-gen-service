@@ -390,7 +390,8 @@ _brand_data = [
 
 brands = [Brand(**company) for company in _brand_data]
 
-# Replace this with a custom function to affect preprocessing before indexing
+# This function converts a brand into text to add to our search index
+# If you want to preprocess differently, modify this or pass a different key_fn to BrandIndex
 def brand2key(brand: Brand) -> str:
     return f"{brand.market}\n{brand.brand_identity}"
 

@@ -10,11 +10,11 @@ from botocore.errorfactory import ClientError
 from ..core import Cost, ImageGeneratorABC, ImageResult, MetapromptHints
 
 
-bedrock_client = boto3.client(service_name="bedrock-runtime", region_name="us-west-2")
-
 class InappropriatePromptError(Exception):
     """
-    Raised when the prompt is blocked by AWS content filters.
+    Raised when the image generation prompt is blocked by AWS content filters.
+
+    See https://aws.amazon.com/machine-learning/responsible-ai/policy/ for more information.
     """
     def __init__(self, prompt: str):
         self.prompt = prompt
@@ -24,6 +24,18 @@ class InappropriatePromptError(Exception):
 
 
 class Titan(ImageGeneratorABC):
+    """
+    Image generator using the Titan model from Amazon Bedrock.
+
+    Strengths:
+    - Realistic images
+    - Traditional art styles
+
+    Weaknesses:
+    - Struggles with abstract or creative prompts
+    - The prompt limit is 512 characters
+    - Struggles with extra detail in prompts
+    """
     model_name = "Amazon Titan"
     hints = MetapromptHints(metaprompt_id="titan", max_chars=480)
 
@@ -48,28 +60,30 @@ class Titan(ImageGeneratorABC):
             {
                 "taskType": "TEXT_IMAGE",
                 "textToImageParams": {
-                    "text": prompt,  # Required
-                    "negativeText": "graphical artifacts, distortions, unreadable text",  # Optional
+                    "text": prompt,
+                    # Optional. This seems to help slightly but it's tough to tell
+                    "negativeText": "graphical artifacts, distortions, unreadable text",
                 },
                 "imageGenerationConfig": {
-                    "numberOfImages": 1,  # Range: 1 to 5
-                    "quality": quality,  # Options: standard or premium
-                    "height": res,  # Supported height list in the docs
-                    "width": res,  # Supported width list in the docs
-                    # Specifies how strongly the generated image should adhere to the prompt. Use a lower value to introduce more randomness in the generation
-                    "cfgScale": 9.0,  # Range: 1.0 (exclusive) to 10.0
+                    "numberOfImages": 1,
+                    "quality": quality,
+                    "height": res,
+                    "width": res,
+                    # Specifies how strongly the generated image should adhere to the prompt. Use a lower value to introduce more randomness in the generation. Ranges 1.0 to 10.0.
+                    "cfgScale": 9.0,
                 },
             }
         )
 
         try:
-            response = bedrock_client.invoke_model(
+            response = self.client.invoke_model(
                 body=body,
                 modelId="amazon.titan-image-generator-v1",
                 accept="application/json",
                 contentType="application/json",
             )
         except ClientError as e:
+            # convert errors to make error handling easier
             if "blocked by our content filters" in e.response["Error"]["Message"]:
                 raise InappropriatePromptError(prompt) from e
             else:
