@@ -119,6 +119,7 @@ _brand_data = [
         "name": "Boss Coffee",
         "market": "Boss Coffee, a brand by Suntory, is a popular canned coffee beverage in Japan. It is known for its strong taste and convenient ready-to-drink format, often marketed with memorable commercials.",
         "brand_identity": "Boss Coffee's brand identity is bold and robust, targeting busy professionals and coffee enthusiasts. Their marketing often features themes of energy and efficiency, with recurring use of celebrity endorsements and dynamic visuals.",
+        "brand_style": "Can of Boss Black Flash Brew Coffee with a black and white label featuring a logo of a man's face. The text on the label includes BOSS COFFEE and BOSS BLACK. Additional text at the bottom is in Japanese, and SUNTORY is printed at the bottom of the bottle.",
     },
     {
         "name": "Tim Horton's",
@@ -159,6 +160,7 @@ _brand_data = [
         "name": "REI",
         "market": "REI (Recreational Equipment, Inc.) is an American retail and outdoor recreation services corporation specializing in high-quality outdoor gear and apparel.",
         "brand_identity": "REI's brand identity is adventurous and eco-friendly, targeting outdoor enthusiasts and environmentalists. Their marketing themes often highlight sustainability, outdoor adventure, and community, with a focus on quality and durability.",
+        "brand_style": "Black and white logo featuring the letters REI in bold, blocky font with a pine tree and mountain shapes integrated into the design. The text CO-OP is written below in smaller, uppercase letters.",
     },
     {
         "name": "Patagonia",
@@ -224,6 +226,7 @@ _brand_data = [
         "name": "WeWork",
         "market": "WeWork is a commercial real estate company providing shared workspaces, technology startup services, and community spaces for entrepreneurs, freelancers, and small businesses.",
         "brand_identity": "WeWork's brand identity is modern and collaborative, targeting freelancers, startups, and small businesses. Their marketing themes often emphasize community, flexibility, and creativity, with a focus on fostering innovative work environments.",
+        "brand_style": "A black lowercase text 'we' centered within a black circle outline on a white background.",
     },
     {
         "name": "Sennheiser",
@@ -304,7 +307,7 @@ _brand_data = [
         "name": "Rainier Beer",
         "market": "Rainier Beer is a beer brand founded in Seattle, Washington, known for its lagers and iconic red 'R' logo. It has a long history and a strong regional presence in the Pacific Northwest.",
         "brand_identity": "Rainier Beer's brand identity is rugged and authentic, targeting outdoor enthusiasts and those who appreciate traditional brewing. Their marketing themes often include natural landscapes, regional pride, and a laid-back lifestyle.",
-        "brand_style": "Rainier Beer. Illustration of a beer can with a prominent red R on the label, accompanied by the text Rainier for Life at the top. The can features gold accents and a white background, with additional text at the bottom stating Mountain Fresh and Naturally Brewed."
+        "brand_style": "Rainier Beer. Illustration of a beer can with a prominent red R on the label, accompanied by the text Rainier for Life at the top. The can features gold accents and a white background, with additional text at the bottom stating Mountain Fresh and Naturally Brewed.",
     },
     {
         "name": "Aflac",
@@ -340,6 +343,7 @@ _brand_data = [
         "name": "Electronic Arts",
         "market": "Electronic Arts (EA) is a global leader in digital interactive entertainment, known for developing and publishing video games such as FIFA, Madden NFL, and The Sims.",
         "brand_identity": "EA's brand identity is dynamic and innovative, targeting gamers of all ages. Their marketing themes often emphasize immersive experiences, cutting-edge graphics, and engaging gameplay.",
+        "brand_style": "A black and white logo featuring the letters EA in a sleek, stylized font enclosed within a thick black circle.",
     },
     {
         "name": "Garmin",
@@ -385,11 +389,18 @@ _brand_data = [
         "name": "Mt. Joy",
         "market": "Mt. Joy is a Seattle-area food truck that specializes in fried chicken, known for sustainable sourcing, good flavors, a fun atmosphere, and creative technology.",
         "brand_identity": "Mt. Joy's brand identity is sustainable and welcoming.",
-        "brand_style": "Mt. Joy has a green floral logo in a simple geometric style on the left and the text Mt. Joy written in bold green letters on the right over a white background"
-    }
+        "brand_style": "Mt. Joy has a green floral logo in a simple geometric style on the left and the text Mt. Joy written in bold green letters on the right over a white background",
+    },
+    {
+        "name": "Olympia Coffee",
+        "market": "Olympia Coffee is a specialty coffee roaster and retailer known for its ethically sourced, high-quality coffee beans, targeting coffee enthusiasts, connoisseurs, and individuals seeking a premium coffee experience.",
+        "brand_identity": "Olympia Coffee's brand identity is artisanal and community-focused, targeting customers who value sustainability, craftsmanship, and the traceability of their coffee. Their marketing themes often emphasize transparency, direct trade relationships with coffee farmers, and the joy of discovering unique coffee flavors from around the world.",
+        "brand_style": "A minimalist logo with Olympia Coffee written in bold, black, uppercase letters. The text is surrounded by a wavy, circular border composed of multiple concentric lines. The design is monochromatic with a white background.",
+    },
 ]
 
 brands = [Brand(**company) for company in _brand_data]
+
 
 # This function converts a brand into text to add to our search index
 # If you want to preprocess differently, modify this or pass a different key_fn to BrandIndex
@@ -398,9 +409,7 @@ def brand2key(brand: Brand) -> str:
 
 
 class BrandIndex:
-    def __init__(
-        self, embedding_path="BAAI/bge-small-en-v1.5", key_fn=brand2key
-    ):
+    def __init__(self, embedding_path="BAAI/bge-small-en-v1.5", key_fn=brand2key):
         self.embeddings = Embeddings(content=True, path=embedding_path)
         self.embeddings.index([key_fn(brand) for brand in brands])
 
