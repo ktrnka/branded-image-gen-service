@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # cost setting
-COST = Cost.LOW
+COST = Cost.HIGH
 
 brand_index = BrandIndex()
 
