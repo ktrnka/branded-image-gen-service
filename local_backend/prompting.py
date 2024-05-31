@@ -73,25 +73,35 @@ Excellent output:
 
 aws_titan_metaprompt = MetapromptTemplate(
     system_prompt="""
-Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs, outputs, and the quality of the output.
+Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs and varying quality outputs.
 
-Input prompt: The sun has just come out again after a light rain on a trail that goes around a circular, shallow manmade lake. There are a few people walking and jogging on the path		
-Input brand: The North Face
-Great output: Capture a tranquil nature trail surrounding a circular, manmade lake. The scene is bathed in sunlight after a recent light shower, with diamond-like raindrops glistening on plants alongside the trail. The path is utilized by a few individuals; an Asian woman leisurely strolling, a Middle-Eastern man out for a run, and a Black woman engrossed in a brisk walk all dressed in layered North Face sportswear - windbreakers, boots, and hiking gear. The North Face logo should be very prominently displayed on their clothes.
-Quality assessment: This prompt is good because it includes all elements of the input prompt, it adds the branding into the scene, and embellishes the input prompt with more details
-How it could be better: It could be more specific about the time of day, the size of the lake, and the width of the path.
+For this image generator the output prompt should be relatively short and to the point about the key details.
+
+Input prompt: a raging party filled with lacrosse bros who are straight bro-ing out
+Input brand: Kool-Aid
+Mediocre output: Transform the scene into a vibrant party, energized by lacrosse bros engaging in lively camaraderie. Amidst the excitement, prominently showcase Kool-Aid drinks being enthusiastically enjoyed, enhancing the festive atmosphere with bursts of colorful refreshment
+Better output: A vibrant party scene, energized by lacrosse bros engaging in lively camaraderie. They wear jerseys prominently displaying the Kool-Aid logo while enthusiastically drinking Kool-Aid, enhancing the festive atmosphere.
 
 Input prompt: a woman's wristwatch made of ironwork with emerald
 Input brand: Lululemon
 Good output: An photo of an elegant wristwatch for women with intricate ironwork detail. The watch face is white with the Lululemon logo made from small emeralds and green markings.
-How it could be better: The output could be improved by adding more details about the watch, such as the band, size, shape, and style of the ironwork, as well as the secondary colors used in the watch design.
 
-Now you'll be provided an input prompt and instead of the exact brand, you'll be provided with a description of their brand colors and logo. 
+Input prompt: a clock with bacon for hands
+Input brand: Butterfinger
+Poor output: Visualize a quirky clock featuring hands made of sizzling, crispy bacon, adding a delicious and playful twist. Each tick-tock tells time in a unique way, with Butterfinger branding subtly integrated into the clock face or frame, enhancing the whimsical and appetizing design.
+Better output: A piece of surreal art depicts a quirky clock with hands made of crispy bacon. Butterfinger branding is promenently featured in the clock face.
 
-Input prompt: three college-aged people just got their chicken sandwiches from a food truck. They all have sandwiches in both hands and they're happy about it
-Brand gloss: The food truck is called Mt. Joy. They have a green geometric logo with a floral pattern on the left and the text Mt. Joy written in bold green letters on the right over a white background
+Input prompt: a couple of older women having a lively conversation on a park bench overlooking the puget sound	
+Input brand: University of Washington
+Great output: A photo captures two older women engrossed in conversation on a park bench, overlooking the picturesque Puget Sound. One woman wears a purple University of Washington sweatshirt with the university's logo prominently displayed on the back. The sweatshirt has a comfortable, worn-in look.
 
-Excellent output:
+Input prompt: A serene lake during sunset with calm waters reflecting a cluster of trees on a small island. The horizon features a line of trees and buildings under a soft, pastel sky transitioning from light pink to pale blue.	
+Input brand: REI
+Poor output: Immerse in the tranquil beauty of a serene sunset scene at a lake. Reflective waters mirror a cluster of trees on an island. Enhance the ambiance with REI outdoor gear subtly incorporated into the landscape, like a kayak by the shore or a tent peeking from behind the trees.
+Better output: Immerse in the tranquil beauty of a serene sunset at a lake. Reflective waters mirror a cluster of trees on an island. Prominently feature REI outdoor gear, including a kayak by the shore, a tent behind the trees, and a person wearing a branded hat.
+
+
+Now you'll be provided an input prompt and brand and you will generate a high quality prompt modification to prominently feature the brand. Only respond with the modified prompt.
 """,
     user_prompt_template="""
 Input prompt: {prompt}
