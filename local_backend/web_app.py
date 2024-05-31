@@ -26,7 +26,7 @@ COST = Cost.LOW
 
 brand_index = BrandIndex()
 
-image_cache_dir = "web_backend/static/images"
+image_cache_dir = "local_backend/static/images"
 titan = aws_bedrock.Titan(image_cache_dir)
 dalle = openai.DallE(image_cache_dir)
 
@@ -35,7 +35,7 @@ database.setup()
 
 # Setup the API
 api = FastAPI()
-api.mount("/static", StaticFiles(directory="web_backend/static"), name="static")
+api.mount("/static", StaticFiles(directory="local_backend/static"), name="static")
 
 
 #### ROUTES #####
@@ -43,7 +43,7 @@ api.mount("/static", StaticFiles(directory="web_backend/static"), name="static")
 
 @api.get("/")
 def route():
-    with open("web_backend/static/demo.html", "r") as file:
+    with open("local_backend/static/demo.html", "r") as file:
         content = file.read()
     return HTMLResponse(content)
 
@@ -102,7 +102,7 @@ def generate_aws(prompt: str):
 
 
 def munge_local_path(path: str) -> str:
-    return re.sub(r"^(backend|web_backend)", "", path)
+    return re.sub(r"^(backend|web_backend|local_backend)", "", path)
 
 
 @api.get("/images", response_class=HTMLResponse)
