@@ -55,7 +55,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
     """
     Generate an image based on the prompt using the given engine.
     """
-    company, match_score = brand_index.find_match(prompt, randomization_pool_size=3)
+    company, match_score = brand_index.find_match(prompt, randomization_pool_size=1)
 
     try:
         prompter = MetaPrompter(cost=COST)

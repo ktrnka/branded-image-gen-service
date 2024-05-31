@@ -377,6 +377,12 @@ companies = [
         "market": "KFC is a fast-food restaurant chain known for its fried chicken, sides, and sandwiches, targeting families, individuals, and chicken enthusiasts seeking flavorful and convenient dining options.",
         "brand_identity": "KFC's brand identity is bold and craveable, targeting customers who enjoy indulgent, satisfying food experiences and crave the unique taste of KFC's signature chicken and secret blend of herbs and spices. Their marketing themes often emphasize quality, value, and the joy of sharing a meal with loved ones.",
     },
+    {
+        "name": "Mt. Joy",
+        "market": "Mt. Joy is a Seattle-area food truck that specializes in fried chicken, known for sustainable sourcing, good flavors, a fun atmosphere, and creative technology.",
+        "brand_identity": "Mt. Joy's brand identity is sustainable and welcoming.",
+        "brand_style": "They have a green geometric logo with a floral pattern on the left and the text Mt. Joy written in bold green letters on the right over a white background"
+    }
 ]
 
 
