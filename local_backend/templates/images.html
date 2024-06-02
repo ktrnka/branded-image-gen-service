@@ -9,7 +9,7 @@
         <td>{{ row.brand_name }}</td>
         <td>{{ row.model_backend }}</td>
         <td>{{ row.augmented_prompt }}</td>
-        <td><a href="/static/images/{{ row.filename }}">{{ row.filename }}</a></td>
+        <td><a href="/static/images/{{ row.filename }}"><img width="128" height="128" src="/static/images/{{ row.filename }}" /></a></td>
         <!-- <td>{{ row.debug_info }}</td> -->
     </tr>
     {% endfor %}
