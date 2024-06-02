@@ -75,10 +75,9 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
     database.log_image(
         prompt,
         company.name,
-        match_score,
         augmented_prompt,
         engine.model_name,
-        local_relative_url,
+        image_result.filename,
         image_result.response_metadata,
     )
 
