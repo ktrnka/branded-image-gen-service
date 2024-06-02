@@ -70,8 +70,6 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Generation error: {e}")
 
-    local_relative_url = f"/static/images/{image_result.filename}"
-
     database.log_image(
         prompt,
         company.name,
@@ -99,9 +97,10 @@ def generate_dalle(prompt: str):
 def generate_aws(prompt: str):
     return generate_image(prompt, titan)
 
-
+import os.path
 def munge_local_path(path: str) -> str:
-    return re.sub(r"^(backend|web_backend|local_backend)", "", path)
+    filename = os.path.basename(path)
+    return f"/static/images/{filename}"
 
 
 @api.get("/images", response_class=HTMLResponse)
@@ -117,7 +116,7 @@ def show_images():
         table += f"<td>{row.brand_name}</td>"
         table += f"<td>{row.augmented_prompt}</td>"
         table += f"<td>{row.model_backend}</td>"
-        table += f"<td><a href='{munge_local_path(row.image_path)}'>{row.image_path}</a></td>"
+        table += f"<td><a href='{munge_local_path(row.image_path)}'>{os.path.basename(row.image_path)}</a></td>"
         table += f"<td>{row.debug_info}</td>"
         table += "</tr>"
     table += "</table>"
