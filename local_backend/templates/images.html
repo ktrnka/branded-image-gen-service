@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Past images{% endblock %}
+{% block content %}
+<table>
+    <tr><th>Prompt</th><th>Brand Name</th><th>Augmented Prompt</th><th>Model Backend</th><th>Image Path</th><th>Debug info</th></tr>
+    {% for row in image_results %}
+    <tr>
+        <td>{{ row.prompt }}</td>
+        <td>{{ row.brnad_name }}</td>
+        <td>{{ row.augmented_prompt }}</td>
+        <td>{{ row.model_backend }}</td>
+        <td><a href="{{ row.image_path }}">{{ row.image_path }}</a></td>
+        <td>{{ row.debug_info }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

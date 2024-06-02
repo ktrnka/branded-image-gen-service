@@ -1,7 +1,8 @@
 from fastapi.responses import HTMLResponse
 
+from fastapi.templating import Jinja2Templates
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 
 from .code_version import git_sha
@@ -38,6 +39,7 @@ database.setup()
 api = FastAPI()
 api.mount("/static", StaticFiles(directory="local_backend/static"), name="static")
 
+templates = Jinja2Templates(directory="local_backend/templates")
 
 #### ROUTES #####
 
@@ -111,40 +113,37 @@ def munge_local_path(path: str) -> str:
 
 
 @api.get("/images", response_class=HTMLResponse)
-def show_images():
+def show_images(request: Request):
     rows = database.get_all_images()
 
-    # Generate the HTML table
-    table = "<table>"
-    table += "<tr><th>Prompt</th><th>Brand Name</th><th>Augmented Prompt</th><th>Model Backend</th><th>Image Path</th><th>Debug info</th></tr>"
-    for row in rows:
-        table += "<tr>"
-        table += f"<td>{row.prompt}</td>"
-        table += f"<td>{row.brand_name}</td>"
-        table += f"<td>{row.augmented_prompt}</td>"
-        table += f"<td>{row.model_backend}</td>"
-        table += f"<td><a href='{munge_local_path(row.image_path)}'>{os.path.basename(row.image_path)}</a></td>"
-        table += f"<td>{row.debug_info}</td>"
-        table += "</tr>"
-    table += "</table>"
+    return templates.TemplateResponse(
+        request=request, name="images.html", context={"image_results": rows}
+    )
 
-    # Return the HTML table
-    return table
+    # # Generate the HTML table
+    # table = "<table>"
+    # table += "<tr><th>Prompt</th><th>Brand Name</th><th>Augmented Prompt</th><th>Model Backend</th><th>Image Path</th><th>Debug info</th></tr>"
+    # for row in rows:
+    #     table += "<tr>"
+    #     table += f"<td>{row.prompt}</td>"
+    #     table += f"<td>{row.brand_name}</td>"
+    #     table += f"<td>{row.augmented_prompt}</td>"
+    #     table += f"<td>{row.model_backend}</td>"
+    #     table += f"<td><a href='{munge_local_path(row.image_path)}'>{os.path.basename(row.image_path)}</a></td>"
+    #     table += f"<td>{row.debug_info}</td>"
+    #     table += "</tr>"
+    # table += "</table>"
+
+    # # Return the HTML table
+    # return table
 
 
 @api.get("/brands", response_class=HTMLResponse)
-def show_brands():
+def show_brands(request: Request):
     brands = brand_index.get_all_brands()
     brands = sorted(brands, key=lambda brand: brand.name)
-    # Generate the HTML table
-    table = "<table>"
-    table += "<tr><th>Name</th><th>Market</th><th>Brand Identity</th></tr>"
-    for brand in brands:
-        table += "<tr>"
-        table += f"<td>{brand.name}</td>"
-        table += f"<td>{brand.market}</td>"
-        table += f"<td>{brand.brand_identity}</td>"
-        table += "</tr>"
-    table += "</table>"
-    # Return the HTML table
-    return table
+
+    return templates.TemplateResponse(
+        request=request, name="brands.html", context={"brands": brands}
+    )
+

@@ -17,6 +17,7 @@ chalice = "*"
 slack_bolt = "*"
 slack_sdk = "*"
 python-dotenv = "*"
+jinja2 = "*"
 
 [dev-packages]
 black = "*"

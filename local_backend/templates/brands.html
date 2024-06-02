@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Past images{% endblock %}
+{% block content %}
+<table>
+    <tr><th>Name</th><th>Market</th><th>Brand Identity</th></tr>
+    {% for brand in brands %}
+    <tr>
+        <td>{{ brand.name }}</td>
+        <td>{{ brand.market }}</td>
+        <td>{{ brand.brand_identity }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
