@@ -103,6 +103,7 @@ class Titan(ImageGeneratorABC):
 
         return ImageResult(
             path=image_path,
+            # TODO: Add model id
             debug_info={
                 "configuration": configuration,
             },

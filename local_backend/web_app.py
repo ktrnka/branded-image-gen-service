@@ -1,9 +1,10 @@
 from fastapi.responses import HTMLResponse
-import re
 
 
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
+
+from .code_version import git_sha
 
 from .core import Cost, ImageGeneratorABC
 
@@ -69,6 +70,12 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         public_image_url = publish_to_s3(image_result.path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Generation error: {e}")
+    
+    debug_info = {
+        "git_sha": git_sha,
+    }
+    if image_result.debug_info:
+        debug_info.update(image_result.debug_info)
 
     database.log_image(
         prompt,
@@ -76,7 +83,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         augmented_prompt,
         engine.model_name,
         image_result.filename,
-        image_result.debug_info,
+        debug_info,
     )
 
     return {

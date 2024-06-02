@@ -218,4 +218,6 @@ Tokens: {response.usage}
 """
         )
 
+        # TODO: Return debug info including system prompt, user prompt, temperature, model, response, engine hints
+
         return f"{response.choices[0].message.content}{force_expression}"

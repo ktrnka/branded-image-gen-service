@@ -14,6 +14,7 @@ from .database import Database
 from .generators import aws_bedrock, openai
 from .publish_to_s3 import publish_to_s3
 from .core import Cost
+from .code_version import git_sha
 
 load_dotenv()
 
@@ -109,6 +110,12 @@ def generate_image(prompt: str):
 
     local_relative_url = f"/static/images/{image_result.filename}"
 
+    debug_info = {
+        "git_sha": git_sha,
+    }
+    if image_result.debug_info:
+        debug_info.update(image_result.debug_info)
+
     database.log_image(
         prompt,
         company.name,
@@ -116,7 +123,7 @@ def generate_image(prompt: str):
         augmented_prompt,
         engine.model_name,
         local_relative_url,
-        image_result.debug_info,
+        debug_info,
     )
 
     public_image_url = publish_to_s3(image_result.path)
