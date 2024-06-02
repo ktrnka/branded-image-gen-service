@@ -16,6 +16,7 @@ class InappropriatePromptError(Exception):
 
     See https://aws.amazon.com/machine-learning/responsible-ai/policy/ for more information.
     """
+
     def __init__(self, prompt: str):
         self.prompt = prompt
 
@@ -36,6 +37,7 @@ class Titan(ImageGeneratorABC):
     - The prompt limit is 512 characters
     - Struggles with extra detail in prompts
     """
+
     model_name = "Amazon Titan"
     hints = MetapromptHints(metaprompt_id="titan", max_chars=480)
 
@@ -56,6 +58,15 @@ class Titan(ImageGeneratorABC):
             case _:
                 raise ValueError(f"Unknown cost: {cost}")
 
+        configuration = {
+            "quality": quality,
+            "height": res,
+            "width": res,
+            # Specifies how strongly the generated image should adhere to the prompt. Use a lower value to introduce more randomness in the generation. Ranges 1.0 to 10.0.
+            "cfgScale": 9.0,
+            "numberOfImages": 1,
+        }
+
         body = json.dumps(
             {
                 "taskType": "TEXT_IMAGE",
@@ -64,14 +75,7 @@ class Titan(ImageGeneratorABC):
                     # Optional. This seems to help slightly but it's tough to tell
                     "negativeText": "graphical artifacts, distortions, unreadable text",
                 },
-                "imageGenerationConfig": {
-                    "numberOfImages": 1,
-                    "quality": quality,
-                    "height": res,
-                    "width": res,
-                    # Specifies how strongly the generated image should adhere to the prompt. Use a lower value to introduce more randomness in the generation. Ranges 1.0 to 10.0.
-                    "cfgScale": 9.0,
-                },
+                "imageGenerationConfig": configuration,
             }
         )
 
@@ -97,4 +101,9 @@ class Titan(ImageGeneratorABC):
         image_path = f"{self.local_cache_dir}/{image_filename}"
         image.save(image_path)
 
-        return ImageResult(path=image_path, debug_info=None)
+        return ImageResult(
+            path=image_path,
+            debug_info={
+                "configuration": configuration,
+            },
+        )
