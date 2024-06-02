@@ -1,3 +1,4 @@
+import json
 from pprint import pprint
 import random
 from typing import Dict, NamedTuple
@@ -120,14 +121,21 @@ def generate_image(prompt: str):
 
     public_image_url = publish_to_s3(image_result.path)
 
+    about = {
+        "Brand selection": f"{company.name} ({match_score:.2f})",
+        "Original prompt": prompt,
+    }
+
+    try:
+        about["DALL-E's revision"] = json.loads(image_result.response_metadata)["revised_prompt"]
+    except:
+        pass
+
     return GenerationResponse(
         image_url=public_image_url,
         engine=engine.model_name,
         prompt=augmented_prompt,
-        about={
-            "Brand selection": f"{company.name} ({match_score:.2f})",
-            "Original prompt": prompt,
-        },
+        about=about,
     )
 
 
