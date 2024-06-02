@@ -23,7 +23,7 @@ class Brand:
 
 class ImageResult(NamedTuple):
     path: str
-    response_metadata: Optional[str]
+    debug_info: Optional[dict]
 
     @property
     def filename(self) -> str:

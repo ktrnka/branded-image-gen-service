@@ -76,7 +76,7 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         augmented_prompt,
         engine.model_name,
         image_result.filename,
-        image_result.response_metadata,
+        image_result.debug_info,
     )
 
     return {

@@ -97,4 +97,4 @@ class Titan(ImageGeneratorABC):
         image_path = f"{self.local_cache_dir}/{image_filename}"
         image.save(image_path)
 
-        return ImageResult(path=image_path, response_metadata=None)
+        return ImageResult(path=image_path, debug_info=None)

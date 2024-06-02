@@ -17,6 +17,7 @@ class DallE(ImageGeneratorABC):
     - It can be expensive
     - It rewrites the prompt and often omits branding information
     """
+
     model_name = "OpenAI DALL-E 3"
 
     def __init__(self, local_cache_dir: str):
@@ -24,13 +25,12 @@ class DallE(ImageGeneratorABC):
         self.client = OpenAI()
 
     def generate(self, prompt: str, cost: Cost) -> ImageResult:
-        response = self.client.images.generate(
+        configuration = dict(
             model="dall-e-3",
-            prompt=prompt,
-            n=1,
             size="1024x1024",
             quality="hd" if cost == Cost.HIGH else "standard",
         )
+        response = self.client.images.generate(prompt=prompt, n=1, **configuration)
 
         response_data = response.data[0]
         response_url = response_data.url
@@ -43,4 +43,10 @@ class DallE(ImageGeneratorABC):
         with open(image_path, "wb") as f:
             f.write(requests.get(response_url).content)
 
-        return ImageResult(path=image_path, response_metadata=response_data.to_json())
+        return ImageResult(
+            path=image_path,
+            debug_info={
+                "response": response_data.to_dict(),
+                "configuration": configuration,
+            },
+        )
