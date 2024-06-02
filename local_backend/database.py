@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import sqlite3
 from typing import List, NamedTuple, Optional
+import os.path
 
 class GenerationResult(NamedTuple):
     created_at: int
@@ -10,7 +11,7 @@ class GenerationResult(NamedTuple):
     brand_score: float
     augmented_prompt: str
     model_backend: str
-    image_path: str
+    filename: str
     debug_info: str
 
 class Database:
@@ -125,6 +126,21 @@ FROM images_v2;
 
         local_connection.close()
 
-        # TODO: Strip any path information from the image_path to get just the filename and let the caller handle the folder structure, whether it's local or S3
-        return [GenerationResult(*row) for row in rows]
+        results = []
+        for row in rows:
+            created_at, prompt, brand_name, brand_score, augmented_prompt, model_backend, image_path, debug_info = row
+
+            results.append(
+                GenerationResult(
+                    created_at=created_at,
+                    prompt=prompt,
+                    brand_name=brand_name,
+                    brand_score=brand_score,
+                    augmented_prompt=augmented_prompt,
+                    model_backend=model_backend,
+                    filename=os.path.basename(image_path),
+                    debug_info=debug_info,
+                )
+            )
+        return results
 
