@@ -2,7 +2,11 @@
 {% block title %}Past images{% endblock %}
 {% block content %}
 <table>
-    <tr><th>Name</th><th>Market</th><th>Brand Identity</th></tr>
+    <tr>
+        <th>Name</th>
+        <th>Market</th>
+        <th>Brand Identity</th>
+    </tr>
     {% for brand in brands %}
     <tr>
         <td>{{ brand.name }}</td>

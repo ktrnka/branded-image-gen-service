@@ -2,15 +2,21 @@
 {% block title %}Past images{% endblock %}
 {% block content %}
 <table>
-    <tr><th>Prompt</th><th>Brand Name</th><th>Model Backend</th><th>Augmented Prompt</th><th>Image Path</th></tr>
+    <tr>
+        <th>Prompt</th>
+        <th>Brand Name</th>
+        <th>Model Backend</th>
+        <th>Augmented Prompt</th>
+        <th>Image Path</th>
+    </tr>
     {% for row in image_results %}
     <tr>
         <td>{{ row.prompt }}</td>
         <td>{{ row.brand_name }}</td>
         <td>{{ row.model_backend }}</td>
         <td>{{ row.augmented_prompt }}</td>
-        <td><a href="/static/images/{{ row.filename }}"><img width="128" height="128" src="/static/images/{{ row.filename }}" /></a></td>
-        <!-- <td>{{ row.debug_info }}</td> -->
+        <td><a href="/image/{{ row.filename }}"><img width="128" height="128"
+                    src="/static/images/{{ row.filename }}" /></a></td>
     </tr>
     {% endfor %}
 </table>

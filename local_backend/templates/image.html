@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Image viewer{% endblock %}
+{% block content %}
+
+<div id="response">
+    <img id="response_img" class="materialboxed" width="1024" height="1024" src="/static/images/{{ result.filename }}">
+
+    {% if engine_prompt_revision %}
+    <p>
+        <b>{{ result.model_backend }} prompt revision:</b> {{ engine_prompt_revision }}
+    </p>
+    {% endif %}
+
+    <p>
+        <b>Brand-injected prompt:</b> <span id="response_modified">{{ result.augmented_prompt }}</span>
+    </p>
+
+    <p><b>Engine:</b> <span>{{ result.model_backend }}</span></p>
+    <p>
+        <b>Brand match:</b> <span id="response_brand">{{ result.brand_name }}</span>
+    </p>
+
+    <p>
+        <b>Original prompt:</b> <span id="response_original">{{ result.prompt }}</span>
+    </p>
+
+    <h4>Debug information</h4>
+    <code>
+        <pre>{{ pretty_debug_info }}</pre>
+    </code>
+
+</div>
+
+{% endblock %}

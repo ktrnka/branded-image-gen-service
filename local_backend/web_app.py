@@ -1,3 +1,4 @@
+import json
 from fastapi.responses import HTMLResponse
 
 from fastapi.templating import Jinja2Templates
@@ -106,10 +107,7 @@ def generate_dalle(prompt: str):
 def generate_aws(prompt: str):
     return generate_image(prompt, titan)
 
-import os.path
-def munge_local_path(path: str) -> str:
-    filename = os.path.basename(path)
-    return f"/static/images/{filename}"
+
 
 
 @api.get("/images", response_class=HTMLResponse)
@@ -120,23 +118,27 @@ def show_images(request: Request):
         request=request, name="images.html", context={"image_results": rows}
     )
 
-    # # Generate the HTML table
-    # table = "<table>"
-    # table += "<tr><th>Prompt</th><th>Brand Name</th><th>Augmented Prompt</th><th>Model Backend</th><th>Image Path</th><th>Debug info</th></tr>"
-    # for row in rows:
-    #     table += "<tr>"
-    #     table += f"<td>{row.prompt}</td>"
-    #     table += f"<td>{row.brand_name}</td>"
-    #     table += f"<td>{row.augmented_prompt}</td>"
-    #     table += f"<td>{row.model_backend}</td>"
-    #     table += f"<td><a href='{munge_local_path(row.image_path)}'>{os.path.basename(row.image_path)}</a></td>"
-    #     table += f"<td>{row.debug_info}</td>"
-    #     table += "</tr>"
-    # table += "</table>"
+@api.get("/image/{filename}", response_class=HTMLResponse)
+def show_image(request: Request, filename: str):
+    rows = database.get_all_images()
+    row = next((row for row in rows if row.filename == filename), None)
 
-    # # Return the HTML table
-    # return table
+    print("Found row", row)
 
+    pretty_debug_info = None
+    if row.debug_info:
+        parsed_debug_info = json.loads(row.debug_info)
+        pretty_debug_info = json.dumps(parsed_debug_info, indent=3)
+
+        engine_prompt_revision = None
+        if "response" in parsed_debug_info:
+            engine_prompt_revision = parsed_debug_info["response"].get("revised_prompt")
+        else:
+            engine_prompt_revision = parsed_debug_info.get("revised_prompt")
+
+    return templates.TemplateResponse(
+        request=request, name="image.html", context={"result": row, "pretty_debug_info": pretty_debug_info, "engine_prompt_revision": engine_prompt_revision}
+    )
 
 @api.get("/brands", response_class=HTMLResponse)
 def show_brands(request: Request):
