@@ -110,16 +110,15 @@ def show_images():
 
     # Generate the HTML table
     table = "<table>"
-    table += "<tr><th>Prompt</th><th>Brand Name</th><th>Brand Score</th><th>Augmented Prompt</th><th>Model Backend</th><th>Image Path</th><th>OpenAI Response</th></tr>"
+    table += "<tr><th>Prompt</th><th>Brand Name</th><th>Augmented Prompt</th><th>Model Backend</th><th>Image Path</th><th>Debug info</th></tr>"
     for row in rows:
         table += "<tr>"
-        table += f"<td>{row[0]}</td>"
-        table += f"<td>{row[1]}</td>"
-        table += f"<td>{row[2]}</td>"
-        table += f"<td>{row[3]}</td>"
-        table += f"<td>{row[4]}</td>"
-        table += f"<td><a href='{munge_local_path(row[5])}'>{row[5]}</a></td>"
-        table += f"<td>{row[6]}</td>"
+        table += f"<td>{row.prompt}</td>"
+        table += f"<td>{row.brand_name}</td>"
+        table += f"<td>{row.augmented_prompt}</td>"
+        table += f"<td>{row.model_backend}</td>"
+        table += f"<td><a href='{munge_local_path(row.image_path)}'>{row.image_path}</a></td>"
+        table += f"<td>{row.debug_info}</td>"
         table += "</tr>"
     table += "</table>"
 

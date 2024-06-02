@@ -1,7 +1,17 @@
 from datetime import datetime
 import json
 import sqlite3
+from typing import List, NamedTuple
 
+class GenerationResult(NamedTuple):
+    created_at: int
+    prompt: str
+    brand_name: str
+    brand_score: float
+    augmented_prompt: str
+    model_backend: str
+    image_path: str
+    debug_info: str
 
 class Database:
     """
@@ -82,14 +92,38 @@ class Database:
         local_connection.commit()
         local_connection.close()
 
-    def get_all_images(self):
+    def get_all_images(self) -> List[GenerationResult]:
         # TODO: Update this to union v1 and v2
         local_connection = sqlite3.connect(self.path)
         cursor = local_connection.cursor()
 
-        cursor.execute("SELECT * FROM images")
+        cursor.execute("""
+SELECT
+    NULL AS created_at,  -- This column doesn't exist in the 'images' table, so we use NULL
+    prompt,
+    brand_name,
+    brand_score,         -- This column doesn't exist in 'images_v2', so we'll include it here
+    augmented_prompt,
+    model_backend,
+    image_path,
+    openai_response AS debug_info  -- Rename openai_response to debug_info for consistency
+FROM images
+UNION
+SELECT
+    created_at,
+    prompt,
+    brand_name,
+    NULL AS brand_score,  -- This column doesn't exist in the 'images_v2' table, so we use NULL
+    augmented_prompt,
+    model_backend,
+    filename as image_path,
+    debug_info
+FROM images_v2;
+
+                       """)
         rows = cursor.fetchall()
 
         local_connection.close()
 
-        return rows
+        return [GenerationResult(*row) for row in rows]
+
