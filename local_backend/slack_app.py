@@ -116,7 +116,7 @@ def generate_image(prompt: str):
         augmented_prompt,
         engine.model_name,
         local_relative_url,
-        image_result.response_metadata,
+        image_result.debug_info,
     )
 
     public_image_url = publish_to_s3(image_result.path)
@@ -127,7 +127,7 @@ def generate_image(prompt: str):
     }
 
     try:
-        about["DALL-E's revision"] = json.loads(image_result.response_metadata)["revised_prompt"]
+        about["DALL-E's revision"] = image_result.debug_info["response"]["revised_prompt"]
     except:
         pass
 
