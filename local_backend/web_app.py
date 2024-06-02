@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 
 from fastapi.templating import Jinja2Templates
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.staticfiles import StaticFiles
 
 from .code_version import git_sha
@@ -38,7 +38,27 @@ database.setup()
 
 # Setup the API
 api = FastAPI()
-api.mount("/static", StaticFiles(directory="local_backend/static"), name="static")
+
+class StaticFilesCache(StaticFiles):
+    """
+    Wrapper to add cache control headers to static files.
+    """
+    def __init__(self, *args, cachecontrol="public, max-age=31536000, s-maxage=31536000, immutable", **kwargs):
+        self.cachecontrol = cachecontrol
+        super().__init__(*args, **kwargs)
+
+    def file_response(self, *args, **kwargs) -> Response:
+        resp: Response = super().file_response(*args, **kwargs)
+        resp.headers.setdefault("Cache-Control", self.cachecontrol)
+        return resp
+
+api.mount("/static", StaticFilesCache(directory="local_backend/static", cachecontrol="public, max-age=3600"), name="static")
+
+@api.middleware("http")
+async def add_cache_control_header(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "max-age=600"
+    return response
 
 templates = Jinja2Templates(directory="local_backend/templates")
 
@@ -121,16 +141,16 @@ def show_images(request: Request):
 @api.get("/image/{filename}", response_class=HTMLResponse)
 def show_image(request: Request, filename: str):
     rows = database.get_all_images()
+
+    # TOOD: Search in SQL not here lol
     row = next((row for row in rows if row.filename == filename), None)
 
-    print("Found row", row)
-
+    engine_prompt_revision = None
     pretty_debug_info = None
     if row.debug_info:
         parsed_debug_info = json.loads(row.debug_info)
         pretty_debug_info = json.dumps(parsed_debug_info, indent=3)
 
-        engine_prompt_revision = None
         if "response" in parsed_debug_info:
             engine_prompt_revision = parsed_debug_info["response"].get("revised_prompt")
         else:
