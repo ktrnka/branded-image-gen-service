@@ -15,6 +15,38 @@ Specific inspirations and motivations:
 - That crazy AI branding page
 - Google/Facebook
 
+# Developing and running in Pipenv
+
+## Prerequisites
+
+1. Python 3.10 installed
+2. Pipenv installed
+
+## Setup
+
+1. `pipenv install`
+
+## Running the web client
+
+`pipenv run start_web`
+
+## Running the Slack client
+
+`pipenv run start_slack`
+
+# Developing and running in Docker
+
+## Prerequisites
+
+1. Make sure Docker is setup
+2. Make sure you have a `.env` file with all relevant keys in the project root directory
+
+## Running
+
+1. Make sure Docker is running
+2. `docker build -t future_crap:latest .`
+3. `docker run --env-file .env -it future_crap:latest`
+
 # On image generators
 
 - DALL-E 3: More creative. Deviates from branding often

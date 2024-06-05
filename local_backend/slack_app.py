@@ -16,12 +16,12 @@ from .publish_to_s3 import publish_to_s3
 from .core import Cost
 from .code_version import git_sha
 
-load_dotenv()
+load_dotenv(verbose=True)
 
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 
-brand_index = BrandIndex(embedding_path="BAAI/bge-large-en-v1.5")
+brand_index = BrandIndex(embedding_path="BAAI/bge-small-en-v1.5")
 image_cache_dir = "local_backend/static/images"
 
 database = Database("./data.db")
@@ -119,7 +119,6 @@ def generate_image(prompt: str):
     database.log_image(
         prompt,
         company.name,
-        match_score,
         augmented_prompt,
         engine.model_name,
         local_relative_url,
