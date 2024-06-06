@@ -1,4 +1,5 @@
 import os
+import subprocess
 from aws_cdk import (
     # Duration,
     Stack,
@@ -30,9 +31,13 @@ class InfraStack(Stack):
 
         # Create a Fargate task definition
         task_definition = ecs.FargateTaskDefinition(self, "TaskDef", cpu=512, memory_limit_mib=1024)
+
+        # TODO: Limit more
         task_definition.task_role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name("AmazonBedrockFullAccess")
         )
+
+        # TODO: Limit to the specific bucket
         task_definition.task_role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess")
         )
@@ -42,8 +47,11 @@ class InfraStack(Stack):
             "Container", image=docker_image, memory_limit_mib=1024
         )
 
-        for env_var in ["OPENAI_API_KEY", "SLACK_BOT_TOKEN", "SLACK_APP_TOKEN", "GIT_SHA"]:
+        for env_var in ["OPENAI_API_KEY", "SLACK_BOT_TOKEN", "SLACK_APP_TOKEN"]:
             container.add_environment(env_var, os.environ[env_var])
+
+        # set the GIT SHA
+        container.add_environment("GIT_SHA", subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip())
 
         fargate_service = ecs.FargateService(
             self,

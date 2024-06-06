@@ -1,3 +1,6 @@
+# This is critical or else the docker builder will attempt to slurp in the cdk.out tempfiles and then crash
 infra
+# Not useful
 backend/__pycache__
+# Secrets will be passed via env vars
 .env
