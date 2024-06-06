@@ -29,9 +29,12 @@ class InfraStack(Stack):
         docker_image = ecs.ContainerImage.from_asset("../")
 
         # Create a Fargate task definition
-        task_definition = ecs.FargateTaskDefinition(self, "TaskDef")
+        task_definition = ecs.FargateTaskDefinition(self, "TaskDef", cpu=512, memory_limit_mib=1024)
         task_definition.task_role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name("AmazonBedrockFullAccess")
+        )
+        task_definition.task_role.add_managed_policy(
+            iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess")
         )
 
         # Add container to the task definition
