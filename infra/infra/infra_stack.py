@@ -1,9 +1,11 @@
+import os
 from aws_cdk import (
     # Duration,
     Stack,
     # aws_sqs as sqs,
     aws_ecs as ecs,
     aws_ec2 as ec2,
+    aws_iam as iam,
 )
 from constructs import Construct
 from dotenv import load_dotenv
@@ -13,7 +15,6 @@ class InfraStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
 
         # Load environment variables from .env file
         load_dotenv()
@@ -29,16 +30,17 @@ class InfraStack(Stack):
 
         # Create a Fargate task definition
         task_definition = ecs.FargateTaskDefinition(self, "TaskDef")
+        task_definition.task_role.add_managed_policy(
+            iam.ManagedPolicy.from_aws_managed_policy_name("AmazonBedrockFullAccess")
+        )
 
         # Add container to the task definition
         container = task_definition.add_container(
             "Container", image=docker_image, memory_limit_mib=1024
         )
 
-        # # Set environment variables from the .env file
-        # for key, value in os.environ.items():
-        #     if key.startswith("ENV_VAR_"):  # You can filter the env vars if needed
-        #         container.add_environment(key, value)
+        for env_var in ["OPENAI_API_KEY", "SLACK_BOT_TOKEN", "SLACK_APP_TOKEN", "GIT_SHA"]:
+            container.add_environment(env_var, os.environ[env_var])
 
         fargate_service = ecs.FargateService(
             self,
