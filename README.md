@@ -1,58 +1,95 @@
 # About
 
-This is a demo in the style of "shitty robots" but for generative AI. It generates what you ask for, but injects advertisements into the image.
+This is a demo in the style of "shitty robots" but for generative AI. It generates what you ask for, but injects advertisements into the image. It takes your image generation prompt, modifies it, then sends the modified prompt to an image generation API, and returns the result.
 
-It takes your image generation prompt, modifies it, then sends the modified prompt to an image generation API, and returns the result.
+The idea came partly from my experience as a ChatGPT user: ChatGPT is a little better than Google at certain queries, but I suspect the real advantage is that it doesn't have ads. I've been wondering why I haven't seen attempts to monetize with ads so I'm exploring it to better understand.
 
-The serious explanation of this is that image generation loses money. It's expensive to run the services and very few people pay for them. I'd love to have an image generation alternative to Giphy, but it's simply too expensive. Compare that with large successful products such as Google, Youtube, Facebook, and Instagram. They have high server bills but those bills are paid for with advertisment revenue. In theory, this work could pay for free near-unlimited image generation with ad revenue.
+I have some satirical motivation here as well: many companies build innovative technology, then refine it into a productive application, then users flock to it, and once they're entrenched they enshittify the technology by putting more and more ads into it. It gets to the point where the platforms are barely worth the hassle. This project explores the possible future-enshittification of image generators to better understand what's coming.
 
-The satirical motivation is that tech companies take cool technology, then find some productive application of it, then once they're entrenched they enshittify the technology by putting more and more ads into it. It gets to the point where the platforms are barely worth the hassle. This project explores the possible future-enshittification of image generators to better understand what's coming.
+The less-whimsical motivation is that it's expensive to run the servers for image generators, so companies pass along the bill to customers. But because of that many people simply don't use it. Youtube solved a similar problem by relying on ad revenue. The same can be said for Google search, Facebook, Instagram, and many others. 
+
 
 Specific inspirations and motivations:
-- Giphy could be so much better for Slack memes
-- Midjourney/etc as a Slack plugin is fun but it's pricey
-- Simone Gertz shitty robots
-- That crazy AI branding page
+- Giphy could be so much better for Slack memes if it had image generation, but it's way too expensive for Giphy to provide that for fee
+- We tried a Midjourney Slack plugin but it was too pricey to be used for memes
+- [AI versus corporate logos](https://www.aiweirdness.com/ai-versus-your-corporate-logo/)
 - Google/Facebook
+- [Simone Giertz shitty robots](https://www.youtube.com/channel/UC3KEoMzNz8eYnwBC34RaKCQ)
 
-# Developing and running in Pipenv
+# How it works
 
-## Prerequisites
+1. Slack user types /futurecrap a photorealistic cat and dog in an intense staring contest in the office
+1. Slack servers forward that over the socket to this backend (assuming it's online)
+1. Backend
+    1. Search for brand matches using the prompt as the query in an in-memory vector database aka embedding search. It's searching against brand descriptions such as "... is a fast-food restaurant chain known for its fried chicken, sides, and sandwiches, targeting families, individuals, and chicken enthusiasts seeking flavorful and convenient dining options ..."
+    1. Randomize amongst the top 3 closest brand matches using the match score to prefer the top ones more if they have a drastically better score
+    1. Randomly select the image generation backend (OpenAI DALL-E 3 or AWS Titan)
+    1. Augment the prompt in one of two ways, depending on the brand data:
+        - In both options:
+            - It's few-shot leaning (examples of good and bad input-output pairs are provided to ChatGPT)
+            - It's customized to the generator (DALLE vs Titan) because they work best with different types of prompts and Titan has a pretty short max prompt length
+        - Option A: Inputs are the prompt and brand name
+        - Option B: Inputs are the prompt and a description of the visuals of the brand. This is used if the brand data has a brand_style field. It was meant for brands that aren't prominent in the training data of the image generator, especially local brands
+    1. Send the augmented prompt to the selected image generation backend
+    1. Upload the image to S3
+    1. Send a Slack message with the image URL and other metadata back over the Slack socket
+1. Slack servers post that into the data for the channel and then people can see it
+
+# Developing 
+
+## Developing and running in Pipenv
+
+### Prerequisites
 
 1. Python 3.10 installed
 2. Pipenv installed
 
-## Setup
+### Setup
 
 1. `pipenv install`
 
-## Running the web client
+### Running the web client
 
 `pipenv run start_web`
 
-## Running the Slack client
+### Running the Slack client
 
 `pipenv run start_slack`
 
-# Developing and running in Docker
+## Developing and running in Docker
 
-## Prerequisites
+### Prerequisites
 
 1. Make sure Docker is setup
 2. Make sure you have a `.env` file with all relevant keys in the project root directory
 
-## Running
+### Running
 
 1. Make sure Docker is running
 2. `docker build -t future_crap:latest .`
 3. `docker run --env-file .env -it future_crap:latest`
 
-# WSL stuff
+## Developing / deploying to AWS
 
-1. `sudo apt install npm`
-2. `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash`
-3. `nvm install --lts`
-4. `npm install -g aws-cdk`
+### Prerequisutes
+
+1. AWS CLI
+1. AWS CDK installed
+    1. `sudo apt install npm`
+    1. `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash`
+    1. `nvm install --lts`
+    1. `npm install -g aws-cdk`
+1. Pipenv is setup like before: It's setup to use the same Pipenv for the whole project rather than a separate Pipenv or requirements.txt for the infrastructure component
+
+### One-time setup
+
+1. Make sure you have a `.env` with the appropriate env vars in the root folder. See infra_stack.py to check which env vars are needed
+1. Run `cdk bootstrap` from `infra`
+1. Run `cdk deploy` from `infra` 
+
+## Slack setup
+
+There was a bunch of typing and clicking in the Slack admin console to set it up. I'll see how much of it I can get into this repo
 
 # On image generators
 
@@ -91,7 +128,7 @@ Specific inspirations and motivations:
 
 - UW logo on buildings/ferries
 - Eating a Snickers
-- McDonald's tatoo
+- McDonald's tattoo
 - The reflection in a woman's eyes is the Starbucks logo
 
 ### Subtle
