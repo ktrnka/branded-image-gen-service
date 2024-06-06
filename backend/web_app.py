@@ -29,7 +29,7 @@ COST = Cost.LOW
 
 brand_index = BrandIndex()
 
-image_cache_dir = "local_backend/static/images"
+image_cache_dir = "backend/static/images"
 titan = aws_bedrock.Titan(image_cache_dir)
 dalle = openai.DallE(image_cache_dir)
 
@@ -52,7 +52,7 @@ class StaticFilesCache(StaticFiles):
         resp.headers.setdefault("Cache-Control", self.cachecontrol)
         return resp
 
-api.mount("/static", StaticFilesCache(directory="local_backend/static", cachecontrol="public, max-age=3600"), name="static")
+api.mount("/static", StaticFilesCache(directory="backend/static", cachecontrol="public, max-age=3600"), name="static")
 
 @api.middleware("http")
 async def add_cache_control_header(request: Request, call_next):
@@ -60,14 +60,14 @@ async def add_cache_control_header(request: Request, call_next):
     response.headers["Cache-Control"] = "max-age=600"
     return response
 
-templates = Jinja2Templates(directory="local_backend/templates")
+templates = Jinja2Templates(directory="backend/templates")
 
 #### ROUTES #####
 
 
 @api.get("/")
 def route():
-    with open("local_backend/static/demo.html", "r") as file:
+    with open("backend/static/demo.html", "r") as file:
         content = file.read()
     return HTMLResponse(content)
 

@@ -22,7 +22,7 @@ SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 
 brand_index = BrandIndex(embedding_path="BAAI/bge-small-en-v1.5")
-image_cache_dir = "local_backend/static/images"
+image_cache_dir = "backend/static/images"
 
 database = Database("./data.db")
 database.setup()

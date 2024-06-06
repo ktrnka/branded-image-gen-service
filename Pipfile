@@ -27,5 +27,5 @@ constructs = "*"
 pytest = "*"
 
 [scripts]
-start_web = "fastapi dev local_backend/web_app.py"
-start_slack = "python -m local_backend.slack_app"
+start_web = "fastapi dev backend/web_app.py"
+start_slack = "python -m backend.slack_app"

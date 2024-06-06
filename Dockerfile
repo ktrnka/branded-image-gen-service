@@ -17,7 +17,7 @@ RUN pipenv install --system --deploy --verbose
 # Run local API instance to cache models in container
 RUN python3 -c "from txtai.embeddings import Embeddings; Embeddings(path='BAAI/bge-small-en-v1.5')"
 
-COPY local_backend ./local_backend
+COPY backend ./backend
 
 # Use python3 instead of pipenv due to --system
-CMD python3 -m local_backend.slack_app
+CMD python3 -m backend.slack_app
