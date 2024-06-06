@@ -47,6 +47,13 @@ Specific inspirations and motivations:
 2. `docker build -t future_crap:latest .`
 3. `docker run --env-file .env -it future_crap:latest`
 
+# WSL stuff
+
+1. `sudo apt install npm`
+2. `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash`
+3. `nvm install --lts`
+4. `npm install -g aws-cdk`
+
 # On image generators
 
 - DALL-E 3: More creative. Deviates from branding often
