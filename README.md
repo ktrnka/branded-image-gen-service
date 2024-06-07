@@ -35,6 +35,19 @@ Specific inspirations and motivations:
     1. Send a Slack message with the image URL and other metadata back over the Slack socket
 1. Slack servers post that into the data for the channel and then people can see it
 
+## About the brand data
+
+The brand data was built somewhat "by hand" in conjunction with ChatGPT and [ImageToPrompt](https://imagetoprompt.com/). It's very messy.
+
+Roughly what the iteration process was like:
+1. I made a list of brands that I remembered from commercials or ads
+1. I used ChatGPT to generate a description of the target demographic and used that for brand matching (the `market` field)
+1. I expanded the list of brands by chatting with friends and reviewing the S&P 500, then generating the demo
+1. I saw that it sometimes matched in a way that didn't make any sense for the scene, so I used ChatGPT to generate the `brand_identity` field after giving some examples
+1. I had a failed experiment in which I generated example ads, but it was going really slowly so I didn't pursue it
+1. I saw that it didn't work for less well-known brands (like Boss Coffee) and it couldn't possibly work for recent local brands (like Mt. Joy) so I tried searching for their icons, fed those into ImageToPrompt, and then added that as a field in the brand data `brand_style`. Then if that field was present, I had the prompt generator use a different metaprompt to do the prompt augmentation from the visual description.
+1. I expanded for a while with ImageToPrompt but it was going slowly so I used ChatGPT/Copilot to add `brand_style` for many other brands. I found that I had to nudge it to be specific about the color scheme and sometimes I'd need to rewrite the output myself.
+
 # Developing 
 
 ## Developing and running in Pipenv
