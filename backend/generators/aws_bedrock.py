@@ -63,7 +63,7 @@ class Titan(ImageGeneratorABC):
             "height": res,
             "width": res,
             # Specifies how strongly the generated image should adhere to the prompt. Use a lower value to introduce more randomness in the generation. Ranges 1.0 to 10.0.
-            "cfgScale": 9.8,
+            "cfgScale": 9.3,
             "numberOfImages": 1,
         }
 
