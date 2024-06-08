@@ -117,6 +117,44 @@ def generate_image(prompt: str, engine: ImageGeneratorABC):
         "image_url": public_image_url,
     }
 
+def eval_generate_image(prompt: str, engine: ImageGeneratorABC):
+    """
+    Generate an image based on the prompt using the given engine for evaluation only.
+    """
+    company, match_score = brand_index.find_match(prompt, randomization_pool_size=1)
+
+    try:
+        prompter = MetaPrompter(cost=Cost.LOW)
+        augmented_prompt = prompter.adjust_prompt(
+            prompt,
+            company,
+            image_engine_hints=engine.hints,
+        )
+    except BaseException as e:
+        raise HTTPException(status_code=500, detail=f"Prompt error: {e}")
+
+    try:
+        image_result = engine.generate(augmented_prompt, cost=Cost.LOW)
+        public_image_url = publish_to_s3(image_result.path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Generation error: {e}")
+    
+    debug_info = {
+        "git_sha": git_sha,
+    }
+    if image_result.debug_info:
+        debug_info.update(image_result.debug_info)
+
+    database.log_evaluation_image(
+        prompt,
+        company.name,
+        augmented_prompt,
+        engine.model_name,
+        git_sha,
+        image_result.filename,
+        debug_info,
+    )
+
 
 @api.get("/generate/dalle")
 def generate_dalle(prompt: str):
@@ -169,3 +207,37 @@ def show_brands(request: Request):
         request=request, name="brands.html", context={"brands": brands}
     )
 
+EVALUATION_PROMPTS = """
+A dog sitting behind an office desk reading reports
+A painting of a serious-looking dog sitting behind an office desk reading reports
+A serene lake during sunset with calm waters reflecting a cluster of trees on a small island. The horizon features a line of trees and buildings under a soft, pastel sky transitioning from light pink to pale blue.
+An impressionist oil painting showing a middle age man sitting at a table that is balanced on top of a 10 foot tall pyramid of friend chicken. The man is staring at a laptop on the desk which has a colorful sticker of a robot on it. He has a wistful look on his face, as if he's questioning his life choices
+College girl studying at a desk listening to lofi hiphop beats with rain outside
+parents dropping their kids off at school but with beer ads
+the ultimate high-definition technicolor coffee experience in a classic grungy Seattle coffee shop
+a humanoid cat hipster barista is looking at you judgmentally while making your frappuccino
+i want to see a former tech ceo joyously eating a chicken sandwich in front of the restaurant he started, while a former tech bro stands behind him working furiously on his computer
+a poor product manager should be making his roadmap right now, but is instead playing around with a fun gen AI toy that his friend made. as a PM, he understands that life is all about tradeoffs, and this is the tradeoff he made
+Two high schoolers are trying to joust with one another using pool noodles while on rollerblades. They have serious, intense expressions while children watch in awe
+"""
+
+@api.get("/evaluation/titan", response_class=HTMLResponse)
+def evaluate_titan(request: Request):
+    if not database.has_evaluation(git_sha, titan.model_name):
+        for prompt in EVALUATION_PROMPTS.strip().split("\n"):
+            eval_generate_image(prompt, titan)
+    
+    evaluation_rows = database.get_evaluation(git_sha, titan.model_name)
+    return templates.TemplateResponse(
+        request=request, name="images.html", context={"image_results": evaluation_rows}
+    )
+
+@api.get("/evaluation/titan/{code_version}", response_class=HTMLResponse)
+def evaluate_titan(request: Request, code_version: str):
+    if not database.has_evaluation(code_version, titan.model_name):
+        raise HTTPException(status_code=404, detail="Evaluation not found")
+    
+    evaluation_rows = database.get_evaluation(code_version, titan.model_name)
+    return templates.TemplateResponse(
+        request=request, name="images.html", context={"image_results": evaluation_rows}
+    )

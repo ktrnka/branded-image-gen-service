@@ -56,6 +56,22 @@ class Database:
         """
         )
 
+        # Evaluation table (same as V2)
+        cursor.execute(
+            """
+        CREATE TABLE IF NOT EXISTS evaluation_images (
+            created_at INTEGER,
+            prompt TEXT,
+            brand_name TEXT,
+            augmented_prompt TEXT,
+            model_backend TEXT,
+            code_version TEXT,
+            filename TEXT,
+            debug_info TEXT
+        )
+        """
+        )
+
         database_connection.commit()
         database_connection.close()
 
@@ -99,29 +115,40 @@ class Database:
         cursor = local_connection.cursor()
 
         cursor.execute("""
-SELECT
-    NULL AS created_at,  -- This column doesn't exist in the 'images' table, so we use NULL
-    prompt,
-    brand_name,
-    brand_score,         -- This column doesn't exist in 'images_v2', so we'll include it here
-    augmented_prompt,
-    model_backend,
-    image_path,
-    openai_response AS debug_info  -- Rename openai_response to debug_info for consistency
-FROM images
-UNION
-SELECT
-    created_at,
-    prompt,
-    brand_name,
-    NULL AS brand_score,  -- This column doesn't exist in the 'images_v2' table, so we use NULL
-    augmented_prompt,
-    model_backend,
-    filename as image_path,
-    debug_info
-FROM images_v2;
+    SELECT
+        NULL AS created_at,  -- This column doesn't exist in the 'images' table, so we use NULL
+        prompt,
+        brand_name,
+        brand_score,         -- This column doesn't exist in 'images_v2', so we'll include it here
+        augmented_prompt,
+        model_backend,
+        image_path,
+        openai_response AS debug_info  -- Rename openai_response to debug_info for consistency
+    FROM images
+    UNION
+    SELECT
+        created_at,
+        prompt,
+        brand_name,
+        NULL AS brand_score,  -- This column doesn't exist in the 'images_v2' table, so we use NULL
+        augmented_prompt,
+        model_backend,
+        filename as image_path,
+        debug_info
+    FROM images_v2
+    UNION
+    SELECT
+        created_at,
+        prompt,
+        brand_name,
+        NULL AS brand_score,  -- This column doesn't exist in the 'evaluation_images' table, so we use NULL
+        augmented_prompt,
+        model_backend,
+        filename as image_path,
+        debug_info
+    FROM evaluation_images;
 
-                       """)
+                   """)
         rows = cursor.fetchall()
 
         local_connection.close()
@@ -144,3 +171,77 @@ FROM images_v2;
             )
         return results
 
+    def has_evaluation(self, code_version: str, model_name: str) -> bool:
+        local_connection = sqlite3.connect(self.path)
+        cursor = local_connection.cursor()
+
+        cursor.execute("select count(*) from evaluation_images where code_version = ? and model_backend = ?", (code_version, model_name))
+
+        count = cursor.fetchone()[0]
+        local_connection.close()
+
+        return count > 0
+
+    def get_evaluation(self, code_version: str, model_name: str) -> List[GenerationResult]:
+        local_connection = sqlite3.connect(self.path)
+        cursor = local_connection.cursor()
+
+        cursor.execute("select * from evaluation_images where code_version = ? and model_backend = ?", (code_version, model_name))
+
+        rows = cursor.fetchall()
+
+        local_connection.close()
+        
+        results = []
+        for row in rows:
+            created_at, prompt, brand_name, augmented_prompt, model_backend, code_version, filename, debug_info = row
+
+            results.append(
+                GenerationResult(
+                    created_at=created_at,
+                    prompt=prompt,
+                    brand_name=brand_name,
+                    brand_score=None,
+                    augmented_prompt=augmented_prompt,
+                    model_backend=model_backend,
+                    filename=filename,
+                    debug_info=debug_info,
+                )
+            )
+
+        return results
+    
+    def log_evaluation_image(
+        self,
+        prompt: str,
+        brand_name: str,
+        augmented_prompt: str,
+        model_backend: str,
+        code_version: str,
+        filename: str,
+        debug_info: Optional[dict],
+    ):
+        debug_encoded = json.dumps(debug_info)
+
+        local_connection = sqlite3.connect(self.path)
+        cursor = local_connection.cursor()
+
+        cursor.execute(
+            """
+        INSERT INTO evaluation_images (created_at, prompt, brand_name, augmented_prompt, model_backend, code_version, filename, debug_info)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+            (
+                int(datetime.now().timestamp()),
+                prompt,
+                brand_name,
+                augmented_prompt,
+                model_backend,
+                code_version,
+                filename,
+                debug_encoded,
+            ),
+        )
+
+        local_connection.commit()
+        local_connection.close()
