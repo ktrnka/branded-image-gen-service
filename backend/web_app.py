@@ -123,21 +123,15 @@ def eval_generate_image(prompt: str, engine: ImageGeneratorABC):
     """
     company, match_score = brand_index.find_match(prompt, randomization_pool_size=1)
 
-    try:
-        prompter = MetaPrompter(cost=Cost.LOW)
-        augmented_prompt = prompter.adjust_prompt(
-            prompt,
-            company,
-            image_engine_hints=engine.hints,
-        )
-    except BaseException as e:
-        raise HTTPException(status_code=500, detail=f"Prompt error: {e}")
+    prompter = MetaPrompter(cost=Cost.LOW)
+    augmented_prompt = prompter.adjust_prompt(
+        prompt,
+        company,
+        image_engine_hints=engine.hints,
+    )
 
-    try:
-        image_result = engine.generate(augmented_prompt, cost=Cost.LOW)
-        public_image_url = publish_to_s3(image_result.path)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Generation error: {e}")
+    image_result = engine.generate(augmented_prompt, cost=Cost.LOW)
+    public_image_url = publish_to_s3(image_result.path)
     
     debug_info = {
         "git_sha": git_sha,
@@ -227,8 +221,8 @@ def evaluate_titan(request: Request):
         for prompt in EVALUATION_PROMPTS.strip().split("\n"):
             try:
                 eval_generate_image(prompt, titan)
-            except aws_bedrock.InappropriatePromptError as e:
-                print(f"Skipping inappropriate prompt: {e}")
+            except Exception as e:
+                print(f"Skipping prompt due to error: {e}")
     
     evaluation_rows = database.get_evaluation(git_sha, titan.model_name)
     return templates.TemplateResponse(
