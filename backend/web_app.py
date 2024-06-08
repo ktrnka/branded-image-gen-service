@@ -217,7 +217,7 @@ Two high schoolers are trying to joust with one another using pool noodles while
 """
 
 @api.get("/evaluation/titan", response_class=HTMLResponse)
-def evaluate_titan(request: Request, reference_version: str):
+def evaluate_titan(request: Request, reference_version: str = None):
     # Re-generate images from all prompts if they don't exist yet
     if not database.has_evaluation(git_sha, titan.model_name):
         for prompt in EVALUATION_PROMPTS.strip().split("\n"):

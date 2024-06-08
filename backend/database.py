@@ -195,7 +195,8 @@ class Database:
         local_connection = sqlite3.connect(self.path)
         cursor = local_connection.cursor()
 
-        cursor.execute("""
+        if reference_code_version:
+            cursor.execute("""
 select
     current.prompt,
     current.brand_name,
@@ -208,6 +209,19 @@ from evaluation_images current left join evaluation_images reference
 on current.prompt = reference.prompt
 where current.code_version = ? and current.model_backend = ? and reference.code_version = ? and reference.model_backend = ?
                        """, (code_version, model_name, reference_code_version, model_name))
+        else:
+            cursor.execute("""
+select
+    prompt,
+    brand_name,
+    augmented_prompt,
+    filename,
+    null as ref_brand_name,
+    null as ref_augmented_prompt,
+    null as ref_filename
+from evaluation_images
+where code_version = ? and model_backend = ?
+                       """, (code_version, model_name))
 
         rows = cursor.fetchall()
 

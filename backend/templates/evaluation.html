@@ -22,10 +22,11 @@
         <td>{{ row.brand_name }}</td>
         <td>{{ row.augmented_prompt }}</td>
         <td><a href="/image/{{ row.filename }}"><img width="128" height="128" src="/static/images/{{ row.filename }}" /></a></td>
+        {% if reference_version %}
         <td>{{ row.ref_brand_name }}</td>
         <td>{{ row.ref_augmented_prompt }}</td>
         <td><a href="/image/{{ row.ref_filename }}"><img width="128" height="128" src="/static/images/{{ row.ref_filename }}" /></a></td>
-
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
