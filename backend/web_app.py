@@ -225,7 +225,10 @@ Two high schoolers are trying to joust with one another using pool noodles while
 def evaluate_titan(request: Request):
     if not database.has_evaluation(git_sha, titan.model_name):
         for prompt in EVALUATION_PROMPTS.strip().split("\n"):
-            eval_generate_image(prompt, titan)
+            try:
+                eval_generate_image(prompt, titan)
+            except aws_bedrock.InappropriatePromptError as e:
+                print(f"Skipping inappropriate prompt: {e}")
     
     evaluation_rows = database.get_evaluation(git_sha, titan.model_name)
     return templates.TemplateResponse(
