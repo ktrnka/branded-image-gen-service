@@ -14,6 +14,15 @@ class GenerationResult(NamedTuple):
     filename: str
     debug_info: str
 
+class EvaluationResult(NamedTuple):
+    prompt: str
+    brand_name: str
+    augmented_prompt: str
+    filename: str
+    ref_brand_name: Optional[str]
+    ref_augmented_prompt: Optional[str]
+    ref_filename: Optional[str]
+
 class Database:
     """
     Janky wrapper around SQLite because I don't want to fogure out SQLAlchemy or threading
@@ -182,34 +191,29 @@ class Database:
 
         return count > 0
 
-    def get_evaluation(self, code_version: str, model_name: str) -> List[GenerationResult]:
+    def get_evaluation(self, model_name: str, code_version: str, reference_code_version: str) -> List[GenerationResult]:
         local_connection = sqlite3.connect(self.path)
         cursor = local_connection.cursor()
 
-        cursor.execute("select * from evaluation_images where code_version = ? and model_backend = ?", (code_version, model_name))
+        cursor.execute("""
+select
+    current.prompt,
+    current.brand_name,
+    current.augmented_prompt,
+    current.filename,
+    reference.brand_name as ref_brand_name,
+    reference.augmented_prompt as ref_augmented_prompt,
+    reference.filename as ref_filename
+from evaluation_images current left join evaluation_images reference
+on current.prompt = reference.prompt
+where current.code_version = ? and current.model_backend = ? and reference.code_version = ? and reference.model_backend = ?
+                       """, (code_version, model_name, reference_code_version, model_name))
 
         rows = cursor.fetchall()
 
         local_connection.close()
         
-        results = []
-        for row in rows:
-            created_at, prompt, brand_name, augmented_prompt, model_backend, code_version, filename, debug_info = row
-
-            results.append(
-                GenerationResult(
-                    created_at=created_at,
-                    prompt=prompt,
-                    brand_name=brand_name,
-                    brand_score=None,
-                    augmented_prompt=augmented_prompt,
-                    model_backend=model_backend,
-                    filename=filename,
-                    debug_info=debug_info,
-                )
-            )
-
-        return results
+        return [EvaluationResult(*row) for row in rows]
     
     def log_evaluation_image(
         self,

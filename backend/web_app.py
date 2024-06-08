@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 from fastapi.responses import HTMLResponse
 
 from fastapi.templating import Jinja2Templates
@@ -216,7 +217,8 @@ Two high schoolers are trying to joust with one another using pool noodles while
 """
 
 @api.get("/evaluation/titan", response_class=HTMLResponse)
-def evaluate_titan(request: Request):
+def evaluate_titan(request: Request, reference_version: str):
+    # Re-generate images from all prompts if they don't exist yet
     if not database.has_evaluation(git_sha, titan.model_name):
         for prompt in EVALUATION_PROMPTS.strip().split("\n"):
             try:
@@ -224,17 +226,7 @@ def evaluate_titan(request: Request):
             except Exception as e:
                 print(f"Skipping prompt due to error: {e}")
     
-    evaluation_rows = database.get_evaluation(git_sha, titan.model_name)
+    evaluation_rows = database.get_evaluation(titan.model_name, git_sha, reference_version)
     return templates.TemplateResponse(
-        request=request, name="images.html", context={"image_results": evaluation_rows}
-    )
-
-@api.get("/evaluation/titan/{code_version}", response_class=HTMLResponse)
-def evaluate_titan(request: Request, code_version: str):
-    if not database.has_evaluation(code_version, titan.model_name):
-        raise HTTPException(status_code=404, detail="Evaluation not found")
-    
-    evaluation_rows = database.get_evaluation(code_version, titan.model_name)
-    return templates.TemplateResponse(
-        request=request, name="images.html", context={"image_results": evaluation_rows}
+        request=request, name="evaluation.html", context={"image_results": evaluation_rows, "current_version": git_sha, "reference_version": reference_version}
     )
