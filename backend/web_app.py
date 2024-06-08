@@ -34,6 +34,11 @@ image_cache_dir = "backend/static/images"
 titan = aws_bedrock.Titan(image_cache_dir)
 dalle = openai.DallE(image_cache_dir)
 
+engine_lookup = {
+    "titan": titan,
+    "dalle": dalle,
+}
+
 database = Database("./data.db")
 database.setup()
 
@@ -216,17 +221,19 @@ a poor product manager should be making his roadmap right now, but is instead pl
 Two high schoolers are trying to joust with one another using pool noodles while on rollerblades. They have serious, intense expressions while children watch in awe
 """
 
-@api.get("/evaluation/titan", response_class=HTMLResponse)
-def evaluate_titan(request: Request, reference_version: str = None):
+@api.get("/evaluation/{model_name}", response_class=HTMLResponse)
+def evaluate_titan(request: Request, model_name: str, reference_version: str = None):
+    engine = engine_lookup[model_name]
+        
     # Re-generate images from all prompts if they don't exist yet
-    if not database.has_evaluation(git_sha, titan.model_name):
+    if not database.has_evaluation(git_sha, engine.model_name):
         for prompt in EVALUATION_PROMPTS.strip().split("\n"):
             try:
-                eval_generate_image(prompt, titan)
+                eval_generate_image(prompt, engine)
             except Exception as e:
                 print(f"Skipping prompt due to error: {e}")
     
-    evaluation_rows = database.get_evaluation(titan.model_name, git_sha, reference_version)
+    evaluation_rows = database.get_evaluation(engine.model_name, git_sha, reference_version)
     return templates.TemplateResponse(
         request=request, name="evaluation.html", context={"image_results": evaluation_rows, "current_version": git_sha, "reference_version": reference_version}
     )
