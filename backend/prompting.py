@@ -126,6 +126,28 @@ Now you'll be provided an input prompt and instead of the exact brand, you'll be
 Input prompt: {prompt}
 Brand gloss: {brand_gloss}
 
+Excellent output (use up to 125 tokens in the output): 
+""",
+)
+
+titan_small_brand_metaprompt = MetapromptTemplate(
+    system_prompt="""
+Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs, outputs, and the quality of the output.
+
+Input prompt: a cartoon family of scorpions walking to school in the morning. The smallest scorpion has a cute backpack and lunch box
+Input brand: McDonald's
+Good output: Illustrate a charming cartoon family of realistic-looking scorpions walking to school in the morning. The youngest scorpion is wearing a cute backpack with the iconic McDonald's red and yellow colors and carrying a matching lunchbox from its stinger. A McDonald's billboard is shown prominently in the background.
+
+Input prompt: an old basement server rack that's slightly rusting and the rack is partly held together with duct tape and metal wire
+Input brand: Home Depot
+Great output: An old server rack with some servers in a dimly lit basement. The rack is strong but rusty and one server akew and held in place with metal wire and duct tape. The rack is black and orange and prominently features the name "HOME DEPOT" printed on the side
+
+Now you'll be provided an input prompt and instead of the exact brand, you'll be provided with a description of their brand colors and logo. Only respond with the modified prompt.
+""",
+    user_prompt_template="""
+Input prompt: {prompt}
+Brand gloss: {brand_gloss}
+
 Excellent output:
 """,
 )
@@ -173,7 +195,10 @@ class MetaPrompter:
 
         match image_engine_hints.metaprompt_id:
             case "titan":
-                metaprompt = aws_titan_metaprompt
+                if brand.brand_style:
+                    metaprompt = titan_small_brand_metaprompt
+                else:
+                    metaprompt = aws_titan_metaprompt
             case "default":
                 if brand.brand_style:
                     metaprompt = dalle_small_brand_metaprompt
