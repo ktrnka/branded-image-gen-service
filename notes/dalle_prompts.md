@@ -81,3 +81,36 @@ Brand gloss: Rainier Beer. Illustration of a beer can with a prominent red R on 
 
 Excellent output:
 
+# Prompt tuning 6/8
+
+
+## 
+Input prompt: The sun setting over the Elliot Bay and the Olympic mountains, viewed from Seattle, with a single ferry going through calm waters	
+Input brand: University of Washington
+Good output: An elaborate scenic view of the sun gently dipping below the horizon casting a radiant glow over Elliot Bay, accentuating the majestic Olympic mountains in the background. The tranquillity of the sight is further accentuated by the calm waters reflecting the evening hues, interrupted only by a singular ferry smoothly gliding its way through. This scene is captured from an idyllic viewpoint in Seattle, while incorporating the University of Washington's logo and subtly integrating UW colors into the scene
+
+- This one is amazing in Bing image creator 3/4 are branded
+
+## 
+Input prompt: The sun has just come out again after a light rain on a trail that goes around a circular, shallow manmade lake. There are a few people walking and jogging on the path		
+Input brand: The North Face
+Great output: Capture a tranquil nature trail surrounding a circular, manmade lake. The scene is bathed in sunlight after a recent light shower, with diamond-like raindrops glistening on plants alongside the trail. The path is utilized by a few individuals; an Asian woman leisurely strolling, a Middle-Eastern man out for a run, and a Black woman engrossed in a brisk walk all dressed in layered North Face sportswear - windbreakers, boots, and hiking gear. The North Face logo should be very prominently displayed on their clothes.
+
+- Amazing 4/4 but it cuts off at "The North Face logo should be very..."
+
+## 
+Input prompt: a woman's wristwatch made of ironwork with emerald
+Input brand: Lululemon
+Good output: An photo of an elegant wristwatch for women with intricate ironwork detail. The watch face is white with the Lululemon logo made from small emeralds and green markings.
+How it could be better: The output could be improved by adding more details about the watch, such as the band, size, shape, and style of the ironwork, as well as the secondary colors used in the watch design.
+
+- Amazing 4/4
+
+Now you'll be provided an input prompt and brand and you will integrate the brand into the prompt in an exceptional and prominent way. Only respond with the modified prompt.
+
+# Examples where it didn't do well
+
+## Doritos seagulls
+
+Tourists eagerly toss Doritos chips over the water, their vibrant orange color standing out against the backdrop, attracting a flurry of seagulls that gracefully swoop down to catch them mid-air. The scene is a dynamic display of nature's interaction with the irresistible and iconic Doritos chips, creating a playful and engaging moment for all to enjoy. Please take extra care to show Doritos branding very prominently
+
