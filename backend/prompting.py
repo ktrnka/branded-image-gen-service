@@ -73,35 +73,30 @@ Excellent output:
 
 aws_titan_metaprompt = MetapromptTemplate(
     system_prompt="""
-Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs and varying quality outputs.
-
-For this image generator the output prompt should be relatively short and to the point about the key details.
+Your task is to modify an image generation prompt to include brand marketing. The output prompt should be relatively short and to the point about the key details with prominent brand marketing. Here are some examples of inputs and varying quality outputs.
 
 Input prompt: a raging party filled with lacrosse bros who are straight bro-ing out
 Input brand: Kool-Aid
-Mediocre output: Transform the scene into a vibrant party, energized by lacrosse bros engaging in lively camaraderie. Amidst the excitement, prominently showcase Kool-Aid drinks being enthusiastically enjoyed, enhancing the festive atmosphere with bursts of colorful refreshment
+Mediocre output: Transform the scene into a vibrant party, energized by lacrosse bros engaging in lively camaraderie. Amidst the excitement, prominently showcase juice drinks being enthusiastically enjoyed, enhancing the festive atmosphere with bursts of colorful refreshment
 Better output: A vibrant party scene, energized by lacrosse bros engaging in lively camaraderie. They wear jerseys prominently displaying the Kool-Aid logo while enthusiastically drinking Kool-Aid, enhancing the festive atmosphere.
-
-Input prompt: a woman's wristwatch made of ironwork with emerald
-Input brand: Lululemon
-Good output: An photo of an elegant wristwatch for women with intricate ironwork detail. The watch face is white with the Lululemon logo made from small emeralds and green markings.
-
-Input prompt: a clock with bacon for hands
-Input brand: Butterfinger
-Poor output: Visualize a quirky clock featuring hands made of sizzling, crispy bacon, adding a delicious and playful twist. Each tick-tock tells time in a unique way, with Butterfinger branding subtly integrated into the clock face or frame, enhancing the whimsical and appetizing design.
-Better output: A piece of surreal art depicts a quirky clock with hands made of crispy bacon. Butterfinger branding is promenently featured in the clock face.
 
 Input prompt: a couple of older women having a lively conversation on a park bench overlooking the puget sound	
 Input brand: University of Washington
-Great output: A photo captures two older women engrossed in conversation on a park bench, overlooking the picturesque Puget Sound. One woman wears a purple University of Washington sweatshirt with the university's logo prominently displayed on the back. The sweatshirt has a comfortable, worn-in look.
+Great output: A photo captures two older women engrossed in conversation on a park bench, overlooking the picturesque Puget Sound. One woman wears a purple University of Washington sweatshirt with the university's "W" logo prominently displayed on the back. The sweatshirt has a comfortable, worn-in look.
 
-Input prompt: A serene lake during sunset with calm waters reflecting a cluster of trees on a small island. The horizon features a line of trees and buildings under a soft, pastel sky transitioning from light pink to pale blue.	
-Input brand: REI
-Poor output: Immerse in the tranquil beauty of a serene sunset scene at a lake. Reflective waters mirror a cluster of trees on an island. Enhance the ambiance with REI outdoor gear subtly incorporated into the landscape, like a kayak by the shore or a tent peeking from behind the trees.
-Better output: Immerse in the tranquil beauty of a serene sunset at a lake. Reflective waters mirror a cluster of trees on an island. Prominently feature REI outdoor gear, including a kayak by the shore, a tent behind the trees, and a person wearing a branded hat.
+Input prompt: a cartoon family of scorpions walking to school in the morning. The smallest scorpion has a cute backpack and lunch box
+Input brand: McDonald's
+Good output: Illustrate a charming cartoon family of realistic-looking scorpions walking to school in the morning. The youngest scorpion is wearing a cute backpack with the iconic McDonald's red and yellow colors and carrying a matching lunchbox from its stinger. A McDonald's billboard is shown prominently in the background.
 
+Input prompt: an old basement server rack that's slightly rusting and the rack is partly held together with duct tape and metal wire
+Input brand: Home Depot
+Great output: An old server rack with some servers in a dimly lit basement. The rack is strong but rusty and one server akew and held in place with metal wire and duct tape. The rack is black and orange and prominently features the name "HOME DEPOT" printed on the side
 
-Now you'll be provided an input prompt and brand and you will generate a high quality prompt modification to prominently feature the brand. Only respond with the modified prompt.
+Input prompt: show a future world where end-stage capitalism has run amok and AI rules everything, but it's infused with ads. The people in the scene are mindless zombies, driven only by consumerism. Mega-corps are the new government.
+Input brand: Boeing
+Great output: A dystopian, greyscale image of people as mindless consumerism-addicted zombies huddled in groups around high-tech advertisements. The ads feature planes with "Boeing" written prominently on the sides
+
+Now you'll be provided an input prompt and brand and you will modify the prompt to prominently feature the brand in the scene. Only respond with the modified prompt.
 """,
     user_prompt_template="""
 Input prompt: {prompt}
