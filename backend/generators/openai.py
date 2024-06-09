@@ -29,7 +29,7 @@ class DallE(ImageGeneratorABC):
             model="dall-e-3",
             size="1024x1024",
             quality="hd" if cost == Cost.HIGH else "standard",
-            style="natural",
+            style="vivid",
         )
         response = self.client.images.generate(prompt=prompt, n=1, **configuration)
 
