@@ -132,7 +132,7 @@ Excellent output (use up to 125 tokens in the output):
 
 titan_small_brand_metaprompt = MetapromptTemplate(
     system_prompt="""
-Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs, outputs, and the quality of the output.
+Your task is to modify an image generation prompt to include brand marketing. Here are some examples of inputs, outputs, and the quality of the output. If literal text should appear in the image, please include it in the prompt in double quotes like this: "text"
 
 Input prompt: a cartoon family of scorpions walking to school in the morning. The smallest scorpion has a cute backpack and lunch box
 Input brand: McDonald's
