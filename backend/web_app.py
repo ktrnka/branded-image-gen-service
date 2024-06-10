@@ -83,8 +83,6 @@ def generate_image(prompt: str, unmodified_prompt: bool, engine: ImageGeneratorA
     Generate an image based on the prompt using the given engine.
     """
 
-    print(f"unmodified_prompt: {unmodified_prompt}")
-
     if unmodified_prompt:
         augmented_prompt = prompt
 
