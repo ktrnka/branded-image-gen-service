@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from .code_version import git_sha
 
-from .core import Cost, ImageGeneratorABC
+from .core import Brand, Cost, ImageGeneratorABC
 
 from .publish_to_s3 import publish_to_s3
 
@@ -78,21 +78,30 @@ def route():
     return HTMLResponse(content)
 
 
-def generate_image(prompt: str, engine: ImageGeneratorABC):
+def generate_image(prompt: str, unmodified_prompt: bool, engine: ImageGeneratorABC):
     """
     Generate an image based on the prompt using the given engine.
     """
-    company, match_score = brand_index.find_match(prompt, randomization_pool_size=1)
 
-    try:
-        prompter = MetaPrompter(cost=Cost.LOW)
-        augmented_prompt = prompter.adjust_prompt(
-            prompt,
-            company,
-            image_engine_hints=engine.hints,
-        )
-    except BaseException as e:
-        raise HTTPException(status_code=500, detail=f"Prompt error: {e}")
+    print(f"unmodified_prompt: {unmodified_prompt}")
+
+    if unmodified_prompt:
+        augmented_prompt = prompt
+
+        company = Brand(None, None, None, None)
+        match_score = 0
+    else:
+        company, match_score = brand_index.find_match(prompt, randomization_pool_size=1)
+
+        try:
+            prompter = MetaPrompter(cost=Cost.LOW)
+            augmented_prompt = prompter.adjust_prompt(
+                prompt,
+                company,
+                image_engine_hints=engine.hints,
+            )
+        except BaseException as e:
+            raise HTTPException(status_code=500, detail=f"Prompt error: {e}")
 
     try:
         image_result = engine.generate(augmented_prompt, cost=Cost.HIGH)
@@ -159,7 +168,7 @@ def eval_generate_image(prompt: str, engine: ImageGeneratorABC):
         )
     except aws_bedrock.InappropriatePromptError as e:
         debug_info["error"] = str(e)
-        
+
         database.log_evaluation_image(
             prompt,
             company.name,
@@ -174,13 +183,13 @@ def eval_generate_image(prompt: str, engine: ImageGeneratorABC):
 
 
 @api.get("/generate/dalle")
-def generate_dalle(prompt: str):
-    return generate_image(prompt, dalle)
+def generate_dalle(prompt: str, unmodified_prompt: bool = False):
+    return generate_image(prompt, unmodified_prompt, dalle)
 
 
 @api.get("/generate/titan")
-def generate_aws(prompt: str):
-    return generate_image(prompt, titan)
+def generate_aws(prompt: str, unmodified_prompt: bool = False):
+    return generate_image(prompt,unmodified_prompt,  titan)
 
 
 

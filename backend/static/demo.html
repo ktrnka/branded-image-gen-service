@@ -50,6 +50,14 @@
                     </select>
                     <!-- <label for="model">Model</label> -->
 
+                    <!-- check box -->
+                    <div>
+                        <label>
+                            <input type="checkbox" id="unmodified_prompt" />
+                            <span>Unmodified Prompt</span>
+                        </label>
+                    </div>
+
                     <!-- submit button -->
                     <button class="btn waves-effect waves-light submit-button" type="submit" name="action"><span
                             id="button_regular_content">Submit <i class="material-icons right">send</i>
@@ -136,8 +144,9 @@
 
             var prompt = $('#prompt').val();
             var model = $('#model').val();
+            var unmodified_prompt = $('#unmodified_prompt').is(':checked');
             beginProcessing();
-            $.get('/generate/' + model, { prompt: prompt }, function (response) {
+            $.get('/generate/' + model, { prompt: prompt, unmodified_prompt: unmodified_prompt }, function (response) {
 
                 setTimeout(function () {
                     $('#response_original').text(prompt);
