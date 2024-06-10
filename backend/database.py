@@ -11,7 +11,7 @@ class GenerationResult(NamedTuple):
     brand_score: float
     augmented_prompt: str
     model_backend: str
-    filename: str
+    filename: Optional[str]
     debug_info: str
 
 class EvaluationResult(NamedTuple):
@@ -174,7 +174,7 @@ class Database:
                     brand_score=brand_score,
                     augmented_prompt=augmented_prompt,
                     model_backend=model_backend,
-                    filename=os.path.basename(image_path),
+                    filename=os.path.basename(image_path) if image_path else None,
                     debug_info=debug_info,
                 )
             )

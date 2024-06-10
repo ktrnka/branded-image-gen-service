@@ -15,8 +15,11 @@
         <td>{{ row.brand_name }}</td>
         <td>{{ row.model_backend }}</td>
         <td>{{ row.augmented_prompt }}</td>
-        <td><a href="/image/{{ row.filename }}"><img width="128" height="128"
-                    src="/static/images/{{ row.filename }}" /></a></td>
+        {% if row.filename %}
+        <td><a href="/image/{{ row.filename }}"><img width="128" height="128" src="/static/images/{{ row.filename }}" /></a></td>
+        {% else %}
+        <td>No image (prpb content filtered)</td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
