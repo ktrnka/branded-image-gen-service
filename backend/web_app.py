@@ -136,24 +136,41 @@ def eval_generate_image(prompt: str, engine: ImageGeneratorABC):
         image_engine_hints=engine.hints,
     )
 
-    image_result = engine.generate(augmented_prompt, cost=Cost.LOW)
-    public_image_url = publish_to_s3(image_result.path)
-    
     debug_info = {
         "git_sha": git_sha,
     }
-    if image_result.debug_info:
-        debug_info.update(image_result.debug_info)
 
-    database.log_evaluation_image(
-        prompt,
-        company.name,
-        augmented_prompt,
-        engine.model_name,
-        git_sha,
-        image_result.filename,
-        debug_info,
-    )
+    try:
+        image_result = engine.generate(augmented_prompt, cost=Cost.LOW)
+
+        _ = publish_to_s3(image_result.path)    
+
+        if image_result.debug_info:
+            debug_info.update(image_result.debug_info)
+
+        database.log_evaluation_image(
+            prompt,
+            company.name,
+            augmented_prompt,
+            engine.model_name,
+            git_sha,
+            image_result.filename,
+            debug_info,
+        )
+    except aws_bedrock.InappropriatePromptError as e:
+        debug_info["error"] = str(e)
+        
+        database.log_evaluation_image(
+            prompt,
+            company.name,
+            augmented_prompt,
+            engine.model_name,
+            git_sha,
+            None,
+            debug_info,
+        )
+
+
 
 
 @api.get("/generate/dalle")
