@@ -123,7 +123,7 @@
                 showResult();
             }, 2000);
         }).fail(function (error) {
-            M.toast({html: 'Error: ' + error.status + ' ' + error.responseJSON.detail, classes: 'red', displayLength: 10000});
+            M.toast({ html: 'Error: ' + error.status + ' ' + error.responseJSON.detail, classes: 'red', displayLength: 10000 });
             console.error('Error:', error);
             endProcessing();
         });
