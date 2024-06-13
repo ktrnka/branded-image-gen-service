@@ -72,10 +72,10 @@ templates = Jinja2Templates(directory="backend/templates")
 
 
 @api.get("/")
-def route():
-    with open("backend/static/demo.html", "r") as file:
-        content = file.read()
-    return HTMLResponse(content)
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="home.html", context={}
+    )
 
 
 def generate_image(prompt: str, unmodified_prompt: bool, engine: ImageGeneratorABC):

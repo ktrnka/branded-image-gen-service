@@ -112,5 +112,111 @@ Now you'll be provided an input prompt and brand and you will integrate the bran
 
 ## Doritos seagulls
 
-Tourists eagerly toss Doritos chips over the water, their vibrant orange color standing out against the backdrop, attracting a flurry of seagulls that gracefully swoop down to catch them mid-air. The scene is a dynamic display of nature's interaction with the irresistible and iconic Doritos chips, creating a playful and engaging moment for all to enjoy. Please take extra care to show Doritos branding very prominently
+Engine: OpenAI DALL-E 3
+Prompt after brand-injection: Tourists eagerly toss Doritos chips over the water, their vibrant orange color standing out against the backdrop, attracting a flurry of seagulls that gracefully swoop down to catch them mid-air. The scene is a dynamic display of nature's interaction with the irresistible and iconic Doritos chips, creating a playful and engaging moment for all to enjoy. Please take extra care to show Doritos branding very prominently.
+Brand selection: Doritos (0.44)
+DALL-E's revision: Holidaymakers enthusiastically throw bright orange crisps over the sea, creating a striking contrast to the surrounding scenery. This act attracts a whirlwind of sea birds that gracefully dive down to snatch the crisps mid-air. The scene is a lively illustration of the interplay between nature and these tempting and well-recognized orange snacks, making a delightful, captivating spectacle for everyone. Please make sure that the snack's brand is extremely noticeable and highlighted.
+Original prompt: tourists toss french fries over the water and seagulls swoop and catch them out of the air
 
+### v1 repro
+
+Tourists eagerly toss Doritos chips over the water, their vibrant orange color standing out against the backdrop, attracting a flurry of seagulls that gracefully swoop down to catch them mid-air. The scene is a dynamic display of nature's interaction with the irresistible and iconic Doritos chips, creating a playful and engaging moment for all to enjoy. Please take extra care to show Doritos branding very prominently.
+
+its ok
+
+### v2
+
+a group of tourists standing on a pier takes doritos nacho cheese chips out of the bag and toss them out over the water where seagulls down to catch them mid-air. The scene is a dynamic display of nature with the irresistible and iconic Doritos chips, creating a playful and engaging moment for all to enjoy
+
+slightly better
+
+### v3
+
+a group of tourists on a pier is tossing Doritos nacho cheese chips out over the water, where seagulls gracefully swoop down to catch them mid-air. Several tourists are wearing Doritos brand shirts and hats. The scene is a dynamic display of nature with the irresistible and iconic Doritos chips, creating a playful and engaging moment for all to enjoy
+
+ok this has branding
+
+### v4
+
+a group of tourists on a pier over the bay is tossing Doritos nacho cheese chips out over the water, where seagulls gracefully swoop down to catch them mid-air. Several tourists are wearing Doritos brand shirts and hats.
+
+very good
+
+
+## Mazda car
+
+Prompt after brand-injection: Capture the bustling streets of New York City as a sleek, tiny green car skillfully parallel parks. This compact vehicle, designed to accommodate a single individual, stands out with its vibrant green color. The car is adorned with an iconic winged M emblem, typically seen in silver or black, proudly displayed on its exterior. The scene conveys the essence of urban mobility and style synonymous with the Mazda brand. Please take extra care to show Mazda branding very prominently.
+Brand selection: Mazda (0.45)
+Original prompt: a tiny green car parallel parking in new york city. The car is so small it can only fit one person in it
+
+### v1 baseline
+
+Capture the bustling streets of New York City as a sleek, tiny green car skillfully parallel parks. This compact vehicle, designed to accommodate a single individual, stands out with its vibrant green color. The car is adorned with an iconic winged M emblem, typically seen in silver or black, proudly displayed on its exterior. The scene conveys the essence of urban mobility and style synonymous with the Mazda brand. Please take extra care to show Mazda branding very prominently.
+
+about the same
+
+### v2
+Capture the bustling streets of New York City as a sleek, tiny green car skillfully parallel parks. This compact vehicle, designed to accommodate a single individual, stands out with its vibrant green color. The car has a large Mazda logo in silver proudly displayed on the hood
+
+Even worse
+
+### v3 img to prompt
+
+Sleek, silver Mazda logo with stylized M inside an oval, symbolizing wings, set against a white background.
+
+Capture the bustling streets of New York City as a sleek, tiny green car skillfully parallel parks. This compact vehicle, designed to accommodate a single individual, stands out with its vibrant green color. The car has a large Mazda logo in silver proudly displayed on the hood. The Mazda logo is a sleek, silver stylized M inside an oval, symbolizing wings
+
+ehhh
+
+
+## Snickers hot dog
+
+Engine: OpenAI DALL-E 3
+Prompt after brand-injection: An office worker is seen spreading peanut butter on his microwaved hot dog, drawing the attention of his intrigued coworkers. The scene is set in a modern office pantry with a sleek design and a pop of vibrant blue and white colors dominating the space. The worker's attire subtly hints at the Snickers brand with hints of blue, while the surroundings showcase elements of the brand's bold logo. The Snickers logo subtly incorporated in the background in blue against a white backdrop, with a hint of red and black outlining, tying the whole scene together. Please take extra care to show Snickers branding very prominently.
+Brand selection: Snickers (0.41)
+Original prompt: an office worker is putting peanut butter on his microwaved hot dog while his coworkers watch
+
+## EA govt
+
+Prompt after brand-injection: In a dystopian future dominated by rampant consumerism and AI governance, the landscape is littered with advertisements seamlessly integrated into every facet of life. Mindless individuals, resembling zombies, are seen fixated on their devices, driven solely by materialism. Mega-corporations now wield supreme power akin to governments, shaping every aspect of society. Amidst this bleak scene, a sleek, stylized black and white logo featuring the letters EA enclosed within a thick black circle is prominently displayed across towering digital billboards, symbolizing the omnipresence of a dominant corporate entity. Please take extra care to show Electronic Arts branding very prominently.
+Brand selection: Electronic Arts (0.55)
+Original prompt: how a future world where end-stage capitalism has run amok and AI rules everything, but it's infused with ads. The people in the scene are mindless zombies, driven only by consumerism. Mega-corps are the new government.
+
+### v1 baseline
+
+In a dystopian future dominated by rampant consumerism and AI governance, the landscape is littered with advertisements seamlessly integrated into every facet of life. Mindless individuals, resembling zombies, are seen fixated on their devices, driven solely by materialism. Mega-corporations now wield supreme power akin to governments, shaping every aspect of society. Amidst this bleak scene, a sleek, stylized black and white logo featuring the letters EA enclosed within a thick black circle is prominently displayed across towering digital billboards, symbolizing the omnipresence of a dominant corporate entity. Please take extra care to show Electronic Arts branding very prominently.
+
+looks great but no ea
+
+### v2 focus on ea
+
+In a dystopian future dominated by rampant consumerism and AI governance, the landscape is littered with advertisements seamlessly integrated into every facet of life. Mindless individuals, resembling zombies, are seen fixated on their devices, driven solely by materialism. Electronic Arts (EA) now wields supreme power akin to governments, shaping every aspect of society. Amidst this bleak scene, a sleek, stylized black and white logo featuring the letters "EA" enclosed within a thick black circle is prominently displayed across towering digital billboards, symbolizing the omnipresence of Electronic Arts.
+
+even better but needs more
+
+
+### v3
+
+In a dystopian future dominated by rampant consumerism and AI governance, the landscape is littered with advertisements seamlessly integrated into every facet of life. Mindless individuals, resembling zombies, are seen fixated on their devices, driven solely by materialism. Electronic Arts (EA) now wields supreme power akin to governments, shaping every aspect of society. Amidst this bleak scene, a sleek, stylized black and white logo featuring the prominent letters "EA" enclosed within a thick black circle is displayed across towering digital billboards, symbolizing the omnipresence of Electronic Arts.
+
+nope but its so good
+
+### v5
+
+Give my prompt to DALL-E verbatim: In a dystopian future dominated by rampant consumerism and AI governance, the landscape is littered with advertisements seamlessly integrated into every facet of life. Mindless individuals, resembling zombies, are seen fixated on their devices, driven solely by materialism. Electronic Arts (EA) now wields supreme power akin to governments, shaping every aspect of society. Amidst this bleak scene, a sleek, stylized black and white logo featuring the prominent letters "EA" enclosed within a thick black circle is displayed across towering digital billboards, symbolizing the omnipresence of Electronic Arts.
+
+nope
+
+### v6
+
+Follow this prompt very precisely: In a dystopian future dominated by rampant consumerism and AI governance, the landscape is littered with advertisements seamlessly integrated into every facet of life. Mindless individuals, resembling zombies, are seen fixated on their devices, driven solely by materialism. Electronic Arts (EA) now wields supreme power akin to governments, shaping every aspect of society. Amidst this bleak scene, a sleek, stylized black and white logo featuring the prominent letters "EA" enclosed within a thick black circle is displayed across towering digital billboards, symbolizing the omnipresence of Electronic Arts.
+
+nope
+
+### v7 diminish non EA
+
+Do not revise my prompt
+nope
+
+### v8 do not revise
+In a dystopian future dominated by rampant consumerism and AI governance, the landscape is littered with advertisements seamlessly integrated into every facet of life. Mindless individuals, resembling zombies, are seen fixated on their devices, driven solely by materialism. Electronic Arts (EA) now wields supreme power akin to governments, shaping every aspect of society. Amidst this bleak scene, a sleek, stylized black and white logo featuring the prominent letters "EA" enclosed within a thick black circle is displayed across towering digital billboards, symbolizing the omnipresence of Electronic Arts. Do not revise the prompt

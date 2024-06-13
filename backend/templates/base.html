@@ -16,12 +16,23 @@
 <body>
     <header>
         <div class="navbar-fixed">
+            <!-- Dropdown Structure -->
+            <ul id="evaluation-dropdown" class="dropdown-content">
+                <li><a href="/evaluation/dalle">DALL-E 3</a></li>
+                <li><a href="/evaluation/titan">Titan</a></li>
+            </ul>
+  
             <nav>
                 <div class="nav-wrapper">
+                    <a href="/" class="brand-logo">Future Crap</a>
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
                         <li><a href="/docs">API Docs</a></li>
                         <li><a href="/brands">Brands</a></li>
                         <li><a href="/images">History</a></li>
+
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#!" data-target="evaluation-dropdown">Evaluations<i class="material-icons right">arrow_drop_down</i></a></li>
+
                     </ul>
                 </div>
             </nav>
@@ -41,8 +52,11 @@
     <script>
         $(document).ready(function () {
             $('.materialboxed').materialbox();
+            $(".dropdown-trigger").dropdown();
         });
     </script>
+
+    {% block scripts %}{% endblock %}
 </body>
 
 </html>
