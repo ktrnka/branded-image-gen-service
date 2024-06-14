@@ -21,7 +21,7 @@ class InfraStack(Stack):
         load_dotenv()
 
         # Use the default VPC
-        vpc = ec2.Vpc(self, "Vpc", max_azs=2)
+        vpc = ec2.Vpc(self, "Vpc", max_azs=1)
 
         # Create a cluster
         cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
