@@ -210,13 +210,16 @@ def show_image(request: Request, filename: str):
     engine_prompt_revision = None
     pretty_debug_info = None
     if row.debug_info:
-        parsed_debug_info = json.loads(row.debug_info)
-        pretty_debug_info = json.dumps(parsed_debug_info, indent=3)
+        try:
+            parsed_debug_info = json.loads(row.debug_info)
+            pretty_debug_info = json.dumps(parsed_debug_info, indent=3)
 
-        if "response" in parsed_debug_info:
-            engine_prompt_revision = parsed_debug_info["response"].get("revised_prompt")
-        else:
-            engine_prompt_revision = parsed_debug_info.get("revised_prompt")
+            if "response" in parsed_debug_info:
+                engine_prompt_revision = parsed_debug_info["response"].get("revised_prompt")
+            else:
+                engine_prompt_revision = parsed_debug_info.get("revised_prompt")
+        except json.JSONDecodeError:
+            pretty_debug_info = row.debug_info
 
     return templates.TemplateResponse(
         request=request, name="image.html", context={"result": row, "pretty_debug_info": pretty_debug_info, "engine_prompt_revision": engine_prompt_revision}
